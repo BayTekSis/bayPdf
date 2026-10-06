@@ -159,6 +159,15 @@ The package uses Orchestra Testbench. Run package commands with `php vendor/bin/
 
 ## License and credits
 
-The distribution license has not been selected. `composer.json` declares `proprietary`; no open-source license is granted. See [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
+BayPdf is open-source software licensed under the MIT License.
 
-PDF generation: tFPDF / FPDF. QR codes: endroid/qr-code. Designer: Vue. Fonts: DejaVu. Development skills: sandermuller/package-boost-laravel and sandermuller/boost-skills.
+Copyright © 2026 BayPass.
+
+BayPdf builds on several open-source projects and resources, including:
+
+tFPDF / FPDF for PDF generation
+endroid/qr-code for QR code generation
+Vue for the visual designer
+DejaVu Fonts for bundled font support
+
+Third-party components remain subject to their respective licenses and copyright notices. See THIRD_PARTY_NOTICES.md for details.

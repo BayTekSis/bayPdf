@@ -2,7 +2,14 @@
     "name":  "bay/baypdf",
     "description":  "Versioned PDF templates and a self-contained visual designer for Laravel.",
     "type":  "library",
-    "license":  "proprietary",
+    "license":  "MIT",
+    "authors": [
+      {
+        "name": "Mehmet BAYINDIR",
+        "homepage": "https://github.com/BayTekSis",
+        "role": "Developer"
+      }
+    ],
     "require":  {
                     "php":  "^8.3",
                     "ext-gd":  "*",
