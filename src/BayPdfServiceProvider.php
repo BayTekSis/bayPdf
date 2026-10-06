@@ -15,8 +15,14 @@ final class BayPdfServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'baypdf');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'baypdf');
+        if (config('baypdf.enabled')) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        }
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__.'/../config/baypdf.php' => config_path('baypdf.php')], 'baypdf-config');
+            $this->publishes([__DIR__.'/../public' => public_path('vendor/baypdf')], 'baypdf-assets');
         }
     }
 }

@@ -14,3 +14,5 @@ BayPdf, Laravel 12/13 ve PHP 8.3+ hedefleyen Composer paketidir. Jugend ile çal
 - Yetkilendirme host authentication + manage-baypdf Gate ile sağlanır; ilk sürüm tek ortak şablon alanıdır.
 
 Değişken şeması her sürümde snapshot olarak saklanır. Sonradan registry değişmesi eski sürümü etkilemez. Taslak klonlama snapshot'ı korur; yeni şema için yeni şablon açılır. Eşzamanlı düzenlemeler lock_version ile 409 döndürür. Fontlar vendor içine yazılmadan özel cache alanında hazırlanır. Üretim için yayınlanmış sürüm zorunludur; önizleme örnek verileri kullanır.
+
+Tasarımcı Vue ile tema bağımsız oluşturuldu; aynı DejaVu fontları tarayıcı ve PDF tarafında kullanılıyor. Browser canvas yerleşim yardımcısıdır; nihai biçim ve QR için server PDF önizlemesi kullanılır. Composer varlıkları public/vendor/baypdf altına yayımlanır. Workbench yalnızca loopback isteklerde geliştirme kullanıcısı sağlar; bu kod dağıtım arşivinden çıkarılır.

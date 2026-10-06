@@ -56,6 +56,9 @@ final class DocumentValidator
             if ($error) {
                 throw ValidationException::withMessages(["elements.{$i}" => $error]);
             }
+            foreach (['content', 'variable', 'asset', 'font_style'] as $field) {
+                $document['elements'][$i][$field] = $element[$field] ?? '';
+            }
         }
 
         return $document;

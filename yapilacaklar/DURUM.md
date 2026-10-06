@@ -11,3 +11,5 @@
 Faz 1 tamamlandı: Testbench 1 test / 3 assertion PASS; Composer validate PASS. İlerleme: 1/4 faz (%25).
 
 Faz 2 tamamlandı: 22 test / 37 assertion PASS, Pint PASS. A5 gerçek 148x210 mm olarak düzeltildi. İlerleme: 2/4 faz (%50).
+
+Faz 3 tamamlandı: 30 backend testi / 76 assertion, 2 frontend birim testi ve 2 Playwright senaryosu PASS. Production build ve Pint PASS. İlerleme: 3/4 faz (%75). Tasarımcı DE/TR/EN, özel görsel yükleme, sürükleme, klavye taşıma, undo/redo, önizleme ve yayın akışını içeriyor.

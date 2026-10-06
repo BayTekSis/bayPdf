@@ -1,2 +1,15 @@
 providers:
   - BayPdf\BayPdfServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
+
+workbench:
+  start: /baypdf
+  install: false
+  health: false
+  discovers:
+    web: false
+    api: false
+    commands: false
+    components: false
+    factories: false
+    views: false
