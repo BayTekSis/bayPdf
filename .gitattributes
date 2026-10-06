@@ -1,3 +1,6 @@
+* text=auto eol=lf
+*.ttf binary
+*.png binary
 # >>> package-boost (managed) >>>
 .agents/                export-ignore
 .ai/                    export-ignore
@@ -12,3 +15,26 @@ AGENTS.md               export-ignore
 CLAUDE.md               export-ignore
 GEMINI.md               export-ignore
 # <<< package-boost (managed) <<<
+.artifacts/ export-ignore
+.boost/ export-ignore
+.git/ export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
+.lpv export-ignore
+.phpunit.cache/ export-ignore
+boost.php export-ignore
+composer.lock export-ignore
+package.json export-ignore
+package-lock.json export-ignore
+phpstan.neon.dist export-ignore
+phpunit.xml.dist export-ignore
+playwright.config.js export-ignore
+testbench.yaml export-ignore
+vite.config.js export-ignore
+node_modules/ export-ignore
+vendor/ export-ignore
+tests/ export-ignore
+workbench/ export-ignore
+yapilacaklar/ export-ignore
+docs/ export-ignore
+resources/js/ export-ignore

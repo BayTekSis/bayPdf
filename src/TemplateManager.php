@@ -4,6 +4,7 @@ namespace BayPdf;
 
 use BayPdf\Models\Template;
 use BayPdf\Models\TemplateVersion;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -48,7 +49,7 @@ final class TemplateManager
                 throw ValidationException::withMessages(['document' => 'Add at least one element before publishing.']);
             }
             $this->preview($current);
-            $current->published_at = now();
+            $current->published_at = CarbonImmutable::now();
             $current->lock_version++;
             $current->save();
 

@@ -1,15 +1,18 @@
-# Durum
+﻿# Durum
 
-- Bağımsız repository ve Composer bağımlılıkları kuruldu.
-- sandermuller/package-boost-laravel 1.1.0 ve dokümantasyon skills için sandermuller/boost-skills 2.49.0 kuruldu.
-- Codex için yerel skills eşitlendi.
-- Composer kimlik doğrulama sorunu yalnızca .artifacts içindeki izole Composer home ile çözüldü.
-- GitHub remote henüz yok. Lisans seçimi bekleniyor; şimdilik proprietary.
-- Başlangıç Jugend branch: master; git durumu temiz. Jugend komutları yalnızca salt okunur.
-- Faz 1: Testbench smoke testi ve Composer doğrulaması bekleniyor.
+Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı (%100).
 
-Faz 1 tamamlandı: Testbench 1 test / 3 assertion PASS; Composer validate PASS. İlerleme: 1/4 faz (%25).
+1. Bağımsız Composer repository, Package Boost 1.1.0 ve boost-skills 2.49.0, Codex skills ve Testbench kuruldu.
+2. Esnek değişken kaydı, Unicode PDF, özel görseller ve sürümlü şablonlar tamamlandı.
+3. Yetkili API, DE/TR/EN Vue tasarımcı ve bağımsız workbench tamamlandı.
+4. Uyumluluk testleri, statik analiz, dağıtım kontrolü, GitHub CI ve kapsamlı kullanım belgeleri tamamlandı.
 
-Faz 2 tamamlandı: 22 test / 37 assertion PASS, Pint PASS. A5 gerçek 148x210 mm olarak düzeltildi. İlerleme: 2/4 faz (%50).
+Son doğrulama: 31 backend testi / 77 assertion, 2 frontend testi ve 2 tarayıcı senaryosu PASS. Build, Pint, PHPStan ve dağıtım validator PASS. Laravel 12/13 ve PHP 8.3/8.4 çalıştırılan kombinasyonları için docs/VERIFICATION.md esas alınır.
 
-Faz 3 tamamlandı: 30 backend testi / 76 assertion, 2 frontend birim testi ve 2 Playwright senaryosu PASS. Production build ve Pint PASS. İlerleme: 3/4 faz (%75). Tasarımcı DE/TR/EN, özel görsel yükleme, sürükleme, klavye taşıma, undo/redo, önizleme ve yayın akışını içeriyor.
+Jugend'e yazılmadı; master branch ve temiz git durumu korundu. Composer auth sorunu sadece paket içindeki izole Composer home ile aşıldı; global ayarlar değişmedi.
+
+Bekleyen dış yayın adımları: GitHub sahibi/repository/görünürlük bilgisi, dağıtım lisansı seçimi, uzak CI çalışması ve sürüm/Packagist yayını. Remote ve tag oluşturulmadı; lisans şimdilik proprietary.
+
+Bilinen sınırlamalar: tek sayfalı sabit yerleşim, ortak yönetim alanı; tenant izolasyonu ve otomatik çok sayfa/tablo akışı yok. Düşük Symfony Translation sürümünde PHP 8.4 deprecated bildirimi mevcut. Ayrıntılar README ve doğrulama raporunda.
+
+Sonraki adım: bağımsız workbench üzerinde kullanıcı incelemesi; ardından repository ve lisans kararıyla GitHub hazırlığının tamamlanması.

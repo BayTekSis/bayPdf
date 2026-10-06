@@ -70,6 +70,16 @@ final class TemplateManagerTest extends TestCase
         $version->update(['document' => []]);
     }
 
+    public function test_stale_model_cannot_overwrite_a_subsequently_published_version(): void
+    {
+        $manager = app(TemplateManager::class);
+        $version = $manager->save($this->draft(), $this->document(), 1);
+        $stale = $version->fresh();
+        $manager->publish($version, 2);
+        $this->expectException(LogicException::class);
+        $stale->update(['document' => []]);
+    }
+
     public function test_clone_preserves_document_and_schema_and_gets_new_version(): void
     {
         $manager = app(TemplateManager::class);

@@ -19,13 +19,13 @@
                     "illuminate/view":  "^12.0 || ^13.0"
                 },
     "require-dev":  {
-        "larastan/larastan": "^3.12",
-        "laravel/pint": "^1.29",
-        "orchestra/testbench": "^10.0 || ^11.0",
-        "phpunit/phpunit": "^11.5 || ^12.0",
-        "sandermuller/boost-skills": "^2.49",
-        "sandermuller/package-boost-laravel": "^1.1"
-    },
+                        "larastan/larastan":  "^3.12",
+                        "laravel/pint":  "^1.29",
+                        "orchestra/testbench":  "^10.0 || ^11.0",
+                        "phpunit/phpunit":  "^11.5 || ^12.0",
+                        "sandermuller/boost-skills":  "^2.49",
+                        "sandermuller/package-boost-laravel":  "^1.1"
+                    },
     "autoload":  {
                      "psr-4":  {
                                    "BayPdf\\":  "src/"
@@ -58,8 +58,11 @@
                     "format:check":  "@php vendor/bin/pint --test src tests config database routes workbench",
                     "sync-ai":  "@php vendor/bin/boost sync",
                     "qa":  [
+                               "composer validate --strict",
+                               "@format:check",
+                               "@analyse",
                                "@test",
-                               "@format:check"
+                               "@dist:check"
                            ],
                     "workbench:prepare":  [
                                               "@php workbench/prepare.php",
@@ -69,6 +72,8 @@
                     "serve":  [
                                   "Composer\\Config::disableProcessTimeout",
                                   "@php vendor/bin/testbench serve --host=127.0.0.1 --port=8127 --no-reload"
-                              ]
+                              ],
+                    "analyse":  "@php vendor/bin/phpstan analyse --memory-limit=2G",
+                    "dist:check":  "@php vendor/bin/lean-package-validator validate"
                 }
 }
