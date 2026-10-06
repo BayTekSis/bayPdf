@@ -1,0 +1,59 @@
+{
+    "name":  "bay/baypdf",
+    "description":  "Versioned PDF templates and a self-contained visual designer for Laravel.",
+    "type":  "library",
+    "license":  "proprietary",
+    "require":  {
+                    "php":  "^8.3",
+                    "ext-gd":  "*",
+                    "ext-mbstring":  "*",
+                    "illuminate/support":  "^12.0 || ^13.0",
+                    "illuminate/database":  "^12.0 || ^13.0",
+                    "illuminate/validation":  "^12.0 || ^13.0",
+                    "setasign/tfpdf":  "^1.33",
+                    "endroid/qr-code":  "^5.0"
+                },
+    "require-dev":  {
+                        "laravel/pint":  "^1.29",
+                        "orchestra/testbench":  "^10.0 || ^11.0",
+                        "phpunit/phpunit":  "^11.5 || ^12.0",
+                        "sandermuller/boost-skills":  "^2.49",
+                        "sandermuller/package-boost-laravel":  "^1.1"
+                    },
+    "autoload":  {
+                     "psr-4":  {
+                                   "BayPdf\\":  "src/"
+                               }
+                 },
+    "autoload-dev":  {
+                         "psr-4":  {
+                                       "BayPdf\\Tests\\":  "tests/",
+                                       "Workbench\\App\\":  "workbench/app/"
+                                   }
+                     },
+    "extra":  {
+                  "laravel":  {
+                                  "providers":  [
+                                                    "BayPdf\\BayPdfServiceProvider"
+                                                ]
+                              }
+              },
+    "config":  {
+                   "sort-packages":  true,
+                   "allow-plugins":  {
+
+                                     }
+               },
+    "minimum-stability":  "stable",
+    "prefer-stable":  true,
+    "scripts":  {
+                    "test":  "@php vendor/bin/phpunit",
+                    "format":  "@php vendor/bin/pint src tests config workbench",
+                    "format:check":  "@php vendor/bin/pint --test src tests config workbench",
+                    "sync-ai":  "@php vendor/bin/boost sync",
+                    "qa":  [
+                               "@test",
+                               "@format:check"
+                           ]
+                }
+}
