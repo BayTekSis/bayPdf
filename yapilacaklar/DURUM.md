@@ -9,3 +9,5 @@
 - Faz 1: Testbench smoke testi ve Composer doğrulaması bekleniyor.
 
 Faz 1 tamamlandı: Testbench 1 test / 3 assertion PASS; Composer validate PASS. İlerleme: 1/4 faz (%25).
+
+Faz 2 tamamlandı: 22 test / 37 assertion PASS, Pint PASS. A5 gerçek 148x210 mm olarak düzeltildi. İlerleme: 2/4 faz (%50).

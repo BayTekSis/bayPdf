@@ -11,3 +11,5 @@ Kabul kriterleri:
 - Yalnızca BayPdf dosyaları commitlenmiş; Jugend git durumu başlangıçla aynı.
 
 Durum: Faz 1 doğrulaması.
+
+Faz 1 ve 2 kabul kriterleri doğrulandı. Aktif faz: yetkili API, görsel tasarımcı ve workbench.
