@@ -1,12 +1,12 @@
 # BayPdf
 
-Belge yerleşimini her değişiklikte PHP koduna müdahale etmeden düzenleyin. BayPdf, Laravel uygulamanıza sürümlü PDF şablonları ve hazır bir görsel tasarımcı ekler.
+Edit document layouts without changing PHP code for every adjustment. BayPdf adds versioned PDF templates and a visual designer to Laravel applications.
 
-**Durum:** Yerel geliştirme sürümü. GitHub remote ve Packagist yayını henüz oluşturulmadı. `bay/baypdf` geliştirme paket adıdır; kayıtlı veya yayımlanmış olduğu iddia edilmez.
+**Status:** Local development version. No GitHub remote or Packagist release exists yet. `bay/baypdf` is the development package name; its availability has not been verified.
 
-## Yerelde çalıştırma
+## Run locally
 
-BayPdf kaynak klasöründe:
+From the BayPdf source directory:
 
 ```bash
 composer install
@@ -16,23 +16,25 @@ composer workbench:prepare
 composer serve
 ```
 
-[http://127.0.0.1:8127/baypdf](http://127.0.0.1:8127/baypdf) adresini açın. Workbench kendi SQLite dosyasını kullanır ve yalnızca loopback istekleri kabul eder. Geliştirme kullanıcısı sadece workbench'tedir.
+Open [http://127.0.0.1:8127/baypdf](http://127.0.0.1:8127/baypdf). The workbench uses its own SQLite database and accepts only loopback requests. Its development user exists only in the workbench. Do not expose it to the internet or through a reverse proxy.
 
-## Gereksinimler
+On Windows PowerShell, use `npm.cmd` and `npx.cmd` if script execution restrictions prevent `npm` or `npx` from running.
 
-| Kullanım | Gereksinim |
+## Requirements
+
+| Use | Requirement |
 |---|---|
-| Uygulamada çalıştırma | PHP 8.3+, Laravel 12 veya 13, GD, mbstring |
-| Veritabanı | Laravel bağlantısı ve ilgili PDO sürücüsü |
-| Dosyalar | Özel storage diski ve yazılabilir font cache dizini |
-| Paket geliştirme | Composer 2, Node 22.12+ veya 24+, npm |
-| Test | SQLite, Orchestra Testbench ve geliştirme bağımlılıkları |
+| Application runtime | PHP 8.3+, Laravel 12 or 13, GD, mbstring |
+| Database | Laravel connection and the corresponding PDO driver |
+| Files | Private storage disk and a writable font cache directory |
+| Package development | Composer 2, Node 22.12+ or 24+, npm |
+| Tests | SQLite, Orchestra Testbench and development dependencies |
 
-**Hazır paketi kullanan uygulamada Node/npm gerekmez.** Derlenmiş Vue, CSS ve fontlar Composer paketine dahildir. package.json özeldir; npm'e ayrı paket yayımlanmaz.
+**Applications consuming the package do not need Node/npm.** Compiled Vue assets, CSS and fonts ship in the Composer package. `package.json` is private; there is no separate npm package.
 
-## Başka bir Laravel uygulamasına kurulum
+## Install in a Laravel application
 
-Henüz Packagist yayını olmadığı için yerel Composer repository kullanın. Aşağıdaki komutları **paketi kullanacak uygulamada** çalıştırın:
+Until a Packagist release is available, use a local Composer repository. Run these commands **in the consuming application**:
 
 ```bash
 composer config repositories.baypdf path C:/laragon/www/bayPdf
@@ -42,9 +44,9 @@ php artisan vendor:publish --tag=baypdf-assets
 php artisan migrate
 ```
 
-Komutlar hedef uygulamaya dosya ve iki baypdf_* tablosu ekler. Mevcut veritabanını sıfırlamaz. Ayrıntılar [kurulum rehberinde](docs/INSTALLATION.md).
+Adjust the path to the local BayPdf checkout. These commands publish package files and run the application's pending migrations, including the two `baypdf_*` tables. See the [installation guide](docs/INSTALLATION.md).
 
-config/baypdf.php içinde enabled değerini true yapın. Tasarımcı varsayılan kapalıdır. Açıldığında web, auth ve manage-baypdf Gate kontrolü uygulanır. Gate'i mevcut izin sisteminize bağlayın:
+Set `enabled` to `true` in `config/baypdf.php`. The designer is disabled by default. When enabled, it uses `web`, `auth` and the `manage-baypdf` Gate. Connect the Gate to the application's permission system:
 
 ```php
 use App\Models\User;
@@ -55,29 +57,31 @@ Gate::define('manage-baypdf', fn (User $user): bool =>
 );
 ```
 
-manage-documents uygulamanızda tanımlanması gereken izin/policy yeteneğidir. BayPdf herhangi bir kullanıcıyı otomatik yetkilendirmez. Giriş yapmış, bu izne sahip kullanıcılar /baypdf sayfasını açabilir.
+Define the `manage-documents` ability in the application. BayPdf grants no access automatically. Authenticated users with this permission can open `/baypdf`.
 
-## Kendi değişkenlerinizi tanımlama
+The designer has one shared template area and no built-in tenant isolation. Users who pass the Gate can access all templates and assets; do not expose these routes to tenant customers.
 
-Uygulamanızın servis sağlayıcısının boot metodunda:
+## Register document variables
+
+In the application service provider's `boot` method:
 
 ```php
 use BayPdf\DocumentTypes;
 
 public function boot(DocumentTypes $types): void
 {
-    $types->register('certificate', 'Katılım belgesi', [
+    $types->register('certificate', 'Certificate of participation', [
         [
             'key' => 'recipient.name',
-            'label' => 'Katılımcı adı',
-            'group' => 'Katılımcı',
+            'label' => 'Recipient name',
+            'group' => 'Recipient',
             'type' => 'text',
             'required' => true,
             'example' => 'Ayşe Yılmaz',
         ],
         [
             'key' => 'issued.date',
-            'label' => 'Düzenleme tarihi',
+            'label' => 'Issue date',
             'type' => 'date',
             'example' => '2026-10-06',
             'format' => 'd.m.Y',
@@ -86,17 +90,17 @@ public function boot(DocumentTypes $types): void
 }
 ```
 
-Tasarımcıdan **Yeni şablon** seçin, belge türünü belirleyin ve değişken düğmesine tıklayarak sayfaya ekleyin. Konumu sürükleyerek, ok tuşlarıyla veya milimetre alanlarıyla düzenleyin. Taslağı kaydedin, PDF önizlemesini kontrol edin ve sürümü yayınlayın.
+Choose **New template**, select a document type, then click a variable to add it to the page. Position elements by dragging, using arrow keys or entering millimetre values. Save the draft, check the PDF preview and publish the version.
 
-## Yayınlanan sürümden PDF üretme
+## Generate a PDF from a published version
 
-Uygulamanızın yetkilendirdiği controller/job içinde:
+In an application controller or job, after authorizing access:
 
 ```php
 use BayPdf\Models\TemplateVersion;
 use BayPdf\TemplateManager;
 
-// $versionId, uygulamanızın seçip yetkilendirdiği yayınlanmış sürümdür.
+// $versionId identifies a published version selected and authorized by the application.
 $version = TemplateVersion::query()->findOrFail($versionId);
 
 $pdf = app(TemplateManager::class)->render($version, [
@@ -111,35 +115,34 @@ return response($pdf, 200, [
 ]);
 ```
 
-BayPdf veriyi uygulamanızın modellerinden otomatik çekmez; uygulama izin kontrolünü yapıp veriyi sağlar. Önizleme yalnızca örnek değerleri kullanır. Yayınlanmış sürüm değişmez; düzenleme için yeni taslak klonlanır.
+The application authorizes and supplies the data; BayPdf does not fetch it from application models. Previews use variable examples, falling back to defaults. Published versions are immutable; clone a new draft to make changes.
 
-## Kapsam ve sınırlar
+## Scope and limitations
 
-- Metin, değişken, PNG/JPEG, QR, çizgi ve dikdörtgen; katman sırası, gizleme, çoğaltma ve undo/redo.
-- A4, A5, Letter; yatay/dikey; sabit tek sayfa. Otomatik çok sayfa/tablo akışı yoktur.
-- DejaVu Sans normal/kalın/italik fontları; DE/TR/EN tasarımcı metinleri.
-- Taşan metin sessizce kesilmez, doğrulama hatası döner.
-- HTML/PDF şablon içe aktarma, SVG/WebP ve uzaktan görsel indirme desteklenmez.
-- Tek ortak şablon alanı; yerleşik tenant izolasyonu yoktur.
-- PDF imzası, QR doğrulama servisi ve belge arşivi host uygulamanın sorumluluğundadır.
+- Text, variables, PNG/JPEG images, QR codes, lines and rectangles; layer ordering, hiding, duplication and undo/redo.
+- A4, A5 and Letter in portrait or landscape, with a fixed single-page layout. No automatic pagination or flowing tables.
+- DejaVu Sans regular, bold and italic fonts; German, Turkish and English designer translations.
+- Text overflow produces a validation error instead of silently truncating content.
+- No HTML/PDF template import, SVG/WebP support or remote image downloads.
+- PDF signatures, QR verification services and document archiving belong to the host application.
 
-## Dokümantasyon
+## Documentation
 
-Bu rehberler kaynak repository'sinde bulunur; hafif Composer dağıtım arşivine docs klasörü dahil edilmez.
+These guides are currently in Turkish and available in the source repository. The `docs/` directory is excluded from the Composer distribution archive.
 
-| Rehber | İçerik |
+| Guide | Contents |
 |---|---|
-| [Kurulum](docs/INSTALLATION.md) | Composer, yapılandırma, erişim ve güncelleme |
-| [Değişkenler](docs/VARIABLES.md) | Türler, örnekler, zorunlu alanlar ve snapshot |
-| [Şablonlar ve API](docs/TEMPLATES.md) | JSON yerleşimi, sürümler ve PHP API |
-| [Güvenlik](docs/SECURITY.md) | Yetkiler, özel dosyalar, sınırlar |
-| [Geliştirme](docs/DEVELOPMENT.md) | Testbench, skills, testler ve build |
-| [GitHub ve dağıtım](docs/PUBLISHING.md) | Repository, CI, sürümleme, Packagist |
-| [Sorun giderme](docs/TROUBLESHOOTING.md) | Kurulum ve çıktı hataları |
-| [Mimari](docs/ARCHITECTURE.md) | Teknik kararlar |
-| [Doğrulama](docs/VERIFICATION.md) | Çalıştırılan kontroller ve ortam |
+| [Installation](docs/INSTALLATION.md) | Composer, configuration, access and updates |
+| [Variables](docs/VARIABLES.md) | Types, examples, required fields and snapshots |
+| [Templates and API](docs/TEMPLATES.md) | JSON layout, versions and PHP API |
+| [Security](docs/SECURITY.md) | Permissions, private files and boundaries |
+| [Development](docs/DEVELOPMENT.md) | Testbench, skills, tests and builds |
+| [GitHub and distribution](docs/PUBLISHING.md) | Repository, CI, versioning and Packagist |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | Installation and output errors |
+| [Architecture](docs/ARCHITECTURE.md) | Technical decisions |
+| [Verification](docs/VERIFICATION.md) | Executed checks and environment |
 
-## Geliştirme kontrolleri
+## Development checks
 
 ```bash
 composer qa
@@ -150,10 +153,12 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-Katkı: [CONTRIBUTING.md](CONTRIBUTING.md). Geçmiş: [CHANGELOG.md](CHANGELOG.md). Kullanıcı API'si: [PUBLIC_API.md](PUBLIC_API.md).
+The package uses Orchestra Testbench. Run package commands with `php vendor/bin/testbench`, rather than `php artisan` at the package root.
 
-## Lisans ve kaynaklar
+[Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Public API](PUBLIC_API.md)
 
-BayPdf'nin dağıtım lisansı henüz seçilmedi; composer.json bu nedenle proprietary belirtir. Açık kaynak kullanım izni verilmiş değildir. [LICENSE](LICENSE) ve [üçüncü taraf bildirimleri](THIRD_PARTY_NOTICES.md) geçerlidir.
+## License and credits
 
-PDF: tFPDF / FPDF ailesi. QR: endroid/qr-code. Tasarımcı: Vue. Font: DejaVu. Geliştirme skills: sandermuller/package-boost-laravel ve sandermuller/boost-skills.
+The distribution license has not been selected. `composer.json` declares `proprietary`; no open-source license is granted. See [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
+
+PDF generation: tFPDF / FPDF. QR codes: endroid/qr-code. Designer: Vue. Fonts: DejaVu. Development skills: sandermuller/package-boost-laravel and sandermuller/boost-skills.

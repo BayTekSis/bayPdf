@@ -15,4 +15,10 @@ Bekleyen dış yayın adımları: GitHub sahibi/repository/görünürlük bilgis
 
 Bilinen sınırlamalar: tek sayfalı sabit yerleşim, ortak yönetim alanı; tenant izolasyonu ve otomatik çok sayfa/tablo akışı yok. Düşük Symfony Translation sürümünde PHP 8.4 deprecated bildirimi mevcut. Ayrıntılar README ve doğrulama raporunda.
 
-Sonraki adım: bağımsız workbench üzerinde kullanıcı incelemesi; ardından repository ve lisans kararıyla GitHub hazırlığının tamamlanması.
+README İngilizceye çevrildi; kurulum, yetkilendirme, örnekler ve mevcut sınırlar korundu. Bağlantılı rehberler Türkçe kalıyor.
+
+2026-10-06 devam kontrolü: `composer qa`, 2 frontend testi, production build, workbench hazırlığı ve 2 Chromium senaryosu yeniden geçti. Masaüstü/mobil ekran görüntüleri incelendi; bu senaryolarda düzeltme gerektiren hata bulunmadı. `boost sync --check`: 35 dosyada drift yok. README yerel bağlantıları doğrulandı. Uyumluluk matrisi ve temiz tüketici kurulumu bu turda tekrarlanmadı.
+
+Chromium ilk çalıştırmada bulunamadı; yalnızca `.artifacts/playwright` altına kuruldu ve `PLAYWRIGHT_BROWSERS_PATH` bu dizine ayarlanarak testler geçti. Başlangıçtaki izlenmeyen `.idea/` korundu. GitHub CLI bulunamadı; remote hâlâ tanımlı değil.
+
+Sonraki adım: kullanıcı workbench incelemesi ve GitHub hesabı/repository/görünürlük/lisans kararlarının alınması; ardından dış yayın hazırlığı.
