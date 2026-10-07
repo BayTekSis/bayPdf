@@ -14,6 +14,12 @@ README, kurulum/yayın belgeleri ve üçüncü taraf bildirimleri güncellendi. 
 
 GitHub Actions'a dağıtım arşivini kuran `distribution` işi eklendi. Yerel kontroller: 31 backend testi / 77 assertion, 2 frontend testi, 2 Chromium senaryosu, build, Pint, PHPStan, dağıtım ve arşivden dev bağımlılıkları olmadan kurulum PASS. Detay ve doğrulanmayan alanlar docs/VERIFICATION.md içinde.
 
+## 2026-10-07 kapsamlı kontrol
+
+Tarih girdisi, öğe/değişken listeleri ve özel grup adlarıyla ilgili dört hata düzeltildi. Kalabalık şablon kütüphanesi kendi alanında kaydırılarak araçların ekran dışına itilmesi giderildi. Yeni regresyon testleri düzeltme öncesinde başarısız, sonrasında başarılı çalıştı.
+
+Son kontrol: 34 backend testi / 80 assertion, 2 frontend testi, 4 Chromium senaryosu, production build, Pint, PHPStan ve dağıtım kontrolü PASS. Masaüstü/mobil görüntüler incelendi. Güncel ZIP arşivi geliştirme dosyalarından arındırılmış; ayrı dizinde runtime kurulum, platform, autoload ve asset kontrolleri PASS. Composer runtime ve npm audit güvenlik bildirimi bulmadı. Kanıt ve sınırlar docs/VERIFICATION.md içinde.
+
 ## Dış adımlar
 
 - Son hazırlık commit'i GitHub'a gönderilmeli; bütün CI işleri aynı SHA üzerinde başarılı olmalı.

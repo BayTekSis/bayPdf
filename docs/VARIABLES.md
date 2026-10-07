@@ -35,6 +35,8 @@ $data = ['customer' => ['name' => 'Ayşe Yılmaz'], 'quote.total' => 1250.5];
 
 En fazla 100 değişken. Veriler scalar ve en fazla 5000 karakter olmalıdır. Sıfır geçerlidir. Açık null/boş metin default yerine boş kabul edilir; required ise hata verir.
 
+`register()` çağrısındaki değişken şeması sıfırdan başlayan ardışık indeksli bir liste olmalıdır. İsimli veya aralıklı anahtarlar kabul edilmez; gerekirse `array_values()` kullanın. Bu kural, anahtarlı veri dizisine (`$data`) uygulanmaz.
+
 Tarih kesin YYYY-MM-DD biçimindedir; imkânsız tarihler reddedilir. Para ana para birimindedir, kuruş/cent değildir. Biçim 1,250.50 EUR olur. Farklı yerel biçim için host değeri biçimlendirip text türü olarak gönderebilir.
 
 image izin verilen disk/önek içindeki asset anahtarını taşır. URL/base64 kabul edilmez. qr içeriği QR olarak çizer; sınır 1000 byte. Bağlantının işlevini host sağlar.

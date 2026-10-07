@@ -37,6 +37,10 @@ final class VariableResolver
 
     private function date(string $key, mixed $value, string $format): string
     {
+        if (str_contains((string) $value, "\0")) {
+            $this->invalid($key, 'Dates must be valid YYYY-MM-DD values.');
+        }
+
         $date = DateTimeImmutable::createFromFormat('!Y-m-d', (string) $value);
         if (! $date || $date->format('Y-m-d') !== (string) $value) {
             $this->invalid($key, 'Dates must be valid YYYY-MM-DD values.');

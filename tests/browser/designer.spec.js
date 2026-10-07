@@ -1,5 +1,38 @@
 import { test, expect } from '@playwright/test'
 
+test('a full library keeps editing tools within the desktop viewport', async ({ page }) => {
+  await page.route('**/api/templates?page=1', async route => {
+    const response = await route.fetch()
+    const result = await response.json()
+    result.data = Array.from({ length: 30 }, (_, index) => ({ id: 10000 + index, name: `Library template ${index}`, document_type: 'certificate' }))
+    await route.fulfill({ response, json: result })
+  })
+  await page.goto('/baypdf')
+  await page.getByRole('button', { name: '+ New template' }).first().click()
+  await page.getByRole('dialog').getByLabel('Template name').fill('Library viewport ' + Date.now())
+  await page.getByRole('dialog').getByRole('button', { name: 'Create template' }).click()
+  await expect(page.getByRole('button', { name: 'T Text', exact: true })).toBeInViewport()
+  await page.screenshot({ path: '.artifacts/studio-library.png', fullPage: true })
+})
+
+test('variable groups with object property names remain editable', async ({ page }) => {
+  await page.route('**/api/templates', async route => {
+    if (route.request().method() !== 'POST') return route.continue()
+    const response = await route.fetch()
+    const template = await response.json()
+    template.versions[0].variables[0].group = 'constructor'
+    template.versions[0].variables[1].group = '__proto__'
+    await route.fulfill({ response, json: template })
+  })
+  await page.goto('/baypdf')
+  await page.getByRole('button', { name: '+ New template' }).first().click()
+  await page.getByRole('dialog').getByLabel('Template name').fill('Variable groups ' + Date.now())
+  await page.getByRole('dialog').getByRole('button', { name: 'Create template' }).click()
+  await expect(page.getByRole('button', { name: /Recipient name/ })).toBeVisible()
+  await page.getByRole('button', { name: /Course title/ }).click()
+  await expect(page.locator('.paper .element')).toContainText('Designing for the future')
+})
+
 test('create, edit, preview, publish and clone a template', async ({ page }) => {
   const errors = []
   page.on('pageerror', error => errors.push(error.message))
@@ -45,7 +78,7 @@ test('German shell and mobile layout remain usable', async ({ page }) => {
   await page.goto('/baypdf?locale=de')
   await expect(page.getByRole('button', { name: '+ Neue Vorlage' }).first()).toBeVisible()
   await page.getByRole('button', { name: '+ Neue Vorlage' }).first().click()
-  await page.getByRole('dialog').getByLabel('Vorlagenname').fill('Mobile Vorlage ' + Date.now())
+  await page.getByRole('dialog').getByLabel('Vorlagenname').fill('Mobile Vorlage ' + 'W'.repeat(105))
   await page.getByRole('dialog').getByRole('button', { name: 'Vorlage erstellen' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Mobile Vorlage')
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)

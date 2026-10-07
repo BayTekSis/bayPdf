@@ -27,6 +27,8 @@ $pdf = $manager->render($published, ['recipient.name' => 'Ayşe Yılmaz']);
 
 Koordinatlar ve boyutlar mm; font_size punto. Sayfa A4 (210×297), A5 (148×210) veya Letter (215.9×279.4). Yatay yön ölçüleri ters çevirir. Öğeler array sırasıyla çizilir; son öğe en önde. En fazla 100 öğe.
 
+`elements`, sıfırdan başlayan ardışık indeksli bir liste olmalıdır. İsimli veya aralıklı anahtarlar doğrulama hatası verir; filtrelenmiş PHP dizilerini `array_values()` ile yeniden indeksleyin.
+
 | type | Veri |
 |---|---|
 | text | content düz metni |

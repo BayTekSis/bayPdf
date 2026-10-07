@@ -1,6 +1,16 @@
 # Aktif görev
 
-Amaç: BayPdf'nin Composer ve GitHub yayın hazırlığını tamamlamak; Jugend'e yazmadan mevcut master branch'inde çalışmak.
+Amaç: BayPdf'nin kodunu, tasarımcı görünümünü ve Composer dağıtımını kapsamlı incelemek; doğrulanan hataları mevcut master branch'inde düzeltmek.
+
+## Kapsamlı kontrol
+
+- [x] Runtime kaynakları, API yetkilendirmesi, sürüm yönetimi, dosyalar ve paket manifesti incelendi.
+- [x] Null byte tarih hatası, öğe/değişken listesi doğrulaması ve özel grup adları için regresyon testleri önce başarısız çalıştırıldı, ardından düzeltildi.
+- [x] Kalabalık kütüphanenin araçları ekran dışına itmesi testle doğrulandı ve kaydırılabilir listeyle düzeltildi.
+- [x] 34 backend testi / 80 assertion, 2 frontend testi, 4 Chromium senaryosu, Pint, PHPStan ve build geçti.
+- [x] Son dağıtım arşivi yeniden kontrol edildi ve dokümantasyon tamamlandı.
+
+## Önceki yayın hazırlığı ve dış adımlar
 
 - [x] Git durumu, talimatlar, paket metadatası ve belgeler incelendi.
 - [x] MIT/BayPass lisans bilgileri ve üçüncü taraf atıfları tutarlı hâle getirildi.
@@ -14,4 +24,4 @@ Amaç: BayPdf'nin Composer ve GitHub yayın hazırlığını tamamlamak; Jugend'
 - [ ] Packagist vendor erişimi ve kayıt/webhook tamamlandı.
 - [ ] Yeşil commit'e bağlı release notları ve tag öncesi handoff hazırlandı.
 
-Durum: Yerel yayın hazırlığı doğrulandı. Dış servis erişimi ve final SHA üzerinde CI bekleniyor. Tag/release agent tarafından oluşturulmaz. Kanıtlar docs/VERIFICATION.md ve DURUM.md içinde.
+Durum: Kapsamlı yerel kontrol ve beş düzeltme tamamlandı. Son commit'in uzak CI sonucu ve dış yayın adımları bekleniyor. Tag/release agent tarafından oluşturulmaz. Kanıtlar docs/VERIFICATION.md ve DURUM.md içinde.

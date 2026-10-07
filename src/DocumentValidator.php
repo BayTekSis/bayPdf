@@ -14,7 +14,7 @@ final class DocumentValidator
             'page' => ['required', 'array:size,orientation'],
             'page.size' => ['required', Rule::in(['A4', 'A5', 'Letter'])],
             'page.orientation' => ['required', Rule::in(['portrait', 'landscape'])],
-            'elements' => ['present', 'array', 'max:100'],
+            'elements' => ['present', 'array', 'list', 'max:100'],
             'elements.*' => ['array:id,type,x,y,width,height,content,variable,asset,font_size,font_style,color,fill,align,hidden'],
             'elements.*.id' => ['required', 'string', 'max:80', 'distinct'],
             'elements.*.type' => ['required', Rule::in(['text', 'variable', 'image', 'qr', 'line', 'rectangle'])],

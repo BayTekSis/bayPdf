@@ -1,5 +1,17 @@
 # Doğrulama raporu
 
+## Kapsamlı kontrol — 2026-10-07
+
+Son kod üzerinde `composer qa`: **34 test / 80 assertion**, Pint, PHPStan ve dağıtım doğrulayıcısı PASS. `npm.cmd test`: **2 test**; production build ve Chromium: **4 senaryo PASS**. Ayrı lint/typecheck scripti yoktur.
+
+Beş sorun önce başarısız regresyon testleriyle doğrulandı, sonra düzeltildi: null byte içeren tarihte ValueError, liste olmayan öğe ve değişken şemalarının kabulü, `constructor`/`__proto__` grup adlarında arayüzün bozulması ve kalabalık kütüphanenin düzenleme araçlarını ekran dışına itmesi. Mobil senaryo 120 karakterlik adla yatay taşmayı da denetler. Güncel masaüstü, kalabalık liste ve mobil ekran görüntüleri incelendi.
+
+`.artifacts/baypdf-audit.zip`: 36 giriş; geliştirme/özel dosya yok. Arşivdeki değişen kaynak ve build dosyalarının hash değerleri çalışma ağacıyla aynı. Ayrı dizinde `composer install --no-dev --no-scripts`, platform, autoload ve asset kontrolleri PASS; Testbench kurulu değil. Composer runtime audit ve npm audit bildirim bulmadı. Boost kontrolü 35 dosyada drift bulmadı.
+
+Bağımsız agent incelemesinin bulduğu değişken listesi sorunu da giderildi. Codex CLI incelemesi çalışmadı: `Codex CLI with exec review is required`. Bu tur PHP 8.4/Laravel 13/SQLite ve Chromium ile sınırlıdır; PHP/Laravel matrisi, MySQL/PostgreSQL, yük testi, PDF raster kontrolü ve son commit'in uzak CI sonucu doğrulanmadı. Yerel paket hazır; yayın için DURUM.md'deki dış adımlar bekleniyor.
+
+## Önceki doğrulamalar
+
 Tarih: 2026-10-06. Windows üzerinde, yalnızca BayPdf çalışma alanında çalıştırıldı.
 
 Her satırda 31 test / 77 assertion geçti:

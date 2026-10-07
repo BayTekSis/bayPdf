@@ -15,7 +15,7 @@ final class DocumentTypes
         Validator::make(['key' => $key, 'label' => $label, 'variables' => $variables], [
             'key' => ['required', 'string', 'max:80', 'regex:/^[a-z][a-z0-9_-]*$/'],
             'label' => ['required', 'string', 'max:120'],
-            'variables' => ['present', 'array', 'max:100'],
+            'variables' => ['present', 'array', 'list', 'max:100'],
             'variables.*' => ['array:key,label,group,type,required,example,default,format,currency,decimals'],
             'variables.*.key' => ['required', 'string', 'distinct', 'max:120', 'regex:/^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$/'],
             'variables.*.label' => ['required', 'string', 'max:120'],

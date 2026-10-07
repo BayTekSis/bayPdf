@@ -16,7 +16,7 @@ const dirty = computed(() => document.value && fingerprint(document.value) !== s
 const paper = computed(() => document.value ? dimensions(document.value.page) : [210, 297])
 const scale = computed(() => 96 / 25.4 * zoom.value)
 const groups = computed(() => {
-  const result = {}
+  const result = Object.create(null)
   for (const v of version.value?.variables ?? []) (result[v.group ?? t('variables')] ??= []).push(v)
   return result
 })

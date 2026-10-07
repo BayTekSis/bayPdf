@@ -61,6 +61,21 @@ final class RenderingTest extends TestCase
         app(VariableResolver::class)->resolve([['key' => 'date', 'type' => 'date']], ['date' => '2026-02-30']);
     }
 
+    public function test_date_with_null_byte_is_rejected_as_validation_error(): void
+    {
+        $this->expectException(ValidationException::class);
+        app(VariableResolver::class)->resolve([['key' => 'date', 'type' => 'date']], ['date' => "2026-10-07\0"]);
+    }
+
+    public function test_named_element_keys_are_rejected_instead_of_persisting_an_object(): void
+    {
+        $document = $this->document();
+        $document['elements'] = ['title' => $document['elements'][0]];
+
+        $this->expectException(ValidationException::class);
+        app(DocumentValidator::class)->validate($document, []);
+    }
+
     public function test_unknown_variable_is_rejected(): void
     {
         $this->expectException(ValidationException::class);
@@ -122,6 +137,14 @@ final class RenderingTest extends TestCase
         app(DocumentTypes::class)->register('invoice', 'Invoice', [
             ['key' => 'name', 'label' => 'Name', 'type' => 'text'],
             ['key' => 'name', 'label' => 'Other name', 'type' => 'text'],
+        ]);
+    }
+
+    public function test_named_variable_keys_are_rejected_instead_of_persisting_an_object(): void
+    {
+        $this->expectException(ValidationException::class);
+        app(DocumentTypes::class)->register('invoice', 'Invoice', [
+            'name' => ['key' => 'name', 'label' => 'Name', 'type' => 'text'],
         ]);
     }
 
