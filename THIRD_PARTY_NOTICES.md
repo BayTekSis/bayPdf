@@ -1,6 +1,6 @@
 # Third-party notices
 
-BayPdf's own license is pending. Dependencies retain their upstream licenses.
+BayPdf is licensed under the [MIT License](LICENSE), copyright 2026 BayPass. Dependencies retain their upstream licenses.
 
 - tFPDF: LGPL-2.1, distributed through Composer; see its composer.json license declaration and upstream project at https://github.com/Setasign/tFPDF.
 - endroid/qr-code: MIT, distributed through Composer.

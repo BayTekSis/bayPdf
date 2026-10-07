@@ -16,6 +16,8 @@ CLAUDE.md               export-ignore
 GEMINI.md               export-ignore
 # <<< package-boost (managed) <<<
 .artifacts/ export-ignore
+.idea/ export-ignore
+internal/ export-ignore
 .boost/ export-ignore
 .git/ export-ignore
 .gitignore export-ignore

@@ -1,6 +1,6 @@
 # Katkı
 
-[Geliştirme rehberini](docs/DEVELOPMENT.md) izleyin.
+[Geliştirme rehberini](https://github.com/BayTekSis/bayPdf/blob/master/docs/DEVELOPMENT.md) izleyin.
 
 Davranış değişikliklerine regresyon testi ekleyin. PHP için Pint/Larastan; UI için build ve Playwright kullanılır. Public build dosyalarını kaynakla birlikte güncelleyin.
 

@@ -3,14 +3,16 @@
 Bir Laravel uygulamasında:
 
 ```bash
-composer config repositories.baypdf path C:/laragon/www/bayPdf
-composer require bay/baypdf:@dev
+composer config repositories.baypdf vcs https://github.com/BayTekSis/bayPdf
+composer require bay/baypdf:dev-master
 php artisan vendor:publish --tag=baypdf-config
 php artisan vendor:publish --tag=baypdf-assets
 php artisan migrate
 ```
 
-Path repository yerel geliştirme içindir. Production'da etiketlenmiş bir Composer sürümü kullanın. GitHub/Packagist yayını henüz yoktur. Composer gerektiğinde junction/symlink yerine mirror kullanabilir; paket değişikliklerinin uygulamaya ulaştığını doğrulayın.
+Bu komutlar ilk etiketli sürüm öncesinde GitHub geliştirme branch'ini kurar. `0.1.0` Packagist'e kaydedildikten sonra VCS tanımı olmadan `composer require bay/baypdf:^0.1` kullanın. Production'da etiketli sürümü tercih edin. `migrate` uygulamadaki bütün bekleyen migration'ları çalıştırır.
+
+Yerel paket geliştirmesinde VCS yerine `composer config repositories.baypdf path C:/laragon/www/bayPdf` kullanılabilir; yolu kendi checkout konumuna uyarlayın. Composer junction/symlink yerine mirror kullanırsa paket değişikliklerinin uygulamaya ulaştığını doğrulayın.
 
 ## Etkinleştirme
 

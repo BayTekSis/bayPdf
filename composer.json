@@ -1,6 +1,13 @@
 {
     "name":  "bay/baypdf",
     "description":  "Versioned PDF templates and a self-contained visual designer for Laravel.",
+    "keywords": ["laravel", "pdf", "templates", "designer"],
+    "homepage": "https://github.com/BayTekSis/bayPdf",
+    "support": {
+        "issues": "https://github.com/BayTekSis/bayPdf/issues",
+        "source": "https://github.com/BayTekSis/bayPdf",
+        "docs": "https://github.com/BayTekSis/bayPdf/blob/master/README.md"
+    },
     "type":  "library",
     "license":  "MIT",
     "authors": [

@@ -2,7 +2,7 @@
 
 Edit document layouts without changing PHP code for every adjustment. BayPdf adds versioned PDF templates and a visual designer to Laravel applications.
 
-**Status:** Local development version. No GitHub remote or Packagist release exists yet. `bay/baypdf` is the development package name; its availability has not been verified.
+**Status:** Preparing the first release. Source and CI are available on [GitHub](https://github.com/BayTekSis/bayPdf). Until a tagged release is registered on Packagist, install the development branch through Composer's VCS repository support.
 
 ## Run locally
 
@@ -34,17 +34,17 @@ On Windows PowerShell, use `npm.cmd` and `npx.cmd` if script execution restricti
 
 ## Install in a Laravel application
 
-Until a Packagist release is available, use a local Composer repository. Run these commands **in the consuming application**:
+Before the first Packagist release, run these commands **in the consuming application**:
 
 ```bash
-composer config repositories.baypdf path C:/laragon/www/bayPdf
-composer require bay/baypdf:@dev
+composer config repositories.baypdf vcs https://github.com/BayTekSis/bayPdf
+composer require bay/baypdf:dev-master
 php artisan vendor:publish --tag=baypdf-config
 php artisan vendor:publish --tag=baypdf-assets
 php artisan migrate
 ```
 
-Adjust the path to the local BayPdf checkout. These commands publish package files and run the application's pending migrations, including the two `baypdf_*` tables. See the [installation guide](docs/INSTALLATION.md).
+The development branch can change; use a tagged version for production. Once `0.1.0` is available on Packagist, use `composer require bay/baypdf:^0.1` without the VCS configuration. These commands publish package files and run the application's pending migrations, including the two `baypdf_*` tables. See the [installation guide](https://github.com/BayTekSis/bayPdf/blob/master/docs/INSTALLATION.md).
 
 Set `enabled` to `true` in `config/baypdf.php`. The designer is disabled by default. When enabled, it uses `web`, `auth` and the `manage-baypdf` Gate. Connect the Gate to the application's permission system:
 
@@ -132,15 +132,15 @@ These guides are currently in Turkish and available in the source repository. Th
 
 | Guide | Contents |
 |---|---|
-| [Installation](docs/INSTALLATION.md) | Composer, configuration, access and updates |
-| [Variables](docs/VARIABLES.md) | Types, examples, required fields and snapshots |
-| [Templates and API](docs/TEMPLATES.md) | JSON layout, versions and PHP API |
-| [Security](docs/SECURITY.md) | Permissions, private files and boundaries |
-| [Development](docs/DEVELOPMENT.md) | Testbench, skills, tests and builds |
-| [GitHub and distribution](docs/PUBLISHING.md) | Repository, CI, versioning and Packagist |
-| [Troubleshooting](docs/TROUBLESHOOTING.md) | Installation and output errors |
-| [Architecture](docs/ARCHITECTURE.md) | Technical decisions |
-| [Verification](docs/VERIFICATION.md) | Executed checks and environment |
+| [Installation](https://github.com/BayTekSis/bayPdf/blob/master/docs/INSTALLATION.md) | Composer, configuration, access and updates |
+| [Variables](https://github.com/BayTekSis/bayPdf/blob/master/docs/VARIABLES.md) | Types, examples, required fields and snapshots |
+| [Templates and API](https://github.com/BayTekSis/bayPdf/blob/master/docs/TEMPLATES.md) | JSON layout, versions and PHP API |
+| [Security](https://github.com/BayTekSis/bayPdf/blob/master/docs/SECURITY.md) | Permissions, private files and boundaries |
+| [Development](https://github.com/BayTekSis/bayPdf/blob/master/docs/DEVELOPMENT.md) | Testbench, skills, tests and builds |
+| [GitHub and distribution](https://github.com/BayTekSis/bayPdf/blob/master/docs/PUBLISHING.md) | Repository, CI, versioning and Packagist |
+| [Troubleshooting](https://github.com/BayTekSis/bayPdf/blob/master/docs/TROUBLESHOOTING.md) | Installation and output errors |
+| [Architecture](https://github.com/BayTekSis/bayPdf/blob/master/docs/ARCHITECTURE.md) | Technical decisions |
+| [Verification](https://github.com/BayTekSis/bayPdf/blob/master/docs/VERIFICATION.md) | Executed checks and environment |
 
 ## Development checks
 
@@ -155,19 +155,19 @@ npm run test:browser
 
 The package uses Orchestra Testbench. Run package commands with `php vendor/bin/testbench`, rather than `php artisan` at the package root.
 
-[Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Public API](PUBLIC_API.md)
+[Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Public API](PUBLIC_API.md) · [Security policy](SECURITY.md)
 
 ## License and credits
 
-BayPdf is open-source software licensed under the MIT License.
+BayPdf is licensed under the [MIT License](LICENSE).
 
 Copyright © 2026 BayPass.
 
-BayPdf builds on several open-source projects and resources, including:
+Developed by [Mehmet BAYINDIR](https://github.com/BayTekSis).
 
-tFPDF / FPDF for PDF generation
-endroid/qr-code for QR code generation
-Vue for the visual designer
-DejaVu Fonts for bundled font support
+- tFPDF / FPDF for PDF generation.
+- endroid/qr-code for QR code generation.
+- Vue for the visual designer.
+- DejaVu Fonts for bundled font support.
 
-Third-party components remain subject to their respective licenses and copyright notices. See THIRD_PARTY_NOTICES.md for details.
+Third-party components retain their own licenses and copyright notices. See [third-party notices](THIRD_PARTY_NOTICES.md).

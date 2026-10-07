@@ -1,6 +1,8 @@
 .agents
 .ai
 .artifacts
+.idea
+internal
 .boost
 .git
 .github

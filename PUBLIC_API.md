@@ -13,6 +13,6 @@ Sürümleme sözleşmesi:
 - baypdf-config ve baypdf-assets publish tag'leri
 - baypdf_templates ve baypdf_versions şemaları
 
-Rendering ve Http namespace'leri iç uygulamadır. Vue kaynak bileşeni ayrı npm API değildir. JSON alanları docs/TEMPLATES.md'de tanımlıdır. Model yazımı için TemplateManager kullanın; bulk SQL korumaları atlar.
+Rendering ve Http namespace'leri iç uygulamadır. Vue kaynak bileşeni ayrı npm API değildir. JSON alanları [şablon rehberinde](https://github.com/BayTekSis/bayPdf/blob/master/docs/TEMPLATES.md) tanımlıdır. Model yazımı için TemplateManager kullanın; bulk SQL korumaları atlar.
 
 İlk yayın öncesi API kararlı sürüm olarak duyurulmuş değildir.

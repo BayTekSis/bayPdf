@@ -26,7 +26,7 @@ Testler uygulama anahtarını kendileri üretir; önceden hazırlanmış workben
 - `npm run test:browser`: 2 Chromium senaryosu PASS; oluşturma, düzenleme, PDF önizleme, yayınlama, klonlama, Almanca ve mobil görünüm.
 - Masaüstü ve mobil ekran görüntüleri görsel olarak incelendi.
 - `php vendor/bin/boost sync --check`: 35 dosya, drift yok.
-- GitHub workflow dosyaları YAML parser ile doğrulandı; GitHub üzerinde henüz çalıştırılmadı.
+- GitHub workflow dosyaları YAML parser ile doğrulandı. Bu ilk yerel doğrulama sırasında uzak CI henüz çalıştırılmamıştı; güncel yayın kontrolü aşağıdadır.
 - Ayrı frontend lint/typecheck scripti yoktur.
 
 ## Dağıtım ve sınırlar
@@ -37,4 +37,17 @@ PDF testleri Unicode font gömme, sayfa boyutları, QR/görsel ve taşma doğrul
 
 Son kaynak incelemesinde eski bir model örneğinin sonradan yayınlanmış sürümü değiştirme ihtimali regresyon testiyle kapatıldı. Yetkisiz erişim, CSRF, dosya yolu geçişi ve uzaktan görsel reddi testlerle doğrulandı.
 
-Jugend repository'si salt okunur tutuldu. Son git kontrolünde master branch'i ve temiz durum korundu. GitHub remote, lisans seçimi ve Packagist yayını bekliyor.
+Jugend repository'si ilk geliştirme sırasında salt okunur tutuldu; o kontrol sırasında master branch'i ve temiz durum korundu.
+
+## Yayın hazırlığı — 2026-10-07
+
+- `composer qa`: 31 test / 77 assertion, Pint, PHPStan ve dağıtım doğrulayıcısı PASS.
+- `npm.cmd ci`, `npm.cmd test` (2 test), `npm.cmd run build`: PASS. `public/` çıktısı mevcut commit ile aynı.
+- `composer workbench:prepare` ve `npm.cmd run test:browser`: PASS; 2 Chromium senaryosu.
+- `composer audit --locked --no-dev`: bilinen güvenlik bildirimi yok. npm kurulum denetimi: 0 vulnerability.
+- `php vendor/bin/boost sync --check`: 35 dosyada drift yok.
+- `.artifacts/baypdf-release-check.zip` dışlama kontrolü PASS; özel/geliştirme dosyaları yok. Ayrı dizinde `composer install --no-dev --no-scripts`, platform gereksinimleri ve runtime autoload/asset kontrolü PASS. Testbench kurulmadığı doğrulandı.
+- GitHub workflow YAML dosyaları parse edildi. Yeni `distribution` işi arşiv dışlamalarını, PHP 8.3 üzerinde dev bağımlılıkları olmadan kurulumu ve runtime dosyalarını kontrol eder; uzak sonucu final commit üzerinde ayrıca doğrulanmalıdır.
+- Yayın değişiklikleri bağımsız, salt okunur incelemeden geçti. Codex CLI wrapper çalışmadı: `Codex CLI with exec review is required`; mevcut terminalde uygun CLI yok.
+
+Rector ve ayrı frontend lint/typecheck scripti projede yoktur. Belgeler düz Markdown olduğundan docs build komutu yoktur; bağlantılar dosya yollarına göre kontrol edilir. PHP/Laravel matrisi bu turda yerelde tekrarlanmadı. MySQL/PostgreSQL, yük testi ve PDF raster görsel doğrulaması yapılmadı. GitHub/Packagist yayın durumu için DURUM.md ve son handoff esas alınır.

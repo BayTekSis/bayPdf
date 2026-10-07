@@ -1,25 +1,17 @@
 # Aktif görev
 
-Amaç: BayPdf'yi Jugend'e yazmadan, bağımsız ve tekrar kullanılabilir Laravel paketi olarak oluşturmak.
+Amaç: BayPdf'nin Composer ve GitHub yayın hazırlığını tamamlamak; Jugend'e yazmadan mevcut master branch'inde çalışmak.
 
-Kabul kriterleri:
-- Package Boost kurulmuş ve Codex skills eşitlenmiş.
-- Model bağımsız değişkenler, sürümlü şablonlar ve PDF çıktısı test edilmiş.
-- Tasarımcı paketle derlenmiş olarak dağıtılıyor.
-- Yetkisiz erişim, doğrulama, özel dosyalar ve sürüm değişmezliği test edilmiş.
-- Kurulum, kullanım, geliştirme ve yayın belgeleri mevcut.
-- Yalnızca BayPdf dosyaları commitlenmiş; Jugend git durumu başlangıçla aynı.
+- [x] Git durumu, talimatlar, paket metadatası ve belgeler incelendi.
+- [x] MIT/BayPass lisans bilgileri ve üçüncü taraf atıfları tutarlı hâle getirildi.
+- [x] README, kurulum ve yayın rehberleri mevcut GitHub repository'sine göre güncellendi.
+- [x] Composer destek/kaynak bağlantıları ve güvenlik politikası eklendi.
+- [x] Yerel IDE dosyaları ve release notları Git/dağıtım dışında bırakıldı.
+- [x] QA, frontend, build, tarayıcı ve arşivden runtime kurulum kontrolü geçti.
+- [x] Dağıtım doğrulaması CI'a eklendi; YAML parse ve bağımsız diff incelemesi yapıldı.
+- [ ] Final commit GitHub'a gönderildi ve o SHA'nın tüm CI işleri geçti.
+- [ ] GitHub özel güvenlik bildirimi etkinleştirildi.
+- [ ] Packagist vendor erişimi ve kayıt/webhook tamamlandı.
+- [ ] Yeşil commit'e bağlı release notları ve tag öncesi handoff hazırlandı.
 
-Durum: Yerel uygulama ve doğrulama tamamlandı, 4/4 faz (%100). Kabul kriterleri kontrol edildi. GitHub hesabı/repository, görünürlük ve lisans bilgileri olmadan dış yayın yapılmadı. Test kanıtları docs/VERIFICATION.md içinde.
-
-## Devam görevi: İngilizce README ve yerel doğrulama
-
-- [x] Git durumu, talimatlar, belgeler ve mevcut kod incelendi.
-- [x] README, kod örneklerinin açıklamaları dahil İngilizce hazırlandı; yerel bağlantılar kontrol edildi.
-- [x] Backend QA, frontend testleri, build, workbench hazırlığı ve Chromium senaryoları yeniden çalıştırıldı.
-- [x] Masaüstü ve mobil ekran görüntüleri incelendi.
-- [x] Başlangıçtaki `.idea/` değişikliği korundu; Jugend'e yazılmadı.
-- [ ] GitHub hesabı/organizasyonu, repository adı, görünürlük ve lisans kararı alındı.
-- [ ] Kararlara göre paket kimliği kesinleştirildi; remote/push ve uzak CI doğrulandı.
-
-Durum: README ve yerel doğrulama tamamlandı. Kullanıcı incelemesi ve yayın kararları bekleniyor; tag/release oluşturulmadı. Bu turdaki doğrulama kapsamı DURUM.md içinde kaydedildi.
+Durum: Yerel yayın hazırlığı doğrulandı. Dış servis erişimi ve final SHA üzerinde CI bekleniyor. Tag/release agent tarafından oluşturulmaz. Kanıtlar docs/VERIFICATION.md ve DURUM.md içinde.

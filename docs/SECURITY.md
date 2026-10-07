@@ -23,4 +23,4 @@ SVG/HTML/PHP çalıştırılabilir içerik olarak işlenmez. Tasarımcı metinle
 
 Workbench yalnızca geliştirme içindir. Loopback'ten gelen isteklerde geliştirme kullanıcısı sağlar; internete veya reverse proxy arkasına yayınlamayın. Workbench dağıtım arşivinden çıkarılır.
 
-Repository açıldıktan sonra GitHub private vulnerability reporting etkinleştirilmelidir. Kamuya açık issue ve fixture içine hassas veri/token eklemeyin.
+Özel bildirim yolu ve destek kapsamı [SECURITY.md](../SECURITY.md) içinde tanımlıdır. Repository ayarlarından private vulnerability reporting etkinleştirilmelidir. Kamuya açık issue ve fixture içine hassas veri/token eklemeyin.

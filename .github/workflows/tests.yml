@@ -62,3 +62,28 @@ jobs:
         with:
           name: browser-results
           path: .artifacts/browser-results/
+  distribution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, gd, pdo_sqlite
+          coverage: none
+      - name: Build and inspect distribution
+        run: |
+          composer archive --format=zip --dir=.artifacts --file=baypdf-dist
+          unzip -Z1 .artifacts/baypdf-dist.zip > .artifacts/archive-files.txt
+          if grep -Eq '^(vendor/|node_modules/|workbench/|tests/|resources/js/|docs/|internal/|yapilacaklar/|\.|composer.lock|package-lock.json)' .artifacts/archive-files.txt; then
+            echo 'Development or private files found in distribution'
+            exit 1
+          fi
+          mkdir .artifacts/dist-install
+          unzip -q .artifacts/baypdf-dist.zip -d .artifacts/dist-install
+      - name: Install runtime dependencies from archive
+        working-directory: .artifacts/dist-install
+        run: |
+          composer install --no-dev --prefer-dist --no-interaction --no-scripts
+          composer check-platform-reqs --no-dev
+          php -r 'require "vendor/autoload.php"; foreach (["BayPdf\\BayPdfServiceProvider", "BayPdf\\TemplateManager", "BayPdf\\PdfRenderer"] as $class) { if (!class_exists($class)) { throw new RuntimeException($class); } } foreach (["public/designer.js", "public/designer.css", "public/Vue-LICENSE.txt", "public/DejaVu-LICENSE.txt", "LICENSE", "config/baypdf.php", "resources/views/designer.blade.php"] as $file) { if (!is_file($file)) { throw new RuntimeException($file); } }'

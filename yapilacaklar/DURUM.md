@@ -1,24 +1,26 @@
-﻿# Durum
+# Durum
 
-Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı (%100).
+Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı.
 
-1. Bağımsız Composer repository, Package Boost 1.1.0 ve boost-skills 2.49.0, Codex skills ve Testbench kuruldu.
-2. Esnek değişken kaydı, Unicode PDF, özel görseller ve sürümlü şablonlar tamamlandı.
-3. Yetkili API, DE/TR/EN Vue tasarımcı ve bağımsız workbench tamamlandı.
-4. Uyumluluk testleri, statik analiz, dağıtım kontrolü, GitHub CI ve kapsamlı kullanım belgeleri tamamlandı.
+- Bağımsız Composer paketi, Testbench/workbench ve Package Boost altyapısı mevcut.
+- Değişken kaydı, sürümlü şablonlar, Unicode PDF ve yetkili Vue tasarımcı tamamlandı.
+- GitHub: https://github.com/BayTekSis/bayPdf, public, master branch'i.
+- Lisans: MIT. Telif sahibi: BayPass. Geliştirici: Mehmet BAYINDIR.
+- Composer adı mevcut `bay/baypdf` olarak korundu; Packagist vendor sahipliği henüz doğrulanmadı.
 
-Son doğrulama: 31 backend testi / 77 assertion, 2 frontend testi ve 2 tarayıcı senaryosu PASS. Build, Pint, PHPStan ve dağıtım validator PASS. Laravel 12/13 ve PHP 8.3/8.4 çalıştırılan kombinasyonları için docs/VERIFICATION.md esas alınır.
+## 2026-10-07 yayın hazırlığı
 
-Jugend'e yazılmadı; master branch ve temiz git durumu korundu. Composer auth sorunu sadece paket içindeki izole Composer home ile aşıldı; global ayarlar değişmedi.
+README, kurulum/yayın belgeleri ve üçüncü taraf bildirimleri güncellendi. Composer homepage/support/keywords bilgileri eklendi. GitHub güvenlik politikası oluşturuldu. `.idea/` ve yerel release notları Git/dağıtım dışında bırakıldı; kullanıcı dosyaları silinmedi.
 
-Bekleyen dış yayın adımları: GitHub sahibi/repository/görünürlük bilgisi, dağıtım lisansı seçimi, uzak CI çalışması ve sürüm/Packagist yayını. Remote ve tag oluşturulmadı; lisans şimdilik proprietary.
+GitHub Actions'a dağıtım arşivini kuran `distribution` işi eklendi. Yerel kontroller: 31 backend testi / 77 assertion, 2 frontend testi, 2 Chromium senaryosu, build, Pint, PHPStan, dağıtım ve arşivden dev bağımlılıkları olmadan kurulum PASS. Detay ve doğrulanmayan alanlar docs/VERIFICATION.md içinde.
 
-Bilinen sınırlamalar: tek sayfalı sabit yerleşim, ortak yönetim alanı; tenant izolasyonu ve otomatik çok sayfa/tablo akışı yok. Düşük Symfony Translation sürümünde PHP 8.4 deprecated bildirimi mevcut. Ayrıntılar README ve doğrulama raporunda.
+## Dış adımlar
 
-README İngilizceye çevrildi; kurulum, yetkilendirme, örnekler ve mevcut sınırlar korundu. Bağlantılı rehberler Türkçe kalıyor.
+- Son hazırlık commit'i GitHub'a gönderilmeli; bütün CI işleri aynı SHA üzerinde başarılı olmalı.
+- Private vulnerability reporting etkinleştirilmeli. Kontrolde kapalıydı; terminalde GitHub yazma kimliği bulunamadı.
+- Packagist hesabının `bay` vendor erişimi doğrulanmalı, repository kaydedilmeli ve webhook kurulmalı.
+- CI yeşil olduktan sonra doğrulanmış SHA'ya bağlı release notları hazırlanmalı. Tag/release kullanıcı tarafından oluşturulmalı; yayın sonrası tag ve changelog işleri kontrol edilmeli.
 
-2026-10-06 devam kontrolü: `composer qa`, 2 frontend testi, production build, workbench hazırlığı ve 2 Chromium senaryosu yeniden geçti. Masaüstü/mobil ekran görüntüleri incelendi; bu senaryolarda düzeltme gerektiren hata bulunmadı. `boost sync --check`: 35 dosyada drift yok. README yerel bağlantıları doğrulandı. Uyumluluk matrisi ve temiz tüketici kurulumu bu turda tekrarlanmadı.
+GitHub CLI bu terminalde yok; Git credential lookup başarısız oldu. Codex CLI bağımsız inceleme wrapper'ı da uygun CLI bulamadı; yayın diff'i ayrı agent tarafından salt okunur incelendi.
 
-Chromium ilk çalıştırmada bulunamadı; yalnızca `.artifacts/playwright` altına kuruldu ve `PLAYWRIGHT_BROWSERS_PATH` bu dizine ayarlanarak testler geçti. Başlangıçtaki izlenmeyen `.idea/` korundu. GitHub CLI bulunamadı; remote hâlâ tanımlı değil.
-
-Sonraki adım: kullanıcı workbench incelemesi ve GitHub hesabı/repository/görünürlük/lisans kararlarının alınması; ardından dış yayın hazırlığı.
+Sınırlar: tek sayfalı sabit yerleşim, ortak yönetim alanı; tenant izolasyonu, otomatik çok sayfa ve tablo akışı yok. Jugend'e yazılmadı.
