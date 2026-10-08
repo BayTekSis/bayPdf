@@ -24,6 +24,6 @@ Amaç: BayPdf'nin kodunu, tasarımcı görünümünü ve Composer dağıtımın�
 - [ ] Packagist vendor erişimi ve kayıt/webhook tamamlandı.
 - [x] Yeşil commit'e bağlı release notları hazırlandı; açık yayın talebi üzerine 0.1.0 etiketi ve GitHub sürümü yayımlandı.
 - [x] Etiket üzerindeki 11 test/dağıtım CI işi geçti.
-- [ ] Başarısız otomatik changelog işleminin yerel telafisi GitHub'a aktarıldı.
+- [x] Başarısız otomatik changelog işleminin telafisi `cf912fc` commit'iyle GitHub'a aktarıldı.
 
-Durum: GitHub v0.1.0 yayımlandı ve etiket CI başarılı. Packagist hesabına erişim/kayıt ve changelog telafisinin uzak aktarımı bekleniyor. Ayrıntılar DURUM.md içinde.
+Durum: GitHub v0.1.0 yayımlandı, etiket CI başarılı ve changelog telafisi GitHub'a aktarıldı. Packagist hesabına erişim/kayıt bekleniyor. Ayrıntılar DURUM.md içinde.

@@ -27,6 +27,7 @@ Son kontrol: 34 backend testi / 80 assertion, 2 frontend testi, 4 Chromium senar
 - Release sonrası `Update changelog` işi (`37751897045`) commit adımında 128 ile başarısız oldu. Changelog, yayımlanan release gövdesinden yerelde tamamlandı. Release hedefi SHA; workflow bu değeri checkout edip branch belirtmeden push ediyor. Hedefi `master` olarak güncelleme denemesi GitHub kimliği alınamadığı için tamamlanmadı; etiket değiştirilmedi.
 - Private vulnerability reporting etkinleştirilmeli. Kontrolde kapalıydı; terminalde GitHub yazma kimliği bulunamadı.
 - Packagist `bay/baypdf` API kontrolü 404 döndü. Paket sahibi hesabıyla repository kaydı ve webhook kurulumu bekleniyor; bağlı tarayıcı oturumu yok.
+- Changelog telafisi `cf912fc` commit'iyle master'a gönderildi. Başarısız otomatik işin sonucu değiştirilmedi; sürüm etiketi aynı commit'te tutuldu.
 - Sürüm notları `internal/release-notes-0.1.0.md` içinde doğrulanmış SHA'ya bağlıdır. Composer manifestine version eklenmedi; sürüm Git etiketinden okunur.
 
 GitHub CLI bu terminalde yok; Git credential lookup başarısız oldu. Codex CLI bağımsız inceleme wrapper'ı da uygun CLI bulamadı; yayın diff'i ayrı agent tarafından salt okunur incelendi.
