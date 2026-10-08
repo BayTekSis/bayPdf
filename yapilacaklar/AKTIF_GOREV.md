@@ -19,9 +19,11 @@ Amaç: BayPdf'nin kodunu, tasarımcı görünümünü ve Composer dağıtımın�
 - [x] Yerel IDE dosyaları ve release notları Git/dağıtım dışında bırakıldı.
 - [x] QA, frontend, build, tarayıcı ve arşivden runtime kurulum kontrolü geçti.
 - [x] Dağıtım doğrulaması CI'a eklendi; YAML parse ve bağımsız diff incelemesi yapıldı.
-- [ ] Final commit GitHub'a gönderildi ve o SHA'nın tüm CI işleri geçti.
+- [x] Final kod commit'i GitHub'a gönderildi ve o SHA'nın tüm test/dağıtım CI işleri geçti.
 - [ ] GitHub özel güvenlik bildirimi etkinleştirildi.
 - [ ] Packagist vendor erişimi ve kayıt/webhook tamamlandı.
-- [ ] Yeşil commit'e bağlı release notları ve tag öncesi handoff hazırlandı.
+- [x] Yeşil commit'e bağlı release notları hazırlandı; açık yayın talebi üzerine 0.1.0 etiketi ve GitHub sürümü yayımlandı.
+- [x] Etiket üzerindeki 11 test/dağıtım CI işi geçti.
+- [ ] Başarısız otomatik changelog işleminin yerel telafisi GitHub'a aktarıldı.
 
-Durum: Kapsamlı yerel kontrol ve beş düzeltme tamamlandı. Son commit'in uzak CI sonucu ve dış yayın adımları bekleniyor. Tag/release agent tarafından oluşturulmaz. Kanıtlar docs/VERIFICATION.md ve DURUM.md içinde.
+Durum: GitHub v0.1.0 yayımlandı ve etiket CI başarılı. Packagist hesabına erişim/kayıt ve changelog telafisinin uzak aktarımı bekleniyor. Ayrıntılar DURUM.md içinde.

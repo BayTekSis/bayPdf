@@ -22,10 +22,12 @@ Son kontrol: 34 backend testi / 80 assertion, 2 frontend testi, 4 Chromium senar
 
 ## Dış adımlar
 
-- Son hazırlık commit'i GitHub'a gönderilmeli; bütün CI işleri aynı SHA üzerinde başarılı olmalı.
+- `0.1.0` etiketi ve `v0.1.0` GitHub release, 2026-10-08 tarihinde kullanıcının açık yayın talebiyle oluşturuldu. Etiket: `67903e737ffde7b90890c4cf15b635adcc280390`.
+- Master CI `37744943786` ve etiket CI `37751728725`: 11 işin tamamı başarılı. Yerel QA, build, 2 frontend ve 4 Chromium testi yeniden geçti.
+- Release sonrası `Update changelog` işi (`37751897045`) commit adımında 128 ile başarısız oldu. Changelog, yayımlanan release gövdesinden yerelde tamamlandı. Release hedefi SHA; workflow bu değeri checkout edip branch belirtmeden push ediyor. Hedefi `master` olarak güncelleme denemesi GitHub kimliği alınamadığı için tamamlanmadı; etiket değiştirilmedi.
 - Private vulnerability reporting etkinleştirilmeli. Kontrolde kapalıydı; terminalde GitHub yazma kimliği bulunamadı.
-- Packagist hesabının `bay` vendor erişimi doğrulanmalı, repository kaydedilmeli ve webhook kurulmalı.
-- CI yeşil olduktan sonra doğrulanmış SHA'ya bağlı release notları hazırlanmalı. Tag/release kullanıcı tarafından oluşturulmalı; yayın sonrası tag ve changelog işleri kontrol edilmeli.
+- Packagist `bay/baypdf` API kontrolü 404 döndü. Paket sahibi hesabıyla repository kaydı ve webhook kurulumu bekleniyor; bağlı tarayıcı oturumu yok.
+- Sürüm notları `internal/release-notes-0.1.0.md` içinde doğrulanmış SHA'ya bağlıdır. Composer manifestine version eklenmedi; sürüm Git etiketinden okunur.
 
 GitHub CLI bu terminalde yok; Git credential lookup başarısız oldu. Codex CLI bağımsız inceleme wrapper'ı da uygun CLI bulamadı; yayın diff'i ayrı agent tarafından salt okunur incelendi.
 
