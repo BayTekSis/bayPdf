@@ -6,6 +6,10 @@ return [
     'path' => 'baypdf',
     'middleware' => ['web', 'auth'],
     'gate' => 'manage-baypdf',
+    'scoping' => [
+        // When enabled, the host must bind BayPdf\Contracts\ScopeResolver.
+        'enabled' => false,
+    ],
     'locale' => 'en',
     'disk' => 'local',
     'asset_prefix' => 'baypdf/assets',

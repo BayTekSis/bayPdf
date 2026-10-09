@@ -8,7 +8,7 @@ Detaylı ve ölçülebilir kabul kriterleri `docs/codex/ROADMAP.md` içinde tek 
 
 - [x] Repository truth audit ve başlangıç test envanteri çıkarıldı.
 - [x] `docs/codex/` continuity sistemi ve objective roadmap hazırlandı.
-- [ ] Generic scope isolation ve legacy strategy tamamlandı.
+- [x] Generic scope isolation ve legacy strategy tamamlandı.
 - [ ] Scoped assets tamamlandı.
 - [ ] Collection schema ve validation tamamlandı.
 - [ ] Collection table designer tamamlandı.
@@ -16,7 +16,7 @@ Detaylı ve ölçülebilir kabul kriterleri `docs/codex/ROADMAP.md` içinde tek 
 - [ ] Browser, security, backward compatibility ve distribution doğrulamaları tamamlandı.
 - [ ] Self-contained Finance readiness report tamamlandı.
 
-Durum: İlk mantıksal birim tamamlanıyor. Sonraki iş server-side scope contract ve additive template scope migration'dır.
+Durum: Generic template/version scope isolation tamamlandı. Sonraki iş scoped asset storage, erişim ve referans doğrulamasıdır.
 
 ---
 

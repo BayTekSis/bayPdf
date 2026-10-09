@@ -59,7 +59,7 @@ Gate::define('manage-baypdf', fn (User $user): bool =>
 
 Define the `manage-documents` ability in the application. BayPdf grants no access automatically. Authenticated users with this permission can open `/baypdf`.
 
-The designer has one shared template area and no built-in tenant isolation. Users who pass the Gate can access all templates and assets; do not expose these routes to tenant customers.
+The default remains one shared template area. Applications that need isolation can enable opaque server-side scoping and bind `BayPdf\Contracts\ScopeResolver`; see the [installation guide](https://github.com/BayTekSis/bayPdf/blob/master/docs/INSTALLATION.md). When scoping is enabled, a missing scope fails closed and legacy unscoped templates stay hidden until the host explicitly assigns ownership.
 
 ## Register document variables
 

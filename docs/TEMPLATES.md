@@ -57,6 +57,8 @@ Metin satırlara sarılır. Sığmazsa 422 verir; kutuyu büyütün veya fontu k
 
 Eski lock_version 409 üretir. Yeniden yükleyin; başkasının kaydını otomatik ezmeyin. Doğrudan SQL/bulk Eloquent model korumalarını atlar; yazımlar için TemplateManager kullanın.
 
+Scoping etkinse TemplateManager current opaque scope'u server-side resolver'dan alır. Create edilen template bu scope'u taşır; save, publish, clone, preview ve render yalnız aynı scope'un version'larını kabul eder. TemplateVersion ayrı bir scope alanı taşımaz ve başka Template'e reassociate edilemez. Direct model sorguları package servisinin scope kontrolünü atlayabileceğinden recommended public path değildir.
+
 Veritabanı olmadan: `app(BayPdf\PdfRenderer::class)->render($document, $data, $variables)`. Bu düşük seviye API yayın durumu denetlemez. variables, DocumentTypes üzerinden doğrulanmış şemadır.
 
 ## Tasarımcı API

@@ -15,8 +15,17 @@
 
 ## Pending implementation decisions
 
-- Exact scope resolver interface and default implementation, after service-container conventions are tested.
-- Additive database column/index details and explicit legacy-data adoption workflow.
 - Scoped asset prefix encoding and listing behavior.
 - Layout schema v2 region and flow shape.
 - Maximum defaults after renderer tests establish practical deterministic bounds.
+
+## Implemented scope decisions
+
+- Public contract: `BayPdf\Contracts\ScopeResolver::resolve(): ?string`.
+- Default binding returns null and `scoping.enabled=false` preserves the shared query behavior.
+- Enabled mode requires a non-empty opaque identifier of at most 191 characters without control characters.
+- `baypdf_templates.scope_key` is nullable and indexed. Existing rows remain null.
+- TemplateVersion carries no duplicate scope column; queries derive ownership through `template_id`.
+- Scoped route binding and TemplateManager return not-found behavior for foreign template/version IDs.
+- Version reassignment is prohibited for every version, preventing ownership changes through the relation.
+- Legacy ownership adoption is an explicit host migration over verified template IDs; automatic assignment is forbidden.

@@ -4,7 +4,9 @@
 
 Repository truth audit tamamlandı. Mevcut kod shared template/asset alanı, scalar değişkenler ve fixed single-page absolute layout kullanıyor; schema snapshot, published immutability ve `lock_version` davranışları korunacak. `docs/codex/` altında continuity sistemi ve 65 objektif kabul kriterli master roadmap oluşturuldu. Başlangıç doğrulaması: 34 backend testi/80 assertion ve 2 frontend testi PASS; 4 mevcut Playwright senaryosu envantere alındı.
 
-Sonraki mantıksal adım: Generic server-side scope resolver, additive nullable template scope alanı ve fail-closed scoped lifecycle.
+Generic scope logical unit tamamlandı: public `ScopeResolver` contract'ı, default shared mod, enabled fail-closed davranış, indexed nullable `scope_key`, scoped TemplateManager lifecycle/render çağrıları ve template/version route binding eklendi. Legacy null satırlar scoped modda gizli kalır ve yalnız host'un doğrulanmış ID migration'ıyla sahiplenilir. Targeted doğrulama 24 test/77 assertion PASS.
+
+Sonraki mantıksal adım: Scoped asset storage prefix, list/read isolation ve template/image variable reference kontrolleri.
 
 
 Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı.

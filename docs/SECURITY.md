@@ -2,7 +2,11 @@
 
 Tasarımcı varsayılan kapalıdır. Host authentication ve Gate gerektirir. BayPdf kendi kullanıcı/rol tablosunu oluşturmaz. API ve özel görseller aynı yetki kontrolünden geçer.
 
-İlk sürüm tek ortak şablon alanıdır. Gate'i geçen yöneticiler bütün şablon ve assetleri görebilir. Yerleşik tenant izolasyonu yoktur; route'ları tenant müşterilerine açmayın.
+Varsayılan mod tek ortak şablon alanıdır. İzolasyon gereken host'lar `scoping.enabled=true` ayarlayıp `BayPdf\Contracts\ScopeResolver` bind eder. Scope yalnız server-side current context'ten çözülür; request body/query içindeki scope alanları authoritative değildir. Resolver boş/geçersiz dönerse erişim fail-closed durur.
+
+Scoped modda template ve version route binding, listeleme ve `TemplateManager` lifecycle/render çağrıları current scope ile sınırlandırılır. Başka scope'a ait tahmin edilmiş ID'ler bulunamaz. Version scope'u canonical template ilişkisinden gelir ve version başka template'e taşınamaz. Direct raw Eloquent/SQL sorguları tamamen engellenemez; host entegrasyonu okuma/yazma/render için `TemplateManager` ve designer API yolunu kullanmalıdır.
+
+Migration sonrası eski `scope_key=null` template'ler scoped modda görünmez. Ownership kanıtlanmadan topluca bir current scope'a atanmaz; açık ID eşlemesi host migration'ında yapılır.
 
 Host render çağrısına verdiği verilerin erişimini kendi doğrular. PHP servisleri host kodunu güvenilir kabul eder. PDF otomatik depolanmaz, e-postalanmaz veya loglanmaz.
 

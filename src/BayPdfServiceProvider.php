@@ -2,6 +2,8 @@
 
 namespace BayPdf;
 
+use BayPdf\Contracts\ScopeResolver;
+use BayPdf\Support\SharedScopeResolver;
 use Illuminate\Support\ServiceProvider;
 
 final class BayPdfServiceProvider extends ServiceProvider
@@ -10,6 +12,7 @@ final class BayPdfServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/baypdf.php', 'baypdf');
         $this->app->singleton(DocumentTypes::class);
+        $this->app->singleton(ScopeResolver::class, SharedScopeResolver::class);
     }
 
     public function boot(): void

@@ -7,6 +7,7 @@ use BayPdf\DocumentTypes;
 use BayPdf\Models\Template;
 use BayPdf\Models\TemplateVersion;
 use BayPdf\PdfRenderer;
+use BayPdf\Support\ScopeContext;
 use BayPdf\TemplateManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ use Illuminate\View\View;
 
 final class DesignerController
 {
-    public function __construct(private TemplateManager $templates) {}
+    public function __construct(private TemplateManager $templates, private ScopeContext $scope) {}
 
     public function index(): View
     {
@@ -29,7 +30,9 @@ final class DesignerController
 
     public function templates(): JsonResponse
     {
-        return response()->json(Template::query()->withCount('versions')->latest('id')->paginate(30));
+        $templates = $this->scope->templates(Template::query());
+
+        return response()->json($templates->withCount('versions')->latest('id')->paginate(30));
     }
 
     public function show(Template $template): JsonResponse

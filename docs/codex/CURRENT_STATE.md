@@ -1,15 +1,15 @@
 # Current state
 
 - Current branch: `master`
-- Current phase: Baseline and continuity
-- Last completed unit: Repository truth audit and pre-implementation snapshot
-- Current working state: Continuity documents are being introduced; implementation has not started
-- Acceptance criteria completed: Baseline repository/config/runtime audit, clean-tree confirmation, current backend test baseline, current frontend unit baseline
+- Current phase: Scoped assets
+- Last completed unit: Generic server-side template/version scope isolation
+- Current working state: Scope implementation and related tests pass; logical unit is ready to commit
+- Acceptance criteria completed: 12 of 65; baseline criteria plus all generic template/version scope criteria
 - Acceptance criteria remaining: See unchecked items in `ROADMAP.md`
 - Known blockers: None. Browser tests have been inventoried but not run in this unit.
-- Latest validation: `composer test` passed with 34 tests and 80 assertions; `npm.cmd test` passed with 2 tests; Playwright lists 4 scenarios.
-- Expected next task: Implement and test the generic server-side scope contract and additive template scope migration.
-- Expected next commit message: `Codex süreklilik sistemi oluşturuldu`
+- Latest validation: Scope, TemplateManager, and designer API subset passed with 24 tests and 77 assertions after Pint passed.
+- Expected next task: Scope asset storage prefixes, listing, reads, static/image-variable render paths, and legacy behavior.
+- Expected next commit message: `Şablon kapsam izolasyonu eklendi`
 - Uncommitted user changes: None at task start.
 - Recommended next model/reasoning: GPT-5.6 Sol, high reasoning, because public API, persistence, rendering, and security boundaries are changing.
 

@@ -23,6 +23,7 @@ config/baypdf.php:
 'path' => 'baypdf',
 'middleware' => ['web', 'auth'],
 'gate' => 'manage-baypdf',
+'scoping' => ['enabled' => false],
 'locale' => 'tr',
 'disk' => 'local',
 ```
@@ -39,6 +40,7 @@ Gate tanımsızsa erişim reddedilir. Bütün API ve görsel yolları Gate ile k
 | path | baypdf; sayfa/API öneki |
 | middleware | web, auth |
 | gate | manage-baypdf |
+| scoping.enabled | false; shared alan korunur, true ise server-side resolver zorunludur |
 | locale | en; en/de/tr desteklenir |
 | disk | local; host diskinin özel kökü olmalıdır |
 | asset_prefix | baypdf/assets |
@@ -49,6 +51,41 @@ Gate tanımsızsa erişim reddedilir. Bütün API ve görsel yolları Gate ile k
 Disk Laravel filesystems.php üzerinden tanımlanır. Public diski seçmeyin. Özel görseller için storage symlink oluşturmayın. Font cache yerel ve PHP sürecince yazılabilir olmalıdır.
 
 Migration'lar provider tarafından yüklenir. Tablolar baypdf_templates ve baypdf_versions adını kullanır. Kullanıcı tablosuna foreign key eklenmez.
+
+## Opaque scope isolation
+
+Shared kurulum için `scoping.enabled` değerini false bırakın. İzolasyon gerektiğinde host, kendi current-context servisini kullanarak contract'ı bind eder; authoritative scope request body/query parametresinden okunmaz:
+
+```php
+use App\Support\CurrentContext;
+use BayPdf\Contracts\ScopeResolver;
+
+$this->app->singleton(ScopeResolver::class, function ($app): ScopeResolver {
+    return new class($app->make(CurrentContext::class)) implements ScopeResolver {
+        public function __construct(private CurrentContext $context) {}
+
+        public function resolve(): ?string
+        {
+            return $this->context->documentScopeKey();
+        }
+    };
+});
+```
+
+Sonra published config içinde `scoping.enabled` true yapılır. Resolver en fazla 191 karakterlik, boş olmayan ve control character içermeyen opaque bir string döndürmelidir. Örneğin `organization:abc` kullanılabilir; BayPdf anahtarın anlamını yorumlamaz. Null/geçersiz sonuç template işlemlerini durdurur.
+
+### Mevcut unscoped template'ler
+
+Scope migration'ı mevcut satırları değiştirmez; `scope_key` nullable eklenir. Scoping açıldığında null satırlar hiçbir scope tarafından görünmez. Host veri sahipliğini dış kayıtlarından doğruladıktan sonra yalnız açıkça eşlenen template ID'lerini bir host migration'ında güncellemelidir:
+
+```php
+DB::table('baypdf_templates')
+    ->whereNull('scope_key')
+    ->whereIn('id', $verifiedTemplateIds)
+    ->update(['scope_key' => $verifiedOpaqueScope]);
+```
+
+Bu eşleme ownership kararıdır; BayPdf eski satırları current scope'a otomatik atamaz. Assetlerin scope migration davranışı scoped asset bölümünde ayrıca açıklanır. Scoping etkinleştirilmeden önce bütün gerekli template ve asset eşlemelerini yedekli bir bakım penceresinde tamamlayın.
 
 ## Güncelleme
 

@@ -13,14 +13,14 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## B. Generic scope isolation
 
-- [ ] A minimal public server-side scope resolver contract is documented and bound by the package.
-- [ ] Scoping disabled preserves the shared installation behavior.
-- [ ] Scoping enabled without a resolved scope fails closed.
-- [ ] Templates store an additive nullable opaque scope key with a safe index.
-- [ ] Template list/create/read operations are restricted to the resolved scope.
-- [ ] Save, publish, clone, preview, version reads, and safe programmatic rendering reject cross-scope IDs.
-- [ ] Route binding returns unavailable/404 behavior for cross-scope template and version IDs.
-- [ ] Legacy unscoped records remain deterministic and are never silently assigned to a tenant scope.
+- [x] A minimal public server-side scope resolver contract is documented and bound by the package.
+- [x] Scoping disabled preserves the shared installation behavior.
+- [x] Scoping enabled without a resolved scope fails closed.
+- [x] Templates store an additive nullable opaque scope key with a safe index.
+- [x] Template list/create/read operations are restricted to the resolved scope.
+- [x] Save, publish, clone, preview, version reads, and safe programmatic rendering reject cross-scope IDs.
+- [x] Route binding returns unavailable/404 behavior for cross-scope template and version IDs.
+- [x] Legacy unscoped records remain deterministic and are never silently assigned to a tenant scope.
 
 ## C. Scoped assets
 
@@ -99,6 +99,6 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## Progress
 
-- Completed: 4
+- Completed: 12
 - Total: 65
-- Progress: 6.2%
+- Progress: 18.5%

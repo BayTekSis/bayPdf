@@ -2,6 +2,7 @@
 
 namespace BayPdf\Models;
 
+use BayPdf\Support\ScopeContext;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,13 +11,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property string $name
  * @property string $document_type
+ * @property string|null $scope_key
  * @property Collection<int, TemplateVersion> $versions
  */
 final class Template extends Model
 {
     protected $table = 'baypdf_templates';
 
-    protected $fillable = ['name', 'document_type'];
+    protected $fillable = ['name', 'document_type', 'scope_key'];
+
+    public function resolveRouteBindingQuery($query, $value, $field = null)
+    {
+        return app(ScopeContext::class)->templates(parent::resolveRouteBindingQuery($query, $value, $field));
+    }
 
     /** @return HasMany<TemplateVersion, $this> */
     public function versions(): HasMany
