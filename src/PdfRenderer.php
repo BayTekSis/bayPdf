@@ -3,6 +3,8 @@
 namespace BayPdf;
 
 use BayPdf\Rendering\Canvas;
+use BayPdf\Rendering\FlowPaginator;
+use BayPdf\Rendering\TextLayout;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\File;
@@ -14,6 +16,8 @@ final class PdfRenderer
         private DocumentValidator $validator,
         private VariableResolver $resolver,
         private Assets $assets,
+        private TextLayout $text,
+        private FlowPaginator $paginator,
     ) {}
 
     public function render(array $document, array $data = [], array $variables = []): string
@@ -28,11 +32,14 @@ final class PdfRenderer
         }
         try {
             $pdf = new Canvas($document['page'], $cache);
-            foreach ($document['elements'] as $i => $element) {
-                if ($element['hidden'] ?? false) {
-                    continue;
+            if (($document['schema_version'] ?? 1) === 2) {
+                $this->drawFlowDocument($pdf, $document, $values);
+            } else {
+                foreach ($document['elements'] as $index => $element) {
+                    if (! ($element['hidden'] ?? false)) {
+                        $this->draw($pdf, $element, $values, "elements.{$index}", 1, 1);
+                    }
                 }
-                $this->draw($pdf, $element, $values, $i);
             }
 
             return $pdf->Output('S');
@@ -42,13 +49,78 @@ final class PdfRenderer
         }
     }
 
-    private function draw(Canvas $pdf, array $element, array $values, int $index): void
+    private function drawFlowDocument(Canvas $pdf, array $document, array $values): void
+    {
+        $pages = $this->paginator->plan($pdf, $document, $values);
+        $total = count($pages);
+        $table = $document['flow']['table'];
+        foreach ($pages as $pageIndex => $plan) {
+            $current = $pageIndex + 1;
+            if ($current > 1) {
+                $pdf->AddPage();
+            }
+            foreach ($document['elements'] as $index => $element) {
+                if (! ($element['hidden'] ?? false) && $this->visibleOnPage($element['repeat'], $current, $total)) {
+                    $this->draw($pdf, $element, $values, "elements.{$index}", $current, $total);
+                }
+            }
+            if ($plan['header'] !== null) {
+                $this->drawTableRow(
+                    $pdf,
+                    $table,
+                    array_column($table['columns'], 'label'),
+                    $table['header'],
+                    $plan['header']['y'],
+                    $plan['header']['height'],
+                    'flow.table.columns',
+                );
+            }
+            foreach ($plan['rows'] as $row) {
+                $this->drawTableRow(
+                    $pdf,
+                    $table,
+                    array_map(fn (array $column): string => $row['values'][$column['field']], $table['columns']),
+                    $table['row'],
+                    $row['y'],
+                    $row['height'],
+                    "data.{$table['source']}.{$row['index']}",
+                );
+            }
+            foreach ($plan['trailing'] as $trailing) {
+                if (! ($trailing['element']['hidden'] ?? false)) {
+                    $this->draw(
+                        $pdf,
+                        [...$trailing['element'], 'y' => $trailing['y']],
+                        $values,
+                        "flow.trailing.{$trailing['index']}",
+                        $current,
+                        $total,
+                    );
+                }
+            }
+        }
+    }
+
+    private function visibleOnPage(string $repeat, int $current, int $total): bool
+    {
+        return match ($repeat) {
+            'all' => true,
+            'continuation' => $current > 1,
+            'last' => $current === $total,
+            default => $current === 1,
+        };
+    }
+
+    private function draw(Canvas $pdf, array $element, array $values, string $errorKey, int $currentPage, int $totalPages): void
     {
         $x = (float) $element['x'];
         $y = (float) $element['y'];
-        $w = (float) $element['width'];
-        $h = (float) $element['height'];
+        $width = (float) $element['width'];
+        $height = (float) $element['height'];
         $value = ! empty($element['variable']) ? $values[$element['variable']] : ($element['content'] ?? '');
+        if ($element['type'] === 'page_number') {
+            $value = str_replace(['{current}', '{total}'], [(string) $currentPage, (string) $totalPages], $element['content'] ?: 'Page {current} / {total}');
+        }
         $color = sscanf($element['color'] ?? '#172b29', '#%02x%02x%02x');
         $pdf->SetDrawColor(...$color);
         $pdf->SetTextColor(...$color);
@@ -56,72 +128,72 @@ final class PdfRenderer
         switch ($element['type']) {
             case 'text':
             case 'variable':
-                $pdf->SetFont('DejaVu', $element['font_style'] ?? '', $element['font_size'] ?? 12);
-                $lines = $this->wrap($pdf, $value, $w);
-                $lineHeight = ($element['font_size'] ?? 12) * 25.4 / 72 * 1.25;
-                if (count($lines) * $lineHeight > $h + 0.01) {
-                    throw ValidationException::withMessages(["elements.{$index}" => 'Text does not fit. Increase the element height or reduce its font size.']);
+            case 'page_number':
+                $fontSize = (float) ($element['font_size'] ?? 12);
+                $pdf->SetFont('DejaVu', $element['font_style'] ?? '', $fontSize);
+                $lines = $this->text->lines($pdf, (string) $value, $width, $errorKey);
+                $lineHeight = $this->text->lineHeight($fontSize);
+                if (count($lines) * $lineHeight > $height + 0.01) {
+                    throw ValidationException::withMessages([$errorKey => 'Text does not fit. Increase the element height or reduce its font size.']);
                 }
-                foreach ($lines as $n => $line) {
-                    $pdf->SetXY($x, $y + $n * $lineHeight);
-                    $pdf->Cell($w, $lineHeight, $line, 0, 0, $element['align'] ?? 'L');
+                foreach ($lines as $lineIndex => $line) {
+                    $pdf->SetXY($x, $y + $lineIndex * $lineHeight);
+                    $pdf->Cell($width, $lineHeight, $line, 0, 0, $element['align'] ?? 'L');
                 }
                 break;
             case 'image':
                 $key = ! empty($element['variable']) ? $value : ($element['asset'] ?? '');
                 if ($key !== '') {
-                    $pdf->imageBytes($this->assets->bytes($key), $x, $y, $w, $h);
+                    $pdf->imageBytes($this->assets->bytes((string) $key), $x, $y, $width, $height);
                 }
                 break;
             case 'qr':
                 if ($value !== '') {
-                    if (strlen($value) > 1000) {
-                        throw ValidationException::withMessages(["elements.{$index}" => 'QR content must not exceed 1000 bytes.']);
+                    if (strlen((string) $value) > 1000) {
+                        throw ValidationException::withMessages([$errorKey => 'QR content must not exceed 1000 bytes.']);
                     }
-                    $bytes = (new PngWriter)->write(QrCode::create($value)->setSize(400)->setMargin(16))->getString();
-                    $pdf->imageBytes($bytes, $x, $y, $w, $h);
+                    $bytes = (new PngWriter)->write(QrCode::create((string) $value)->setSize(400)->setMargin(16))->getString();
+                    $pdf->imageBytes($bytes, $x, $y, $width, $height);
                 }
                 break;
             case 'line':
-                $pdf->Line($x, $y, $x + $w, $y + $h);
+                $pdf->Line($x, $y, $x + $width, $y + $height);
                 break;
             case 'rectangle':
                 if (! empty($element['fill'])) {
                     $pdf->SetFillColor(...sscanf($element['fill'], '#%02x%02x%02x'));
                 }
-                $pdf->Rect($x, $y, $w, $h, empty($element['fill']) ? 'D' : 'DF');
+                $pdf->Rect($x, $y, $width, $height, empty($element['fill']) ? 'D' : 'DF');
         }
     }
 
-    private function wrap(Canvas $pdf, string $text, float $width): array
+    private function drawTableRow(Canvas $pdf, array $table, array $values, array $style, float $y, float $height, string $errorKey): void
     {
-        $lines = [];
-        foreach (explode("\n", str_replace("\r", '', $text)) as $paragraph) {
-            $line = '';
-            foreach (preg_split('/(\\s+)/u', $paragraph, -1, PREG_SPLIT_DELIM_CAPTURE) as $word) {
-                if ($pdf->GetStringWidth($line.$word) <= $width) {
-                    $line .= $word;
-
-                    continue;
-                }
-                if (trim($line) !== '') {
-                    $lines[] = rtrim($line);
-                    $line = '';
-                }
-                foreach (mb_str_split(ltrim($word)) as $char) {
-                    if ($pdf->GetStringWidth($char) > $width) {
-                        throw ValidationException::withMessages(['elements' => 'Text element is too narrow for its font size.']);
-                    }
-                    if ($pdf->GetStringWidth($line.$char) > $width) {
-                        $lines[] = $line;
-                        $line = '';
-                    }
-                    $line .= $char;
-                }
-            }
-            $lines[] = rtrim($line);
+        $fontSize = (float) $style['font_size'];
+        $padding = (float) $style['padding'];
+        $lineHeight = $this->text->lineHeight($fontSize);
+        $color = sscanf($style['color'], '#%02x%02x%02x');
+        $pdf->SetFont('DejaVu', $style['font_style'], $fontSize);
+        $pdf->SetTextColor(...$color);
+        $pdf->SetDrawColor(...$color);
+        $pdf->SetLineWidth(0.3);
+        if ($style['fill'] !== null) {
+            $pdf->SetFillColor(...sscanf($style['fill'], '#%02x%02x%02x'));
         }
 
-        return $lines;
+        $x = (float) $table['x'];
+        foreach ($table['columns'] as $index => $column) {
+            $width = (float) $column['width'];
+            $mode = $style['border'] ? ($style['fill'] !== null ? 'DF' : 'D') : ($style['fill'] !== null ? 'F' : '');
+            if ($mode !== '') {
+                $pdf->Rect($x, $y, $width, $height, $mode);
+            }
+            $lines = $this->text->lines($pdf, (string) $values[$index], $width - 2 * $padding, $errorKey);
+            foreach ($lines as $lineIndex => $line) {
+                $pdf->SetXY($x + $padding, $y + $padding + $lineIndex * $lineHeight);
+                $pdf->Cell($width - 2 * $padding, $lineHeight, $line, 0, 0, $column['align']);
+            }
+            $x += $width;
+        }
     }
 }

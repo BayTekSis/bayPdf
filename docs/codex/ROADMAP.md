@@ -45,40 +45,40 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## E. Collection table designer
 
-- [ ] A generic `collection_table` element is defined without business semantics.
+- [x] A generic `collection_table` element is defined without business semantics.
 - [ ] Source collection and field mappings are selectable in the designer.
-- [ ] Columns support labels, deterministic widths, alignment, padding, borders, header style, and row style.
-- [ ] Invalid or overflowing column widths fail with an actionable validation error.
+- [x] Columns support labels, deterministic widths, alignment, padding, borders, header style, and row style.
+- [x] Invalid or overflowing column widths fail with an actionable validation error.
 - [ ] Table settings use labelled keyboard-accessible controls and preserve existing keyboard positioning.
 - [ ] Advanced/data controls use progressive disclosure and small viewports remain usable.
 - [ ] Frontend tests cover source selection, columns, repeat settings, validation, and save payload.
 
 ## F. Multi-page renderer
 
-- [ ] A versioned layout schema adds multi-page behavior without changing legacy schema meaning.
-- [ ] Collection tables paginate by measured available vertical space.
-- [ ] Zero rows, one row, exact fit, one-row overflow, 50+ rows, and mixed wrapped rows are tested.
-- [ ] Wrapped cells share a deterministic row height across columns.
-- [ ] A row taller than the usable page fails once with a value-free actionable error.
-- [ ] Table headers can repeat on continuation pages.
-- [ ] Maximum generated page and element limits prevent page explosion.
-- [ ] Same version, data, and configuration produce deterministic document structure.
+- [x] A versioned layout schema adds multi-page behavior without changing legacy schema meaning.
+- [x] Collection tables paginate by measured available vertical space.
+- [x] Zero rows, one row, exact fit, one-row overflow, 50+ rows, and mixed wrapped rows are tested.
+- [x] Wrapped cells share a deterministic row height across columns.
+- [x] A row taller than the usable page fails once with a value-free actionable error.
+- [x] Table headers can repeat on continuation pages.
+- [x] Maximum generated page and element limits prevent page explosion.
+- [x] Same version, data, and configuration produce deterministic document structure.
 - [ ] Representative first, continuation, and final PDF pages receive visual inspection evidence.
 
 ## G. Headers, footers, and page context
 
-- [ ] Page regions support bounded first/all/continuation/last visibility rules.
-- [ ] Static and variable elements render safely in page headers and footers.
-- [ ] Built-in current-page and total-page context renders without host registration.
-- [ ] Total page count uses deterministic layout/rendering rather than byte placeholder replacement.
-- [ ] Repeated header/footer and Page X / Y behavior is covered by renderer tests.
+- [x] Page regions support bounded first/all/continuation/last visibility rules.
+- [x] Static and variable elements render safely in page headers and footers.
+- [x] Built-in current-page and total-page context renders without host registration.
+- [x] Total page count uses deterministic layout/rendering rather than byte placeholder replacement.
+- [x] Repeated header/footer and Page X / Y behavior is covered by renderer tests.
 
 ## H. Flowing trailing content
 
-- [ ] A bounded generic flow abstraction positions content after the primary collection table.
-- [ ] Trailing content uses remaining final-page space without overlap or clipping.
-- [ ] Trailing content moves deterministically to a new page when it does not fit.
-- [ ] The supported multiple-collection/flow limit is enforced and documented.
+- [x] A bounded generic flow abstraction positions content after the primary collection table.
+- [x] Trailing content uses remaining final-page space without overlap or clipping.
+- [x] Trailing content moves deterministically to a new page when it does not fit.
+- [x] The supported multiple-collection/flow limit is enforced and documented.
 
 ## I. Browser and security verification
 
@@ -99,6 +99,6 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## Progress
 
-- Completed: 27
+- Completed: 47
 - Total: 65
-- Progress: 41.5%
+- Progress: 72.3%

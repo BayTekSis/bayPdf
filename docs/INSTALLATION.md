@@ -51,6 +51,9 @@ Gate tanımsızsa erişim reddedilir. Bütün API ve görsel yolları Gate ile k
 | limits.max_collection_rows | 500 total rows per render |
 | limits.max_collection_string_bytes | 5000 per row field |
 | limits.max_collection_payload_kb | 1024 across collection input |
+| limits.max_generated_pages | 100 per render |
+| limits.max_layout_elements | 200 fixed + flow elements |
+| pdf_compression | true; test/diagnostic extraction dışında açık bırakın |
 | font_cache | storage/app/private/baypdf/fonts |
 
 Disk Laravel filesystems.php üzerinden tanımlanır. Public diski seçmeyin. Özel görseller için storage symlink oluşturmayın. Font cache yerel ve PHP sürecince yazılabilir olmalıdır.

@@ -12,6 +12,8 @@ Host render çağrısına verdiği verilerin erişimini kendi doğrular. PHP ser
 
 Collection input list/record/scalar shape ile sınırlandırılır. Row, field, string byte ve toplam JSON payload limitleri render öncesinde uygulanır. Validation mesajları yalnız field path ve nedeni içerir; submitted row değerleri loglanmaz veya hata metnine eklenmez.
 
+Flow layout en fazla configured page ve layout element sayısını üretir. Tek bir row usable continuation area'ya sığmıyorsa retry loop yerine path-based validation error döner. Column widths table width'e eşit olmalı, padding sonrasında pozitif text alanı bırakmalı ve her trailing block tek usable page'e sığmalıdır. HTML/CSS/JS yorumlanmaz.
+
 ## Dosyalar
 
 - PNG/JPEG dışında upload reddedilir.

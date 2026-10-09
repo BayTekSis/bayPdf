@@ -120,7 +120,7 @@ The application authorizes and supplies the data; BayPdf does not fetch it from 
 ## Scope and limitations
 
 - Text, variables, PNG/JPEG images, QR codes, lines and rectangles; layer ordering, hiding, duplication and undo/redo.
-- A4, A5 and Letter in portrait or landscape, with a fixed single-page layout. No automatic pagination or flowing tables.
+- A4, A5 and Letter in portrait or landscape. Legacy templates keep their fixed single-page layout; schema v2 adds a bounded collection table, automatic continuation pages, repeated page elements, Page X / Y context and trailing flow blocks.
 - DejaVu Sans regular, bold and italic fonts; German, Turkish and English designer translations.
 - Text overflow produces a validation error instead of silently truncating content.
 - No HTML/PDF template import, SVG/WebP support or remote image downloads.

@@ -18,6 +18,8 @@ Sürümleme sözleşmesi:
 
 `DocumentTypes::register` collection variable kabul eder. Collection schema ve resolved row contract'ı [değişken rehberinde](https://github.com/BayTekSis/bayPdf/blob/master/docs/VARIABLES.md) tanımlıdır. Mevcut scalar variable tanımları değişmeden geçerlidir.
 
+Layout JSON iki contract taşır: schema version alanı olmayan legacy fixed-page belge ve açık `schema_version: 2` flow belgesi. V2 collection table, page repeat/context ve trailing block contract'ı [şablon rehberinde](https://github.com/BayTekSis/bayPdf/blob/master/docs/TEMPLATES.md) tanımlıdır. Legacy JSON otomatik rewrite edilmez.
+
 Rendering ve Http namespace'leri iç uygulamadır. Vue kaynak bileşeni ayrı npm API değildir. JSON alanları [şablon rehberinde](https://github.com/BayTekSis/bayPdf/blob/master/docs/TEMPLATES.md) tanımlıdır. Model yazımı için TemplateManager kullanın; bulk SQL korumaları atlar.
 
 İlk yayın öncesi API kararlı sürüm olarak duyurulmuş değildir.

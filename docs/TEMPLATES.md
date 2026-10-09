@@ -66,3 +66,62 @@ Veritabanı olmadan: `app(BayPdf\PdfRenderer::class)->render($document, $data, $
 Sayfa yolu altında api/catalog, api/templates, api/templates/{id}, api/versions/{id}, sürümün publish/clone/preview yolları ve api/assets bulunur. Session/CSRF kullanılır. Bunlar tasarımcının iç entegrasyonudur; uygulama kodu PHP API'yi tercih etmelidir.
 
 Canvas yaklaşık düzenleme görünümüdür. Gerçek satır sarma, biçimlendirilmiş değişken ve QR çıktısı server PDF önizlemesinde görülür.
+
+## Layout schema v2: collection table and flow
+
+Legacy documents omit `schema_version` and remain fixed single-page layouts. Multi-page behavior requires explicit `schema_version: 2`; BayPdf does not rewrite stored legacy JSON.
+
+```php
+[
+    'schema_version' => 2,
+    'page' => ['size' => 'A4', 'orientation' => 'portrait'],
+    'elements' => [
+        [
+            'id' => 'header', 'type' => 'text', 'region' => 'header', 'repeat' => 'all',
+            'x' => 15, 'y' => 10, 'width' => 180, 'height' => 8,
+            'content' => 'Document title', 'font_size' => 10,
+        ],
+        [
+            'id' => 'page-number', 'type' => 'page_number', 'region' => 'footer', 'repeat' => 'all',
+            'x' => 140, 'y' => 281, 'width' => 55, 'height' => 8,
+            'content' => 'Page {current} / {total}', 'font_size' => 8, 'align' => 'R',
+        ],
+    ],
+    'flow' => [
+        'first_top' => 30,
+        'continuation_top' => 25,
+        'bottom' => 275,
+        'gap' => 4,
+        'table' => [
+            'id' => 'items-table',
+            'type' => 'collection_table',
+            'source' => 'items',
+            'x' => 15,
+            'width' => 180,
+            'repeat_header' => true,
+            'columns' => [
+                ['field' => 'description', 'label' => 'Description', 'width' => 105, 'align' => 'L'],
+                ['field' => 'quantity', 'label' => 'Quantity', 'width' => 30, 'align' => 'R'],
+                ['field' => 'total', 'label' => 'Total', 'width' => 45, 'align' => 'R'],
+            ],
+            'header' => ['font_size' => 9, 'font_style' => 'B', 'color' => '#172b29', 'fill' => '#e5edde', 'padding' => 2, 'border' => true],
+            'row' => ['font_size' => 9, 'font_style' => '', 'color' => '#172b29', 'fill' => null, 'padding' => 2, 'border' => true],
+        ],
+        'trailing' => [[
+            'id' => 'summary', 'type' => 'variable', 'variable' => 'document.summary',
+            'x' => 15, 'width' => 180, 'height' => 20, 'gap_before' => 5,
+            'font_size' => 10,
+        ]],
+    ],
+]
+```
+
+`flow` supports one primary collection table followed by a bounded list of ordinary trailing elements. This deliberate limit covers header → table → summary/notes/signature-style blocks without becoming a general HTML/CSS layout engine. Multiple independent flowing collections are not supported in schema v2.
+
+Column widths are millimetres and must sum exactly to table `width`. Each column maps to one field in the source collection. Header and row styles control font, color, fill, padding and cell border. Text wraps by measured tFPDF font width; every cell in a row uses the tallest measured cell height. No cell content is silently truncated.
+
+The first page starts at `first_top`; continuation pages start at `continuation_top`; `bottom` reserves footer space. Table headers render on page one and repeat on continuation pages when `repeat_header` is true. A row that cannot fit an otherwise empty continuation area fails with `data.<collection>.<row>` and does not loop.
+
+Trailing elements use the existing text, variable, image, QR, line and rectangle contract plus `page_number`. Their Y position is calculated from the actual table end. A block that does not fit moves as a whole to the next page; a block taller than the usable page fails. `gap_before` overrides the flow `gap`.
+
+Absolute page elements accept `region` (`page`, `header`, `footer`) and `repeat` (`first`, `all`, `continuation`, `last`). Header elements must end above both flow tops; footer elements must start at or below flow bottom. `page_number` uses `{current}` and `{total}` from the completed pagination plan, so the host does not register page variables and PDF bytes are not patched after generation.

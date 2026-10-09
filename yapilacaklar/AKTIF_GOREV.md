@@ -12,11 +12,11 @@ Detaylı ve ölçülebilir kabul kriterleri `docs/codex/ROADMAP.md` içinde tek 
 - [x] Scoped assets tamamlandı.
 - [x] Collection schema ve validation tamamlandı.
 - [ ] Collection table designer tamamlandı.
-- [ ] Multi-page renderer, page regions/context ve trailing flow tamamlandı.
+- [x] Multi-page renderer, page regions/context ve trailing flow tamamlandı.
 - [ ] Browser, security, backward compatibility ve distribution doğrulamaları tamamlandı.
 - [ ] Self-contained Finance readiness report tamamlandı.
 
-Durum: Bounded collection schema, examples, snapshot, row validation/formatting ve resource limitleri tamamlandı. Sonraki iş layout schema v2 ve collection table pagination'dır.
+Durum: Layout schema v2, collection table, automatic pagination, page repeat/context ve trailing flow backend'i tamamlandı. Sonraki iş progressive designer UI, frontend ve browser coverage'dır.
 
 ---
 

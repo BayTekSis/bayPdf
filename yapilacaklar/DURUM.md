@@ -16,6 +16,10 @@ Collection data logical unit tamamlandı: DocumentTypes collection/field şemas�
 
 Sonraki mantıksal adım: Layout schema v2, generic collection table, deterministic row measurement ve automatic pagination.
 
+Multi-page renderer logical unit tamamlandı: explicit schema v2, measured generic collection table, exact/overflow pagination, wrapped shared row height, repeated table/page headers, first/all/continuation/last rules, Page X / Y ve trailing block flow eklendi. Oversized row, max page/element ve invalid column widths fail-closed doğrulanıyor. Latest targeted validation 35 test/70 assertion PASS.
+
+Sonraki mantıksal adım: Progressive designer UI, frontend save-payload tests, workbench commercial-document sample ve Playwright scenarios.
+
 
 Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı.
 

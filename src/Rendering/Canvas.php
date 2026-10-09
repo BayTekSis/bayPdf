@@ -29,6 +29,7 @@ final class Canvas extends \tFPDF
         }
         $this->SetMargins(0, 0, 0);
         $this->SetAutoPageBreak(false);
+        $this->SetCompression((bool) config('baypdf.pdf_compression', true));
         $this->AddPage();
     }
 

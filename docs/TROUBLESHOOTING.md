@@ -10,6 +10,9 @@
 | 409 | Değişmiş/yayınlanmış sürümü yeniden yükleyin |
 | 422 required | Bütün required değerleri ve örnekleri sağlayın |
 | Metin sığmıyor | Kutuyu büyütün veya fontu küçültün |
+| Collection row sayfaya sığmıyor | Column genişliğini artırın, text/font/padding'i küçültün veya flow usable alanını büyütün |
+| Page limiti aşılıyor | Row sayısını azaltın veya güvenli bir `limits.max_generated_pages` değeri belirleyin |
+| Column widths hatası | Column width toplamını table width ile aynı yapın |
 | Görsel yok | PNG/JPEG, doğru disk/önek ve geçerli örnek anahtarı |
 | Boş/eski ekran | baypdf-assets yeniden yayımlansın; browser console/Network incelensin |
 | SQLite yok | composer workbench:prepare |

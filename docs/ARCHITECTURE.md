@@ -21,4 +21,8 @@ Asset scope'u storage path ile taşınır: `asset_prefix/scopes/<sha256(scope)>/
 
 Collection variable schema, mevcut scalar variable listesinde `type=collection` ve flat scalar `fields` ile temsil edilir. Resolver list/record shape'i ve resource limitlerini doğrulayıp date/number/money değerlerini table renderer'dan önce deterministically formatlar. Example rows version schema snapshot'ına dahildir. Nested collection ve rich content engine kapsam dışıdır.
 
+Layout schema v2, legacy absolute JSON'dan açıkça ayrılır. Renderer önce font metrikleriyle table header, wrapped row ve trailing block planını çıkarır; toplam sayfa sayısı bu immutable planın uzunluğudur. PDF tek çizim geçişinde üretilir. Page context placeholder'ı PDF byte replacement değildir. Same layout/data/config aynı pagination structure'ını üretir; tFPDF creation timestamp metadata'sı byte-for-byte identity garantisini sınırlar.
+
+Bir v2 flow tek primary collection table taşır. Row page'e bölünmez; bütün columns aynı measured height'i kullanır. Table devam ederken header isteğe bağlı tekrar eder. Trailing blocks gerçek table bitişini izler ve bütün olarak sonraki page'e taşınır. Absolute page elements repeat kurallarıyla header/footer ve first/continuation/last içerik sağlar.
+
 Tasarımcı Vue ile tema bağımsız oluşturuldu; aynı DejaVu fontları tarayıcı ve PDF tarafında kullanılıyor. Browser canvas yerleşim yardımcısıdır; nihai biçim ve QR için server PDF önizlemesi kullanılır. Composer varlıkları public/vendor/baypdf altına yayımlanır. Workbench yalnızca loopback isteklerde geliştirme kullanıcısı sağlar; bu kod dağıtım arşivinden çıkarılır.

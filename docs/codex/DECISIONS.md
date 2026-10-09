@@ -15,7 +15,6 @@
 
 ## Pending implementation decisions
 
-- Layout schema v2 region and flow shape.
 - Maximum defaults after renderer tests establish practical deterministic bounds.
 
 ## Implemented scope decisions
@@ -47,3 +46,15 @@
 - The global row limit counts all registered collections in one render; a collection `max_rows` may only lower that cap.
 - Validation errors expose field paths and reasons, never submitted values.
 - Nesting is fixed at one collection of scalar records. HTML-like strings are plain text.
+
+## Implemented layout and pagination decisions
+
+- Legacy JSON remains schema v1 by omission. Flow features require explicit `schema_version: 2` and no automatic rewrite occurs.
+- V2 has absolute page elements plus one primary collection table and a bounded trailing element list.
+- Flow uses separate first/continuation top boundaries and one bottom boundary; headers and footers stay outside that usable body.
+- Pagination is planned from tFPDF font metrics before drawing. Total pages come from the plan and page context renders in one PDF pass.
+- Rows never split. Wrapped columns share the maximum measured row height; an oversized row fails with its path and no value.
+- Table header repetition is explicit. Page elements support first/all/continuation/last repeat rules.
+- Trailing blocks follow the true table end and move whole to a new page when needed.
+- Defaults cap output at 100 pages and 200 layout elements. Existing asset, QR, text and collection limits continue to apply.
+- tFPDF creation timestamp metadata prevents a byte-for-byte determinism guarantee across different seconds; pagination and document structure are deterministic.

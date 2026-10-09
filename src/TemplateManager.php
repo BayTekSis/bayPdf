@@ -53,7 +53,7 @@ final class TemplateManager
         return DB::transaction(function () use ($version, $expectedLock): TemplateVersion {
             $current = $this->findVersion($version->id, true);
             $this->assertDraft($current, $expectedLock);
-            if (count($current->document['elements']) === 0) {
+            if (($current->document['schema_version'] ?? 1) !== 2 && count($current->document['elements']) === 0) {
                 throw ValidationException::withMessages(['document' => 'Add at least one element before publishing.']);
             }
             $this->renderPreview($current);

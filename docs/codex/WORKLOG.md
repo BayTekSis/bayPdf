@@ -27,3 +27,10 @@
 - Main files/domains: DocumentTypes, VariableResolver, DocumentValidator, config limits, variable/security/architecture/public API docs
 - Validation: Pint PASS; targeted collection, rendering, TemplateManager, and designer API suite — 41 tests/96 assertions PASS
 - Next unit: Layout schema v2, generic collection table, deterministic row measurement, and automatic pagination
+
+## 2026-10-09 — Multi-page collection renderer
+
+- Completed unit: Layout schema v2, measured collection table, automatic continuation pages, repeatable page elements/table header, Page X / Y context, and trailing flow blocks
+- Main files/domains: DocumentValidator, PdfRenderer, Canvas, internal TextLayout/FlowPaginator, renderer/config/security/template/architecture docs
+- Validation: Pint PASS; latest multi-page lifecycle + legacy rendering + TemplateManager subset — 35 tests/70 assertions PASS
+- Next unit: Progressive designer UX, frontend save-payload tests, workbench commercial-document example, and browser coverage
