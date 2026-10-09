@@ -12,6 +12,10 @@ Scoped asset logical unit tamamlandı: yeni upload'lar scope fingerprint path'in
 
 Sonraki mantıksal adım: Bounded collection schema, examples, snapshot ve row validation.
 
+Collection data logical unit tamamlandı: DocumentTypes collection/field şemasını kabul ediyor; VariableResolver bounded list/record/scalar contract'ını, total row/payload ve field byte limitlerini uyguluyor. text/date/number/money formatting, example rows ve TemplateVersion snapshot/clone behavior test edildi. Targeted doğrulama 41 test/96 assertion PASS.
+
+Sonraki mantıksal adım: Layout schema v2, generic collection table, deterministic row measurement ve automatic pagination.
+
 
 Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı.
 

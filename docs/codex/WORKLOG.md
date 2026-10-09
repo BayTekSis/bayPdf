@@ -20,3 +20,10 @@
 - Main files/domains: Assets service, document validation, designer asset API route, scope/security/install/template architecture docs
 - Validation: Pint PASS; targeted asset scope, rendering, designer API, and scope suite — 40 tests/105 assertions PASS
 - Next unit: Bounded collection schema, example rows, snapshot behavior, and data validation
+
+## 2026-10-09 — Bounded collection data
+
+- Completed unit: Collection registration/schema, scalar row validation and formatting, configurable resource bounds, examples, and TemplateVersion snapshot/clone behavior
+- Main files/domains: DocumentTypes, VariableResolver, DocumentValidator, config limits, variable/security/architecture/public API docs
+- Validation: Pint PASS; targeted collection, rendering, TemplateManager, and designer API suite — 41 tests/96 assertions PASS
+- Next unit: Layout schema v2, generic collection table, deterministic row measurement, and automatic pagination

@@ -46,7 +46,7 @@ final class DocumentValidator
             if ($key !== '' && ! isset($schema[$key])) {
                 $error = 'Unknown variable.';
             }
-            if ($element['type'] === 'variable' && ($key === '' || ($schema[$key]['type'] ?? '') === 'image')) {
+            if ($element['type'] === 'variable' && ($key === '' || ! in_array($schema[$key]['type'] ?? '', ['text', 'date', 'number', 'money', 'qr'], true))) {
                 $error = 'A text-compatible variable is required.';
             }
             if ($element['type'] === 'image' && $key !== '' && ($schema[$key]['type'] ?? '') !== 'image') {

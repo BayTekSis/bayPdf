@@ -10,13 +10,13 @@ Detaylı ve ölçülebilir kabul kriterleri `docs/codex/ROADMAP.md` içinde tek 
 - [x] `docs/codex/` continuity sistemi ve objective roadmap hazırlandı.
 - [x] Generic scope isolation ve legacy strategy tamamlandı.
 - [x] Scoped assets tamamlandı.
-- [ ] Collection schema ve validation tamamlandı.
+- [x] Collection schema ve validation tamamlandı.
 - [ ] Collection table designer tamamlandı.
 - [ ] Multi-page renderer, page regions/context ve trailing flow tamamlandı.
 - [ ] Browser, security, backward compatibility ve distribution doğrulamaları tamamlandı.
 - [ ] Self-contained Finance readiness report tamamlandı.
 
-Durum: Scoped asset storage, catalog/read isolation, static/image variable kontrolü ve legacy adoption tamamlandı. Sonraki iş bounded collection schema ve validation'dır.
+Durum: Bounded collection schema, examples, snapshot, row validation/formatting ve resource limitleri tamamlandı. Sonraki iş layout schema v2 ve collection table pagination'dır.
 
 ---
 

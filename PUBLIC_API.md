@@ -16,6 +16,8 @@ Sürümleme sözleşmesi:
 
 `ScopeResolver` host tarafından bind edilen opaque server-side scope contract'ıdır. `scoping.enabled=false` mevcut shared davranışı korur. Etkin modda resolver geçerli bir scope döndürmezse paket fail-closed davranır. `baypdf_templates.scope_key` nullable ve additive'dir; version scope'u template ilişkisinden türetilir.
 
+`DocumentTypes::register` collection variable kabul eder. Collection schema ve resolved row contract'ı [değişken rehberinde](https://github.com/BayTekSis/bayPdf/blob/master/docs/VARIABLES.md) tanımlıdır. Mevcut scalar variable tanımları değişmeden geçerlidir.
+
 Rendering ve Http namespace'leri iç uygulamadır. Vue kaynak bileşeni ayrı npm API değildir. JSON alanları [şablon rehberinde](https://github.com/BayTekSis/bayPdf/blob/master/docs/TEMPLATES.md) tanımlıdır. Model yazımı için TemplateManager kullanın; bulk SQL korumaları atlar.
 
 İlk yayın öncesi API kararlı sürüm olarak duyurulmuş değildir.

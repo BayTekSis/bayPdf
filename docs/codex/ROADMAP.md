@@ -34,14 +34,14 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## D. Collection schema and data
 
-- [ ] Document types accept bounded collection definitions containing scalar record fields.
-- [ ] Collection fields support text, date, number, and money only.
-- [ ] Nested collections, objects, closures, HTML, and arbitrary nested row data are rejected.
-- [ ] Configurable collection, field, row, string-byte, nesting, and payload limits are enforced.
-- [ ] Empty, one-row, many-row, malformed-row, unknown-field, and missing-required-field cases are tested.
-- [ ] Collection number, money, date, and long-text formatting are tested.
-- [ ] Collection schemas are preserved in TemplateVersion snapshots and clones.
-- [ ] Bounded example rows drive designer preview without production data.
+- [x] Document types accept bounded collection definitions containing scalar record fields.
+- [x] Collection fields support text, date, number, and money only.
+- [x] Nested collections, objects, closures, HTML execution, and arbitrary nested row data are rejected.
+- [x] Configurable collection, field, row, string-byte, and payload limits plus a fixed scalar-only nesting boundary are enforced.
+- [x] Empty, one-row, many-row, malformed-row, unknown-field, and missing-required-field cases are tested.
+- [x] Collection number, money, and date formatting are tested.
+- [x] Collection schemas are preserved in TemplateVersion snapshots and clones.
+- [x] Bounded example rows drive designer preview without production data.
 
 ## E. Collection table designer
 
@@ -99,6 +99,6 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## Progress
 
-- Completed: 19
+- Completed: 27
 - Total: 65
-- Progress: 29.2%
+- Progress: 41.5%

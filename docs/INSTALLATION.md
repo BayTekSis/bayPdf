@@ -46,6 +46,11 @@ Gate tanımsızsa erişim reddedilir. Bütün API ve görsel yolları Gate ile k
 | asset_prefix | baypdf/assets |
 | max_upload_kb | 5120 |
 | max_image_pixels | 16000000 |
+| limits.max_collections | 10 per document type |
+| limits.max_collection_fields | 20 per collection schema |
+| limits.max_collection_rows | 500 total rows per render |
+| limits.max_collection_string_bytes | 5000 per row field |
+| limits.max_collection_payload_kb | 1024 across collection input |
 | font_cache | storage/app/private/baypdf/fonts |
 
 Disk Laravel filesystems.php üzerinden tanımlanır. Public diski seçmeyin. Özel görseller için storage symlink oluşturmayın. Font cache yerel ve PHP sürecince yazılabilir olmalıdır.

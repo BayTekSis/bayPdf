@@ -10,6 +10,8 @@ Migration sonrası eski `scope_key=null` template'ler scoped modda görünmez. O
 
 Host render çağrısına verdiği verilerin erişimini kendi doğrular. PHP servisleri host kodunu güvenilir kabul eder. PDF otomatik depolanmaz, e-postalanmaz veya loglanmaz.
 
+Collection input list/record/scalar shape ile sınırlandırılır. Row, field, string byte ve toplam JSON payload limitleri render öncesinde uygulanır. Validation mesajları yalnız field path ve nedeni içerir; submitted row değerleri loglanmaz veya hata metnine eklenmez.
+
 ## Dosyalar
 
 - PNG/JPEG dışında upload reddedilir.

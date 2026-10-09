@@ -41,6 +41,49 @@ Tarih kesin YYYY-MM-DD biçimindedir; imkânsız tarihler reddedilir. Para ana p
 
 image izin verilen disk/önek içindeki asset anahtarını taşır. URL/base64 kabul edilmez. qr içeriği QR olarak çizer; sınır 1000 byte. Bağlantının işlevini host sağlar.
 
+## Collection records
+
+Generic tekrarlanan veriler `collection` olarak kaydedilir. Collection yalnız bounded scalar record listesi taşır; nested collection veya object kabul edilmez:
+
+```php
+$types->register('commercial_document', 'Commercial document', [
+    [
+        'key' => 'items',
+        'label' => 'Items',
+        'type' => 'collection',
+        'max_rows' => 100,
+        'fields' => [
+            ['key' => 'description', 'label' => 'Description', 'type' => 'text', 'required' => true],
+            ['key' => 'quantity', 'label' => 'Quantity', 'type' => 'number', 'decimals' => 3],
+            ['key' => 'unit_price', 'label' => 'Unit price', 'type' => 'money', 'currency' => 'EUR'],
+            ['key' => 'service_date', 'label' => 'Date', 'type' => 'date', 'format' => 'd.m.Y'],
+        ],
+        'example' => [[
+            'description' => 'Consulting',
+            'quantity' => 2,
+            'unit_price' => 125.5,
+            'service_date' => '2026-10-09',
+        ]],
+    ],
+]);
+```
+
+Render input is a zero-indexed list of associative rows:
+
+```php
+[
+    'items' => [
+        ['description' => 'Consulting', 'quantity' => 2, 'unit_price' => 125.5, 'service_date' => '2026-10-09'],
+    ],
+]
+```
+
+Supported field types are text, date, number, and money. Field keys are flat identifiers; values must be scalar. Unknown fields, numeric/list rows, nested arrays, PHP objects, closures, invalid dates/numbers, and missing required fields produce path-based validation errors without echoing the submitted value. HTML-like strings remain plain text and are never executed.
+
+Global defaults allow 10 collections per document type, 20 fields per collection, 500 total rows per render, 5000 bytes per field, and 1024 KiB total collection JSON payload. `max_rows` can lower the per-collection row cap but cannot raise the global total. Collection nesting depth is fixed at one collection of scalar records.
+
+Example rows follow the same validation and formatting contract. With no example, an optional collection previews as an empty list. The entire collection definition and examples are copied into each TemplateVersion snapshot and preserved when cloning.
+
 ## Şema snapshot'ı
 
 Şablon oluşturulurken şema sürüme kopyalanır. Klonlanan taslak aynı şemayı korur. Registry değişikliği geçmiş sürümleri değiştirmez; yeni şema için yeni şablon oluşturun.

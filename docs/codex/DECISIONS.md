@@ -37,3 +37,13 @@
 - Legacy adoption copies validated bytes to a current-scope mirror and preserves the old JSON key.
 - Adoption never deletes the original and may be repeated only for scopes whose ownership is verified by the host.
 - BayPdf exposes no deletion or garbage collector. Hosts must consider every draft and immutable published version reference before external cleanup.
+
+## Implemented collection decisions
+
+- Collection variables extend the existing DocumentTypes registry and TemplateVersion `variables` snapshot; no parallel schema store is introduced.
+- Rows are list entries containing flat associative records. Supported fields are text, date, number, and money.
+- Missing optional collections resolve to an empty list. Required collections require at least one row.
+- Per-document-type collection/field limits and per-render row/payload/field-byte limits are configurable.
+- The global row limit counts all registered collections in one render; a collection `max_rows` may only lower that cap.
+- Validation errors expose field paths and reasons, never submitted values.
+- Nesting is fixed at one collection of scalar records. HTML-like strings are plain text.

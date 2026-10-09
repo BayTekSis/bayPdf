@@ -1,15 +1,15 @@
 # Current state
 
 - Current branch: `master`
-- Current phase: Collection schema and data
-- Last completed unit: Scoped asset storage, catalog, reads, references, and legacy adoption
-- Current working state: Scoped asset implementation and related tests pass; logical unit is ready to commit
-- Acceptance criteria completed: 19 of 65; baseline, template/version scope, and scoped asset criteria
+- Current phase: Collection table and multi-page renderer
+- Last completed unit: Bounded collection registration, examples, snapshot, validation, and formatting
+- Current working state: Collection data contract and related tests pass; logical unit is ready to commit
+- Acceptance criteria completed: 27 of 65; baseline, scoping, scoped assets, and collection data criteria
 - Acceptance criteria remaining: See unchecked items in `ROADMAP.md`
 - Known blockers: None. Browser tests have been inventoried but not run in this unit.
-- Latest validation: Pint passed; asset scope, rendering, designer API, and template scope subset passed with 40 tests and 105 assertions.
-- Expected next task: Bounded collection registration, schema snapshots, example rows, data validation, and scalar field formatting.
-- Expected next commit message: `Varlık kapsam güvenliği güçlendirildi`
+- Latest validation: Pint passed; collection, rendering, TemplateManager, and designer API subset passed with 41 tests and 96 assertions.
+- Expected next task: Define layout schema v2 and implement the generic collection table with deterministic measurement and pagination.
+- Expected next commit message: `Koleksiyon değişkenleri eklendi`
 - Uncommitted user changes: None at task start.
 - Recommended next model/reasoning: GPT-5.6 Sol, high reasoning, because public API, persistence, rendering, and security boundaries are changing.
 

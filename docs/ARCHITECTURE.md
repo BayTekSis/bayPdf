@@ -19,4 +19,6 @@ Scope ownership `baypdf_templates.scope_key` alanında tutulur. Version ownershi
 
 Asset scope'u storage path ile taşınır: `asset_prefix/scopes/<sha256(scope)>/<uuid>`. Ham opaque scope path'e yazılmaz. Legacy key adoption, byte'ları current fingerprint altında mirror ederek immutable published JSON key'ini korur. Asset registry/tablosu yoktur; catalog yalnız current prefix'i listeler ve deletion bilinçli olarak sunulmaz.
 
+Collection variable schema, mevcut scalar variable listesinde `type=collection` ve flat scalar `fields` ile temsil edilir. Resolver list/record shape'i ve resource limitlerini doğrulayıp date/number/money değerlerini table renderer'dan önce deterministically formatlar. Example rows version schema snapshot'ına dahildir. Nested collection ve rich content engine kapsam dışıdır.
+
 Tasarımcı Vue ile tema bağımsız oluşturuldu; aynı DejaVu fontları tarayıcı ve PDF tarafında kullanılıyor. Browser canvas yerleşim yardımcısıdır; nihai biçim ve QR için server PDF önizlemesi kullanılır. Composer varlıkları public/vendor/baypdf altına yayımlanır. Workbench yalnızca loopback isteklerde geliştirme kullanıcısı sağlar; bu kod dağıtım arşivinden çıkarılır.
