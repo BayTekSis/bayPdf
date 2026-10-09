@@ -1,5 +1,12 @@
 # Durum
 
+## 2026-10-09 Finance readiness çalışması
+
+Repository truth audit tamamlandı. Mevcut kod shared template/asset alanı, scalar değişkenler ve fixed single-page absolute layout kullanıyor; schema snapshot, published immutability ve `lock_version` davranışları korunacak. `docs/codex/` altında continuity sistemi ve 65 objektif kabul kriterli master roadmap oluşturuldu. Başlangıç doğrulaması: 34 backend testi/80 assertion ve 2 frontend testi PASS; 4 mevcut Playwright senaryosu envantere alındı.
+
+Sonraki mantıksal adım: Generic server-side scope resolver, additive nullable template scope alanı ve fail-closed scoped lifecycle.
+
+
 Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı.
 
 - Bağımsız Composer paketi, Testbench/workbench ve Package Boost altyapısı mevcut.

@@ -1,5 +1,25 @@
 # Aktif görev
 
+## BayPdf Finance readiness ve generic çok sayfalı belge motoru
+
+Amaç: Mevcut tek sayfalı şablonları bozmadan opaque server-side scope izolasyonu, scoped asset güvenliği, bounded collection verisi, generic dinamik tablo, çok sayfalı render, page region/context ve trailing flow desteği eklemek.
+
+Detaylı ve ölçülebilir kabul kriterleri `docs/codex/ROADMAP.md` içinde tek master plan olarak izlenir. Continuity durumu `docs/codex/CURRENT_STATE.md`, kararlar `docs/codex/DECISIONS.md`, mantıksal birim günlüğü `docs/codex/WORKLOG.md` içindedir.
+
+- [x] Repository truth audit ve başlangıç test envanteri çıkarıldı.
+- [x] `docs/codex/` continuity sistemi ve objective roadmap hazırlandı.
+- [ ] Generic scope isolation ve legacy strategy tamamlandı.
+- [ ] Scoped assets tamamlandı.
+- [ ] Collection schema ve validation tamamlandı.
+- [ ] Collection table designer tamamlandı.
+- [ ] Multi-page renderer, page regions/context ve trailing flow tamamlandı.
+- [ ] Browser, security, backward compatibility ve distribution doğrulamaları tamamlandı.
+- [ ] Self-contained Finance readiness report tamamlandı.
+
+Durum: İlk mantıksal birim tamamlanıyor. Sonraki iş server-side scope contract ve additive template scope migration'dır.
+
+---
+
 Amaç: BayPdf'nin kodunu, tasarımcı görünümünü ve Composer dağıtımını kapsamlı incelemek; doğrulanan hataları mevcut master branch'inde düzeltmek.
 
 ## Kapsamlı kontrol

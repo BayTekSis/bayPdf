@@ -1,5 +1,10 @@
 # BayPdf yol haritası
 
+## Aktif genişletme: Finance readiness
+
+Generic scope isolation, scoped assets, bounded collection records, collection-backed table, automatic multi-page rendering, page regions/context ve trailing flow geliştiriliyor. Ayrıntılı acceptance checklist ve gerçek ilerleme hesabı `docs/codex/ROADMAP.md` içindedir; bu dosya ürün düzeyi özet olarak tutulur.
+
+
 1. Bağımsız Composer paketi, Package Boost skills, Testbench ve çalışma sınırları.
 2. Değişken kaydı, doğrulama, Unicode PDF üretimi, özel görseller ve sürümlü şablonlar.
 3. Yetkili API, Vue tasarımcı, DE/TR/EN metinler ve bağımsız workbench.
