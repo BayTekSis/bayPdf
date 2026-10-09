@@ -1,15 +1,15 @@
 # Current state
 
 - Current branch: `master`
-- Current phase: Scoped assets
-- Last completed unit: Generic server-side template/version scope isolation
-- Current working state: Scope implementation and related tests pass; logical unit is ready to commit
-- Acceptance criteria completed: 12 of 65; baseline criteria plus all generic template/version scope criteria
+- Current phase: Collection schema and data
+- Last completed unit: Scoped asset storage, catalog, reads, references, and legacy adoption
+- Current working state: Scoped asset implementation and related tests pass; logical unit is ready to commit
+- Acceptance criteria completed: 19 of 65; baseline, template/version scope, and scoped asset criteria
 - Acceptance criteria remaining: See unchecked items in `ROADMAP.md`
 - Known blockers: None. Browser tests have been inventoried but not run in this unit.
-- Latest validation: Scope, TemplateManager, and designer API subset passed with 24 tests and 77 assertions after Pint passed.
-- Expected next task: Scope asset storage prefixes, listing, reads, static/image-variable render paths, and legacy behavior.
-- Expected next commit message: `Şablon kapsam izolasyonu eklendi`
+- Latest validation: Pint passed; asset scope, rendering, designer API, and template scope subset passed with 40 tests and 105 assertions.
+- Expected next task: Bounded collection registration, schema snapshots, example rows, data validation, and scalar field formatting.
+- Expected next commit message: `Varlık kapsam güvenliği güçlendirildi`
 - Uncommitted user changes: None at task start.
 - Recommended next model/reasoning: GPT-5.6 Sol, high reasoning, because public API, persistence, rendering, and security boundaries are changing.
 

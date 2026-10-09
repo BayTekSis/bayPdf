@@ -8,6 +8,10 @@ Generic scope logical unit tamamlandı: public `ScopeResolver` contract'ı, defa
 
 Sonraki mantıksal adım: Scoped asset storage prefix, list/read isolation ve template/image variable reference kontrolleri.
 
+Scoped asset logical unit tamamlandı: yeni upload'lar scope fingerprint path'ine yazılıyor; catalog/read, static template image ve image variable referansları current scope ile sınırlandırılıyor. Legacy asset adoption eski JSON key'ini koruyan non-destructive mirror kullanıyor. Otomatik deletion/garbage collection eklenmedi ve published reference sorumluluğu belgelendi. Targeted doğrulama 40 test/105 assertion PASS.
+
+Sonraki mantıksal adım: Bounded collection schema, examples, snapshot ve row validation.
+
 
 Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı.
 

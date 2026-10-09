@@ -6,7 +6,7 @@ Sürümleme sözleşmesi:
 - DocumentTypes::register, get, all, examples
 - TemplateManager::create, save, publish, cloneDraft, preview, render
 - PdfRenderer::render
-- Assets::store, bytes
+- Assets::store, bytes, all, adoptLegacy
 - DocumentValidator::validate, dimensions, blank
 - VariableResolver::resolve
 - Models\Template ve Models\TemplateVersion alanları/ilişkileri

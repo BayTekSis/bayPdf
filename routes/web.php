@@ -18,5 +18,6 @@ Route::prefix(config('baypdf.path'))
         Route::post('/api/versions/{version}/clone', [DesignerController::class, 'clone'])->name('clone');
         Route::post('/api/versions/{version}/preview', [DesignerController::class, 'preview'])->name('preview');
         Route::post('/api/assets', [DesignerController::class, 'upload'])->name('upload');
+        Route::get('/api/assets/catalog', [DesignerController::class, 'assetCatalog'])->name('asset-catalog');
         Route::get('/api/assets', [DesignerController::class, 'asset'])->name('asset');
     });

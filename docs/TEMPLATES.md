@@ -40,7 +40,7 @@ Koordinatlar ve boyutlar mm; font_size punto. Sayfa A4 (210×297), A5 (148×210)
 
 Ortak alanlar id,type,x,y,width,height,hidden. Metin alanları font_size,font_style,align,color. Stiller boş/B/I/BI, hizalama L/C/R, renkler #RRGGBB. Fill null ise şeffaf; kenarlık 0.3 mm.
 
-Görsel oranı korunarak kutuya sığar. Tam sayfa görsel ilk katmana alınarak arka plan yapılabilir. Orijinal dosya değişmez; otomatik crop yoktur.
+Görsel oranı korunarak kutuya sığar. Tam sayfa görsel ilk katmana alınarak arka plan yapılabilir. Orijinal dosya değişmez; otomatik crop yoktur. Scoped modda static asset save sırasında current scope'a ait olmalıdır; image variable key'i render sırasında aynı denetimden geçer.
 
 Metin satırlara sarılır. Sığmazsa 422 verir; kutuyu büyütün veya fontu küçültün. DejaVu DE/TR/EN desteği sağlar; Arapça şekillendirme, emoji ve CJK kapsamı taahhüt edilmez.
 

@@ -85,7 +85,17 @@ DB::table('baypdf_templates')
     ->update(['scope_key' => $verifiedOpaqueScope]);
 ```
 
-Bu eşleme ownership kararıdır; BayPdf eski satırları current scope'a otomatik atamaz. Assetlerin scope migration davranışı scoped asset bölümünde ayrıca açıklanır. Scoping etkinleştirilmeden önce bütün gerekli template ve asset eşlemelerini yedekli bir bakım penceresinde tamamlayın.
+Bu eşleme ownership kararıdır; BayPdf eski satırları current scope'a otomatik atamaz. Scoping etkinleştirilmeden önce bütün gerekli template ve asset eşlemelerini yedekli bir bakım penceresinde tamamlayın.
+
+Legacy asset key'leri de scoped modda varsayılan olarak reddedilir. Published JSON'u değiştirmeden açıkça sahiplenmek için doğrulanmış scope context'i altında her key'i kopyalayın:
+
+```php
+use BayPdf\Assets;
+
+app(Assets::class)->adoptLegacy('baypdf/assets/verified-image.png');
+```
+
+İşlem orijinali silmez. Doğrulanmış byte'ları current scope fingerprint dizinindeki private legacy mirror'a kopyalar; eski key aynı kalır. Aynı legacy asset gerçekten ortaksa her yetkili scope için ayrı adoption çağrısı gerekir. Ownership bilinmiyorsa kopyalamayın.
 
 ## Güncelleme
 

@@ -24,13 +24,13 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## C. Scoped assets
 
-- [ ] New uploads use a deterministic current-scope storage prefix.
-- [ ] Asset list/read operations expose only current-scope assets.
-- [ ] Cross-scope asset keys are rejected even when a key is known.
-- [ ] Static template images and image variables enforce current-scope ownership.
-- [ ] Traversal, remote URL, stream wrapper, byte, pixel, and type protections remain enforced.
-- [ ] Legacy unscoped asset migration behavior is explicit and non-destructive.
-- [ ] Deletion/reference limitations for draft and published version assets are documented.
+- [x] New uploads use a deterministic current-scope storage prefix.
+- [x] Asset list/read operations expose only current-scope assets.
+- [x] Cross-scope asset keys are rejected even when a key is known.
+- [x] Static template images and image variables enforce current-scope ownership.
+- [x] Traversal, remote URL, stream wrapper, byte, pixel, and type protections remain enforced.
+- [x] Legacy unscoped asset migration behavior is explicit and non-destructive.
+- [x] Deletion/reference limitations for draft and published version assets are documented.
 
 ## D. Collection schema and data
 
@@ -99,6 +99,6 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## Progress
 
-- Completed: 12
+- Completed: 19
 - Total: 65
-- Progress: 18.5%
+- Progress: 29.2%

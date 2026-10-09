@@ -17,4 +17,6 @@ Değişken şeması her sürümde snapshot olarak saklanır. Sonradan registry d
 
 Scope ownership `baypdf_templates.scope_key` alanında tutulur. Version ownership canonical template ilişkisinden türetilir; duplicate scope kaynağı yoktur. Nullable alan eski shared satırları korur. Scoped mod null legacy satırları görünmez tutar ve resolver olmadığında fail-closed davranır. Browser scope seçemez; model route binding ve TemplateManager aynı scope context'i uygular.
 
+Asset scope'u storage path ile taşınır: `asset_prefix/scopes/<sha256(scope)>/<uuid>`. Ham opaque scope path'e yazılmaz. Legacy key adoption, byte'ları current fingerprint altında mirror ederek immutable published JSON key'ini korur. Asset registry/tablosu yoktur; catalog yalnız current prefix'i listeler ve deletion bilinçli olarak sunulmaz.
+
 Tasarımcı Vue ile tema bağımsız oluşturuldu; aynı DejaVu fontları tarayıcı ve PDF tarafında kullanılıyor. Browser canvas yerleşim yardımcısıdır; nihai biçim ve QR için server PDF önizlemesi kullanılır. Composer varlıkları public/vendor/baypdf altına yayımlanır. Workbench yalnızca loopback isteklerde geliştirme kullanıcısı sağlar; bu kod dağıtım arşivinden çıkarılır.

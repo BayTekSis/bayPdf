@@ -79,6 +79,11 @@ final class DesignerController
         return response()->json(['key' => app(Assets::class)->store($request->file('file'))], 201);
     }
 
+    public function assetCatalog(): JsonResponse
+    {
+        return response()->json(['assets' => app(Assets::class)->all()]);
+    }
+
     public function asset(Request $request): Response
     {
         $validated = $request->validate(['key' => ['required', 'string', 'max:255']]);

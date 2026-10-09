@@ -8,6 +8,8 @@ use Illuminate\Validation\ValidationException;
 
 final class DocumentValidator
 {
+    public function __construct(private Assets $assets) {}
+
     public function validate(array $document, array $variables): array
     {
         $document = Validator::make($document, [
@@ -55,6 +57,9 @@ final class DocumentValidator
             }
             if ($error) {
                 throw ValidationException::withMessages(["elements.{$i}" => $error]);
+            }
+            if ($element['type'] === 'image' && $key === '' && ! empty($element['asset'])) {
+                $this->assets->bytes($element['asset']);
             }
             foreach (['content', 'variable', 'asset', 'font_style'] as $field) {
                 $document['elements'][$i][$field] = $element[$field] ?? '';

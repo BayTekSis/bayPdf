@@ -16,10 +16,13 @@ Host render çağrısına verdiği verilerin erişimini kendi doğrular. PHP ser
 - Byte ve piksel sınırları yüklemede/okumada uygulanır.
 - Assetler yapılandırılmış önekle sınırlıdır; traversal, URL ve stream wrapper yolları reddedilir.
 - Upload'lar UUID adlarıyla, private görünürlük isteğiyle saklanır.
+- Scoped modda yeni upload'lar opaque scope'un SHA-256 fingerprint dizinine yazılır; ham scope storage key'e girmez.
+- Asset katalog/read yalnız current scope prefix'ini ve açıkça current scope'a adopt edilmiş legacy mirror'ları kabul eder.
+- Static image referansları draft save sırasında, image variable referansları render sırasında aynı scope kuralıyla doğrulanır.
 - Host diskinin kökü HTTP üzerinden sunulmamalıdır. Windows chmod bitleri güvenlik sınırı değildir.
 - Font cache ve geçici görseller özel yerel alandadır. Vendor fontlarına yazılmaz.
 - QR içeriği indirilmez, yalnızca kodlanır. Render sırasında harici HTTP isteği yapılmaz.
-- Otomatik asset temizliği yoktur. Bütün sürüm referanslarını kontrol etmeden dosya silmeyin.
+- Otomatik asset silme/temizleme API'si yoktur. Draft ve immutable published version JSON referanslarının tamamını kontrol etmeden storage dosyası veya legacy mirror silmeyin. Package reference-aware garbage collection yapmaz.
 
 SVG/HTML/PHP çalıştırılabilir içerik olarak işlenmez. Tasarımcı metinleri Vue interpolasyonu, başlangıç verileri escaped Blade attribute ile gösterilir. PDF önizlemesi private,no-store döner.
 

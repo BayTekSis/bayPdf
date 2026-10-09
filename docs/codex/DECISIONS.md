@@ -15,7 +15,6 @@
 
 ## Pending implementation decisions
 
-- Scoped asset prefix encoding and listing behavior.
 - Layout schema v2 region and flow shape.
 - Maximum defaults after renderer tests establish practical deterministic bounds.
 
@@ -29,3 +28,12 @@
 - Scoped route binding and TemplateManager return not-found behavior for foreign template/version IDs.
 - Version reassignment is prohibited for every version, preventing ownership changes through the relation.
 - Legacy ownership adoption is an explicit host migration over verified template IDs; automatic assignment is forbidden.
+
+## Implemented asset decisions
+
+- Scoped assets use `asset_prefix/scopes/<sha256(scope)>`; opaque scope values are not exposed in storage keys.
+- No asset registry table is added. Prefix-bounded storage listing supplies the current catalog.
+- Static image keys are checked during document validation; image variable keys are checked during rendering.
+- Legacy adoption copies validated bytes to a current-scope mirror and preserves the old JSON key.
+- Adoption never deletes the original and may be repeated only for scopes whose ownership is verified by the host.
+- BayPdf exposes no deletion or garbage collector. Hosts must consider every draft and immutable published version reference before external cleanup.
