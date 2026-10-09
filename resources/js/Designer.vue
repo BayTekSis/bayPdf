@@ -1,23 +1,33 @@
 <script setup>
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
-import { dimensions, moveElement } from './layout.js'
+import { addPageNumber, addTrailingElement, changeCollectionSource, collectionColumns, collectionVariables, createFlowDocument, dimensions, moveElement } from './layout.js'
 
 const props = defineProps({ base: String, locale: String, messages: Object })
 const t = key => props.messages[key] ?? key
-const templates = ref([]), types = ref([]), template = ref(null), version = ref(null), document = ref(null)
+const templates = ref([]), types = ref([]), assets = ref([]), template = ref(null), version = ref(null), document = ref(null)
 const selectedId = ref(null), busy = ref(false), error = ref(''), notice = ref(''), creating = ref(false)
 const newName = ref(''), newType = ref(''), nextPage = ref(null), zoom = ref(0.8), snap = ref(true)
 const previewUrl = ref(''), savedJson = ref(''), history = ref([]), historyIndex = ref(-1)
-const createDialog = ref(null), previewDialog = ref(null)
-const selected = computed(() => document.value?.elements.find(e => e.id === selectedId.value))
+const createDialog = ref(null), previewDialog = ref(null), newColumnField = ref('')
+const table = computed(() => document.value?.flow?.table ?? null)
+const trailing = computed(() => document.value?.flow?.trailing ?? [])
+const selected = computed(() => [...(document.value?.elements ?? []), ...trailing.value].find(e => e.id === selectedId.value))
+const selectedFixed = computed(() => document.value?.elements.some(element => element.id === selectedId.value))
 const readOnly = computed(() => Boolean(version.value?.published_at))
 const fingerprint = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item) ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b))) : item)
 const dirty = computed(() => document.value && fingerprint(document.value) !== savedJson.value)
 const paper = computed(() => document.value ? dimensions(document.value.page) : [210, 297])
 const scale = computed(() => 96 / 25.4 * zoom.value)
+const collections = computed(() => collectionVariables(version.value?.variables))
+const activeCollection = computed(() => collections.value.find(item => item.key === table.value?.source))
+const collectionFields = computed(() => activeCollection.value?.fields ?? [])
+const availableColumnFields = computed(() => collectionFields.value.filter(field => !table.value?.columns.some(column => column.field === field.key)))
+const columnTotal = computed(() => Number((table.value?.columns.reduce((total, column) => total + Number(column.width || 0), 0) ?? 0).toFixed(1)))
+const columnWidthsValid = computed(() => !table.value || Math.abs(columnTotal.value - Number(table.value.width)) < 0.01)
+const hasPublishableContent = computed(() => Boolean(document.value?.elements.length || table.value))
 const groups = computed(() => {
   const result = Object.create(null)
-  for (const v of version.value?.variables ?? []) (result[v.group ?? t('variables')] ??= []).push(v)
+  for (const v of version.value?.variables ?? []) if (v.type !== 'collection') (result[v.group ?? t('variables')] ??= []).push(v)
   return result
 })
 
@@ -110,15 +120,61 @@ function add(type, variable = null, asset = null) {
   const image = type === 'image', square = image || type === 'qr'
   const element = { id: crypto.randomUUID(), type, x: 20, y: 20, width: square ? 40 : 110, height: square ? 40 : type === 'line' ? 1 : 20,
     font_size: 14, font_style: '', color: '#173b34', align: 'L', content: type === 'text' ? t('newText') : '', variable: variable?.key ?? '', asset: asset ?? '', fill: type === 'rectangle' ? '#e4eee5' : null, hidden: false }
+  if (document.value.schema_version === 2) Object.assign(element, { region: 'page', repeat: 'first' })
   document.value.elements.push(element); selectedId.value = element.id; remember()
 }
-function remove() { document.value.elements = document.value.elements.filter(e => e.id !== selectedId.value); selectedId.value = null; remember() }
+function addCollectionTable() {
+  if (readOnly.value || !collections.value.length || table.value) return
+  document.value = createFlowDocument(document.value, collections.value[0])
+  selectedId.value = document.value.flow.table.id
+  newColumnField.value = ''
+  remember()
+}
+function selectCollection(event) {
+  const collection = collections.value.find(item => item.key === event.target.value)
+  if (collection) { changeCollectionSource(document.value, collection); newColumnField.value = ''; remember() }
+}
+function rebalanceColumns() {
+  const fields = table.value.columns.map(column => collectionFields.value.find(field => field.key === column.field)).filter(Boolean)
+  const labels = Object.fromEntries(table.value.columns.map(column => [column.field, column.label]))
+  table.value.columns = collectionColumns({ fields }, Number(table.value.width)).map(column => ({ ...column, label: labels[column.field] ?? column.label }))
+}
+function addColumn() {
+  const field = collectionFields.value.find(item => item.key === newColumnField.value)
+  if (!field) return
+  table.value.columns.push({ field: field.key, label: field.label, width: 1, align: ['number', 'money'].includes(field.type) ? 'R' : 'L' })
+  rebalanceColumns(); newColumnField.value = ''; remember()
+}
+function removeColumn(index) { if (table.value.columns.length > 1) { table.value.columns.splice(index, 1); rebalanceColumns(); remember() } }
+function moveColumn(index, delta) {
+  const target = index + delta
+  if (target < 0 || target >= table.value.columns.length) return
+  ;[table.value.columns[index], table.value.columns[target]] = [table.value.columns[target], table.value.columns[index]]; remember()
+}
+function addTrailing(type = 'text', variable = null) {
+  if (!table.value) return
+  const element = addTrailingElement(document.value, type, t('newTrailingText'), variable)
+  selectedId.value = element.id; remember()
+}
+function addPageContext() {
+  if (!table.value) return
+  const element = addPageNumber(document.value, t('pageNumberPattern'))
+  selectedId.value = element.id; remember()
+}
+function remove() {
+  if (selectedFixed.value) document.value.elements = document.value.elements.filter(e => e.id !== selectedId.value)
+  else document.value.flow.trailing = document.value.flow.trailing.filter(e => e.id !== selectedId.value)
+  selectedId.value = null; remember()
+}
 function duplicate() {
-  const copy = moveElement({ ...selected.value, id: crypto.randomUUID() }, 5, 5, document.value.page, snap.value)
-  document.value.elements.push(copy); selectedId.value = copy.id; remember()
+  const copy = { ...selected.value, id: crypto.randomUUID() }
+  if (selectedFixed.value) { Object.assign(copy, moveElement(copy, 5, 5, document.value.page, snap.value)); document.value.elements.push(copy) }
+  else document.value.flow.trailing.push(copy)
+  selectedId.value = copy.id; remember()
 }
 function reorder(delta) {
-  const elements = document.value.elements, index = elements.findIndex(e => e.id === selectedId.value), next = index + delta
+  const elements = selectedFixed.value ? document.value.elements : document.value.flow.trailing
+  const index = elements.findIndex(e => e.id === selectedId.value), next = index + delta
   if (next < 0 || next >= elements.length) return
   ;[elements[index], elements[next]] = [elements[next], elements[index]]; remember()
 }
@@ -145,6 +201,30 @@ function elementStyle(e) {
     fontStyle: e.font_style?.includes('I') ? 'italic' : 'normal', color: e.color, background: e.type === 'rectangle' ? e.fill : undefined,
     textAlign: { L: 'left', C: 'center', R: 'right' }[e.align], opacity: e.hidden ? 0.25 : 1 }
 }
+function trailingStyle(e, index) {
+  const top = document.value.flow.first_top + 34 + (activeCollection.value?.example?.slice(0, 3).length ?? 0) * 12 + document.value.flow.trailing.slice(0, index).reduce((sum, item) => sum + Number(item.height) + Number(item.gap_before ?? 0), 0) + Number(e.gap_before ?? 0)
+  return { ...elementStyle({ ...e, y: top }), cursor: 'pointer' }
+}
+function tableStyle() {
+  return { left: `${table.value.x * scale.value}px`, top: `${document.value.flow.first_top * scale.value}px`, width: `${table.value.width * scale.value}px` }
+}
+function tableExample(field, row) { return row?.[field] ?? `{${field}}` }
+function pageChanged() {
+  if (!table.value) return
+  const [pageWidth, pageHeight] = dimensions(document.value.page)
+  table.value.x = 15; table.value.width = Number((pageWidth - 30).toFixed(1))
+  document.value.flow.bottom = Number((pageHeight - 22).toFixed(1))
+  document.value.flow.first_top = Math.min(document.value.flow.first_top, pageHeight - 40)
+  document.value.flow.continuation_top = Math.min(document.value.flow.continuation_top, pageHeight - 40)
+  rebalanceColumns()
+}
+function setElementRegion(event) {
+  selected.value.region = event.target.value
+  const [, pageHeight] = dimensions(document.value.page)
+  if (selected.value.region === 'header') { selected.value.y = Number(Math.max(0, Math.min(document.value.flow.first_top, document.value.flow.continuation_top) - selected.value.height).toFixed(1)); selected.value.repeat = 'all' }
+  if (selected.value.region === 'footer') { selected.value.y = Number((pageHeight - selected.value.height - 8).toFixed(1)); selected.value.repeat = 'all' }
+  if (selected.value.region === 'page') selected.value.repeat = 'first'
+}
 function variableExample(e) {
   const v = version.value.variables.find(v => v.key === e.variable)
   return v?.example ?? v?.default ?? `{${e.variable}}`
@@ -156,7 +236,7 @@ function imageUrl(e) {
 async function upload(event) {
   const file = event.target.files[0]; if (!file) return
   const form = new FormData(); form.append('file', file)
-  await run(async () => { const result = await api('/assets', { method: 'POST', body: form }); add('image', null, result.key) })
+  await run(async () => { const result = await api('/assets', { method: 'POST', body: form }); assets.value.push(result.key); add('image', null, result.key) })
   event.target.value = ''
 }
 function changeLocale(event) {
@@ -165,7 +245,7 @@ function changeLocale(event) {
 }
 function unload(e) { if (dirty.value) { e.preventDefault(); e.returnValue = '' } }
 function showCreate() { if (!canLeave()) return; creating.value = true; createDialog.value.showModal() }
-onMounted(() => { run(async () => { types.value = (await api('/catalog')).types; newType.value = types.value[0]?.key ?? ''; await loadList() }); window.addEventListener('beforeunload', unload) })
+onMounted(() => { run(async () => { const [catalog, assetCatalog] = await Promise.all([api('/catalog'), api('/assets/catalog')]); types.value = catalog.types; assets.value = assetCatalog.assets; newType.value = types.value[0]?.key ?? ''; await loadList() }); window.addEventListener('beforeunload', unload) })
 onBeforeUnmount(() => { window.removeEventListener('beforeunload', unload); if (previewUrl.value) URL.revokeObjectURL(previewUrl.value) })
 </script>
 
@@ -189,7 +269,17 @@ onBeforeUnmount(() => { window.removeEventListener('beforeunload', unload); if (
           <div class="tools"><button v-for="[kind, icon] in [['text','T'],['qr','▦'],['line','╱'],['rectangle','□']]" :key="kind" :disabled="readOnly || busy" @click="add(kind)"><b>{{ icon }}</b>{{ t(kind) }}</button></div>
           <label class="upload-button" :class="{ disabled: readOnly || busy }">↑ {{ t('upload') }}<input type="file" accept="image/png,image/jpeg" :disabled="readOnly || busy" @change="upload"></label>
           <p class="micro">{{ t('imageHint') }}</p>
+          <div v-if="assets.length" class="asset-list" :aria-label="t('assetLibrary')"><button v-for="asset in assets" :key="asset" :disabled="readOnly || busy" :title="asset" @click="add('image', null, asset)">{{ t('reuseImage') }}</button></div>
           <div v-for="(variables, group) in groups" :key="group" class="variable-group"><div class="section-heading">{{ group }}</div><button v-for="v in variables" :key="v.key" class="variable-button" :disabled="readOnly || busy" @click="add(v.type === 'image' ? 'image' : v.type === 'qr' ? 'qr' : 'variable', v)"><span class="brace">{ }</span>{{ v.label }}<span v-if="v.required" class="required">*</span></button></div>
+          <details v-if="collections.length" class="advanced-tools">
+            <summary>{{ t('advancedData') }}</summary>
+            <button class="data-tool" :disabled="readOnly || busy || Boolean(table)" @click="addCollectionTable">+ {{ t('collectionTable') }}</button>
+            <template v-if="table">
+              <button class="data-tool" :disabled="readOnly || busy" @click="addPageContext">+ {{ t('pageNumber') }}</button>
+              <button class="data-tool" :disabled="readOnly || busy" @click="addTrailing('text')">+ {{ t('trailingText') }}</button>
+              <button v-for="v in version.variables.filter(item => item.type !== 'collection' && item.type !== 'image')" :key="`trailing-${v.key}`" class="variable-button" :disabled="readOnly || busy" @click="addTrailing(v.type === 'qr' ? 'qr' : 'variable', v)"><span class="brace">↓</span>{{ v.label }}</button>
+            </template>
+          </details>
         </div>
         <div class="library-footer"><span class="status-dot"></span>BayPdf <span>01 / STUDIO</span></div>
       </aside>
@@ -206,6 +296,12 @@ onBeforeUnmount(() => { window.removeEventListener('beforeunload', unload); if (
             <span v-else-if="element.type !== 'rectangle'">{{ element.type === 'variable' ? variableExample(element) : element.content }}</span>
             <span v-if="selectedId === element.id" class="element-tag">{{ t(element.type) }} · {{ element.x }} / {{ element.y }}</span>
           </div>
+          <button v-if="table" type="button" class="flow-table" :class="{ selected: selectedId === table.id }" :style="tableStyle()" :aria-label="t('collectionTable')" @click="selectedId = table.id">
+            <div class="flow-table-row flow-table-head"><span v-for="column in table.columns" :key="column.field" :style="{ width: `${column.width / table.width * 100}%`, textAlign: { L: 'left', C: 'center', R: 'right' }[column.align] }">{{ column.label }}</span></div>
+            <div v-for="(row, rowIndex) in (activeCollection?.example ?? []).slice(0, 3)" :key="rowIndex" class="flow-table-row"><span v-for="column in table.columns" :key="column.field" :style="{ width: `${column.width / table.width * 100}%`, textAlign: { L: 'left', C: 'center', R: 'right' }[column.align] }">{{ tableExample(column.field, row) }}</span></div>
+            <div v-if="!(activeCollection?.example ?? []).length" class="flow-table-empty">{{ t('emptyCollection') }}</div>
+          </button>
+          <div v-for="(element, index) in trailing" :key="element.id" tabindex="0" role="button" :aria-label="`${t('trailingContent')}: ${element.variable || element.content}`" class="element trailing-element" :class="{ selected: selectedId === element.id, readonly: readOnly }" :style="trailingStyle(element, index)" @focus="selectedId = element.id" @click="selectedId = element.id"><span>{{ element.variable ? variableExample(element) : element.content }}</span><span v-if="selectedId === element.id" class="element-tag">{{ t('trailingContent') }}</span></div>
         </div></div></div>
         <footer class="canvas-footer"><span>{{ t('hint') }}</span><label><input type="checkbox" v-model="snap">{{ t('snap') }}</label></footer>
       </main>
@@ -215,20 +311,37 @@ onBeforeUnmount(() => { window.removeEventListener('beforeunload', unload); if (
       <aside v-if="document" class="inspector">
         <div class="section-heading">{{ t('properties') }} <span>↗</span></div>
         <fieldset :disabled="readOnly || busy" @change="remember">
-          <template v-if="selected"><div class="selection-title">{{ t(selected.type) }}<span class="micro">{{ document.elements.findIndex(e => e.id === selected.id) + 1 }} / {{ document.elements.length }}</span></div>
-            <div class="field-pair"><label>X <span>mm</span><input aria-label="X" v-model.number="selected.x" type="number" min="0" step="0.1"></label><label>Y <span>mm</span><input aria-label="Y" v-model.number="selected.y" type="number" min="0" step="0.1"></label></div>
+          <template v-if="selected"><div class="selection-title">{{ t(selected.type) }}<span v-if="selectedFixed" class="micro">{{ document.elements.findIndex(e => e.id === selected.id) + 1 }} / {{ document.elements.length }}</span><span v-else class="micro">{{ t('trailingContent') }}</span></div>
+            <div class="field-pair"><label>X <span>mm</span><input aria-label="X" v-model.number="selected.x" type="number" min="0" step="0.1"></label><label v-if="selectedFixed">Y <span>mm</span><input aria-label="Y" v-model.number="selected.y" type="number" min="0" step="0.1"></label><label v-else>{{ t('gapBefore') }} <span>mm</span><input :aria-label="t('gapBefore')" v-model.number="selected.gap_before" type="number" min="0" max="30" step="0.1"></label></div>
             <div class="field-pair"><label>{{ t('width') }}<input v-model.number="selected.width" type="number" min="1" step="0.1"></label><label>{{ t('height') }}<input v-model.number="selected.height" type="number" min="1" step="0.1"></label></div>
-            <label v-if="['text','qr'].includes(selected.type) && !selected.variable">{{ t('content') }}<textarea v-model="selected.content" rows="4" maxlength="5000" @input="remember"></textarea></label>
-            <label v-if="selected.variable">{{ t('variable') }}<select v-model="selected.variable"><option v-for="v in version.variables.filter(v => selected.type === 'image' ? v.type === 'image' : v.type !== 'image')" :key="v.key" :value="v.key">{{ v.label }}</option></select></label>
-            <template v-if="['text','variable'].includes(selected.type)"><label>{{ t('font') }} <span>pt</span><input v-model.number="selected.font_size" type="number" min="6" max="72"></label><label>{{ t('style') }}<select v-model="selected.font_style"><option value="">{{ t('regular') }}</option><option value="B">{{ t('bold') }}</option><option value="I">{{ t('italic') }}</option><option value="BI">{{ t('boldItalic') }}</option></select></label><label>{{ t('align') }}<select v-model="selected.align"><option value="L">{{ t('left') }}</option><option value="C">{{ t('center') }}</option><option value="R">{{ t('right') }}</option></select></label></template>
+            <label v-if="['text','qr','page_number'].includes(selected.type) && !selected.variable">{{ t('content') }}<textarea v-model="selected.content" rows="4" maxlength="5000" @input="remember"></textarea></label>
+            <label v-if="selected.variable">{{ t('variable') }}<select v-model="selected.variable"><option v-for="v in version.variables.filter(v => v.type !== 'collection' && (selected.type === 'image' ? v.type === 'image' : v.type !== 'image'))" :key="v.key" :value="v.key">{{ v.label }}</option></select></label>
+            <template v-if="['text','variable','page_number'].includes(selected.type)"><label>{{ t('font') }} <span>pt</span><input v-model.number="selected.font_size" type="number" min="6" max="72"></label><label>{{ t('style') }}<select v-model="selected.font_style"><option value="">{{ t('regular') }}</option><option value="B">{{ t('bold') }}</option><option value="I">{{ t('italic') }}</option><option value="BI">{{ t('boldItalic') }}</option></select></label><label>{{ t('align') }}<select v-model="selected.align"><option value="L">{{ t('left') }}</option><option value="C">{{ t('center') }}</option><option value="R">{{ t('right') }}</option></select></label></template>
+            <template v-if="document.schema_version === 2 && selectedFixed"><label>{{ t('pageRegion') }}<select :value="selected.region" @change="setElementRegion"><option value="page">{{ t('pageBody') }}</option><option value="header">{{ t('pageHeader') }}</option><option value="footer">{{ t('pageFooter') }}</option></select></label><label>{{ t('repeatOn') }}<select v-model="selected.repeat"><option value="first">{{ t('firstPage') }}</option><option value="all">{{ t('allPages') }}</option><option value="continuation">{{ t('continuationPages') }}</option><option value="last">{{ t('lastPage') }}</option></select></label></template>
             <label>{{ t('color') }}<input type="color" v-model="selected.color"></label>
             <template v-if="selected.type === 'rectangle'"><label>{{ t('fill') }}<input type="color" :value="selected.fill || '#ffffff'" @input="selected.fill = $event.target.value"></label><button class="quiet" @click="selected.fill = null; remember()">{{ t('transparent') }}</button></template>
             <div class="inspector-actions"><button @click="duplicate">{{ t('duplicate') }}</button><button @click="reorder(1)">{{ t('forward') }}</button><button @click="reorder(-1)">{{ t('backward') }}</button><button @click="selected.hidden = !selected.hidden; remember()">{{ selected.hidden ? t('show') : t('hide') }}</button><button class="danger" @click="remove">{{ t('remove') }}</button></div>
           </template>
           <p v-else class="muted">{{ t('select') }}</p>
-          <div class="page-settings"><div class="section-heading">{{ t('page') }}</div><label>{{ t('page') }}<select v-model="document.page.size"><option>A4</option><option>A5</option><option>Letter</option></select></label><label>{{ t('orientation') }}<select v-model="document.page.orientation"><option value="portrait">{{ t('portrait') }}</option><option value="landscape">{{ t('landscape') }}</option></select></label><p class="micro">{{ t('pageHint') }}</p></div>
+          <div v-if="table" class="flow-settings"><div class="section-heading">{{ t('collectionTable') }}</div>
+            <label>{{ t('collectionSource') }}<select :value="table.source" @change="selectCollection"><option v-for="collection in collections" :key="collection.key" :value="collection.key">{{ collection.label }}</option></select></label>
+            <div class="field-pair"><label>{{ t('flowTop') }}<input v-model.number="document.flow.first_top" type="number" min="0" step="0.1"></label><label>{{ t('continuationTop') }}<input v-model.number="document.flow.continuation_top" type="number" min="0" step="0.1"></label></div>
+            <div class="field-pair"><label>{{ t('flowBottom') }}<input v-model.number="document.flow.bottom" type="number" min="1" step="0.1"></label><label>{{ t('flowGap') }}<input v-model.number="document.flow.gap" type="number" min="0" max="30" step="0.1"></label></div>
+            <label class="check-label"><input type="checkbox" v-model="table.repeat_header">{{ t('repeatTableHeader') }}</label>
+            <div class="column-heading"><strong>{{ t('columns') }}</strong><span :class="{ invalid: !columnWidthsValid }">{{ columnTotal }} / {{ table.width }} mm</span></div>
+            <p v-if="!columnWidthsValid" class="field-error" role="alert">{{ t('columnWidthError') }}</p>
+            <div v-for="(column, index) in table.columns" :key="column.field" class="column-editor">
+              <label>{{ t('field') }}<input :value="collectionFields.find(field => field.key === column.field)?.label ?? column.field" disabled></label>
+              <label>{{ t('columnLabel') }}<input v-model="column.label" maxlength="120"></label>
+              <div class="field-pair"><label>{{ t('width') }}<input v-model.number="column.width" type="number" min="1" step="0.1"></label><label>{{ t('align') }}<select v-model="column.align"><option value="L">{{ t('left') }}</option><option value="C">{{ t('center') }}</option><option value="R">{{ t('right') }}</option></select></label></div>
+              <div class="column-actions"><button type="button" :aria-label="t('moveColumnUp')" :disabled="index === 0" @click="moveColumn(index, -1)">↑</button><button type="button" :aria-label="t('moveColumnDown')" :disabled="index === table.columns.length - 1" @click="moveColumn(index, 1)">↓</button><button type="button" :disabled="table.columns.length === 1" @click="removeColumn(index)">{{ t('remove') }}</button></div>
+            </div>
+            <div v-if="availableColumnFields.length" class="add-column"><label>{{ t('addColumn') }}<select v-model="newColumnField"><option value="">{{ t('chooseField') }}</option><option v-for="field in availableColumnFields" :key="field.key" :value="field.key">{{ field.label }}</option></select></label><button type="button" :disabled="!newColumnField" @click="addColumn">+</button></div>
+            <details class="table-style"><summary>{{ t('tableStyle') }}</summary><label>{{ t('headerFill') }}<input type="color" v-model="table.header.fill"></label><label>{{ t('headerFont') }}<input v-model.number="table.header.font_size" type="number" min="6" max="36"></label><label>{{ t('rowFont') }}<input v-model.number="table.row.font_size" type="number" min="6" max="36"></label><label class="check-label"><input type="checkbox" v-model="table.header.border">{{ t('headerBorder') }}</label><label class="check-label"><input type="checkbox" v-model="table.row.border">{{ t('rowBorder') }}</label></details>
+          </div>
+          <div class="page-settings"><div class="section-heading">{{ t('page') }}</div><label>{{ t('page') }}<select v-model="document.page.size" @change="pageChanged"><option>A4</option><option>A5</option><option>Letter</option></select></label><label>{{ t('orientation') }}<select v-model="document.page.orientation" @change="pageChanged"><option value="portrait">{{ t('portrait') }}</option><option value="landscape">{{ t('landscape') }}</option></select></label><p class="micro">{{ table ? t('flowPageHint') : t('pageHint') }}</p></div>
         </fieldset>
-        <div class="publish-panel"><p class="micro">{{ t('sample') }}</p><button v-if="!readOnly" class="publish-button" :disabled="busy || !document.elements.length" @click="publish">{{ t('publish') }} ↗</button><button class="quiet" :disabled="busy" @click="openTemplate(template.id)">{{ t('refresh') }}</button></div>
+        <div class="publish-panel"><p class="micro">{{ t('sample') }}</p><button v-if="!readOnly" class="publish-button" :disabled="busy || !hasPublishableContent || !columnWidthsValid" @click="publish">{{ t('publish') }} ↗</button><button class="quiet" :disabled="busy" @click="openTemplate(template.id)">{{ t('refresh') }}</button></div>
       </aside>
     </div>
     <dialog ref="createDialog" @close="creating = false"><form @submit.prevent="createTemplate"><div class="section-heading">BAYPDF</div><h2>{{ t('new') }}</h2><label>{{ t('name') }}<input v-model="newName" required maxlength="120" autofocus></label><label>{{ t('type') }}<select v-model="newType" required><option v-for="type in types" :key="type.key" :value="type.key">{{ type.label }}</option></select></label><p v-if="error" class="dialog-error" role="alert">{{ error }}</p><div class="dialog-actions"><button type="button" :disabled="busy" @click="createDialog.close()">{{ t('cancel') }}</button><button class="primary" :disabled="busy">{{ t('create') }}</button></div></form></dialog>

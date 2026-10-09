@@ -20,6 +20,10 @@ Multi-page renderer logical unit tamamlandı: explicit schema v2, measured gener
 
 Sonraki mantıksal adım: Progressive designer UI, frontend save-payload tests, workbench commercial-document sample ve Playwright scenarios.
 
+Progressive designer logical unit tamamlandı: advanced/data alanında collection table, source/column/style, repeated header, page region/repeat, Page X / Y ve trailing content kontrolleri eklendi. Scoped asset catalog'daki kayıtlı görseller yeniden seçilebilir. Workbench sabit server-side scope ve 55 satırlı generic commercial-document örneği kullanıyor. Pint, 41 targeted backend test/132 assertion, 5 frontend test, production build ve 6 Playwright senaryosu PASS.
+
+Sonraki mantıksal adım: Legacy compatibility matrix, representative PDF visual inspection, full QA/distribution/security review ve final report.
+
 
 Yerel paket oluşturma kapsamı: 4/4 faz tamamlandı.
 

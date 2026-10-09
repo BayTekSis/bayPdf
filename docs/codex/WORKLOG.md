@@ -34,3 +34,10 @@
 - Main files/domains: DocumentValidator, PdfRenderer, Canvas, internal TextLayout/FlowPaginator, renderer/config/security/template/architecture docs
 - Validation: Pint PASS; latest multi-page lifecycle + legacy rendering + TemplateManager subset — 35 tests/70 assertions PASS
 - Next unit: Progressive designer UX, frontend save-payload tests, workbench commercial-document example, and browser coverage
+
+## 2026-10-09 — Progressive multi-page designer
+
+- Completed unit: Progressive collection-table tools, source/column/style controls, page repeat/context settings, trailing content authoring, scoped asset reuse, and generic workbench example
+- Main files/domains: Vue designer, layout helpers, translations/CSS, compiled package assets, frontend tests, Playwright scenarios, workbench registration
+- Validation: Pint PASS; targeted backend 41 tests/132 assertions PASS; frontend 5 tests PASS; Vite production build PASS; Playwright 6 scenarios PASS
+- Next unit: Legacy compatibility matrix, representative PDF visual inspection, full QA/distribution/security review, and final report

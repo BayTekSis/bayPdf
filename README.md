@@ -90,7 +90,7 @@ public function boot(DocumentTypes $types): void
 }
 ```
 
-Choose **New template**, select a document type, then click a variable to add it to the page. Position elements by dragging, using arrow keys or entering millimetre values. Save the draft, check the PDF preview and publish the version.
+Choose **New template**, select a document type, then click a variable to add it to the page. Position elements by dragging, using arrow keys or entering millimetre values. Document types with a collection expose an **Advanced / data** section for a paginated table, page repeat rules, page numbers and content that follows the table. Save the draft, check the PDF preview and publish the version.
 
 ## Generate a PDF from a published version
 

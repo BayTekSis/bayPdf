@@ -46,12 +46,12 @@ Progress is calculated only from the objective checklist below. A box is checked
 ## E. Collection table designer
 
 - [x] A generic `collection_table` element is defined without business semantics.
-- [ ] Source collection and field mappings are selectable in the designer.
+- [x] Source collection and field mappings are selectable in the designer.
 - [x] Columns support labels, deterministic widths, alignment, padding, borders, header style, and row style.
 - [x] Invalid or overflowing column widths fail with an actionable validation error.
-- [ ] Table settings use labelled keyboard-accessible controls and preserve existing keyboard positioning.
-- [ ] Advanced/data controls use progressive disclosure and small viewports remain usable.
-- [ ] Frontend tests cover source selection, columns, repeat settings, validation, and save payload.
+- [x] Table settings use labelled keyboard-accessible controls and preserve existing keyboard positioning.
+- [x] Advanced/data controls use progressive disclosure and small viewports remain usable.
+- [x] Frontend tests cover source selection, columns, repeat settings, validation, and save payload.
 
 ## F. Multi-page renderer
 
@@ -82,11 +82,11 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## I. Browser and security verification
 
-- [ ] Playwright verifies the legacy single-page authoring lifecycle.
-- [ ] Playwright verifies scoped template isolation.
-- [ ] Playwright verifies a collection table that previews across multiple pages.
-- [ ] Playwright verifies repeated page content, page numbers, and trailing flow state.
-- [ ] Security tests cover cross-scope templates, versions, assets, image variables, guessed IDs, malformed collections, and resource exhaustion limits.
+- [x] Playwright verifies the legacy single-page authoring lifecycle.
+- [x] Playwright verifies scoped template isolation.
+- [x] Playwright verifies a collection table that previews across multiple pages.
+- [x] Playwright verifies repeated page content, page numbers, and trailing flow state.
+- [x] Security tests cover cross-scope templates, versions, assets, image variables, guessed IDs, malformed collections, and resource exhaustion limits.
 
 ## J. Documentation, distribution, and release readiness
 
@@ -99,6 +99,6 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## Progress
 
-- Completed: 47
+- Completed: 56
 - Total: 65
-- Progress: 72.3%
+- Progress: 86.2%

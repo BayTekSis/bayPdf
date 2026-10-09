@@ -67,6 +67,8 @@ Sayfa yolu altında api/catalog, api/templates, api/templates/{id}, api/versions
 
 Canvas yaklaşık düzenleme görünümüdür. Gerçek satır sarma, biçimlendirilmiş değişken ve QR çıktısı server PDF önizlemesinde görülür.
 
+Collection değişkeni bulunan belge türlerinde tasarımcı `Advanced / data` bölümü gösterir. Kullanıcı bu açık eylemle legacy taslağı schema v2'ye yükseltir; source collection, sütun eşlemesi/etiketi/genişliği/hizası, repeated table header ve temel table style alanlarını yönetir. Fixed öğeler first/all/continuation/last sayfa kuralı ve page/header/footer region seçebilir. Page number ve table sonrasını izleyen text/variable blokları aynı panelden eklenir. Legacy taslaklar kullanıcı collection table eklemedikçe otomatik dönüştürülmez.
+
 ## Layout schema v2: collection table and flow
 
 Legacy documents omit `schema_version` and remain fixed single-page layouts. Multi-page behavior requires explicit `schema_version: 2`; BayPdf does not rewrite stored legacy JSON.

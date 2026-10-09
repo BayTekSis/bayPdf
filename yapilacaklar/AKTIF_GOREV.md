@@ -11,12 +11,12 @@ Detaylı ve ölçülebilir kabul kriterleri `docs/codex/ROADMAP.md` içinde tek 
 - [x] Generic scope isolation ve legacy strategy tamamlandı.
 - [x] Scoped assets tamamlandı.
 - [x] Collection schema ve validation tamamlandı.
-- [ ] Collection table designer tamamlandı.
+- [x] Collection table designer tamamlandı.
 - [x] Multi-page renderer, page regions/context ve trailing flow tamamlandı.
 - [ ] Browser, security, backward compatibility ve distribution doğrulamaları tamamlandı.
 - [ ] Self-contained Finance readiness report tamamlandı.
 
-Durum: Layout schema v2, collection table, automatic pagination, page repeat/context ve trailing flow backend'i tamamlandı. Sonraki iş progressive designer UI, frontend ve browser coverage'dır.
+Durum: Layout schema v2 backend'i ve progressive designer UI tamamlandı; 5 frontend testi ve 6 Playwright senaryosu geçiyor. Sonraki iş legacy compatibility matrix, PDF visual evidence ve final QA/report'tur.
 
 ---
 
