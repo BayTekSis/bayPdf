@@ -13,10 +13,10 @@ Detaylı ve ölçülebilir kabul kriterleri `docs/codex/ROADMAP.md` içinde tek 
 - [x] Collection schema ve validation tamamlandı.
 - [x] Collection table designer tamamlandı.
 - [x] Multi-page renderer, page regions/context ve trailing flow tamamlandı.
-- [ ] Browser, security, backward compatibility ve distribution doğrulamaları tamamlandı.
-- [ ] Self-contained Finance readiness report tamamlandı.
+- [x] Browser, security, backward compatibility ve distribution doğrulamaları tamamlandı.
+- [x] Self-contained Finance readiness report tamamlandı.
 
-Durum: Layout schema v2 backend'i ve progressive designer UI tamamlandı; 5 frontend testi ve 6 Playwright senaryosu geçiyor. Sonraki iş legacy compatibility matrix, PDF visual evidence ve final QA/report'tur.
+Durum: Yerel Finance readiness kapanışı tamamlandı. Güncel main QA 72 backend testi/255 assertion, 5 frontend testi ve 6 Playwright senaryosu geçti. Legacy matrix, ilk/devam/son PDF görsel incelemesi, case-insensitive MySQL scope testi ve ayrı runtime arşiv kurulumu doğrulandı. Sonraki adım final commit için uzak CI ve kullanıcının seçtiği yeni sürümün yayın handoff'udur; mevcut 0.1.0 etiketi korunur.
 
 ---
 

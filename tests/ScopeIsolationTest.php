@@ -8,8 +8,11 @@ use BayPdf\Models\Template;
 use BayPdf\TemplateManager;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use LogicException;
 
 final class ScopeIsolationTest extends TestCase
@@ -86,6 +89,26 @@ final class ScopeIsolationTest extends TestCase
         $this->postJson("/baypdf/api/versions/{$version->id}/preview", ['document' => $document])->assertNotFound();
         $this->postJson("/baypdf/api/versions/{$version->id}/publish", ['lock_version' => 1])->assertNotFound();
         $this->postJson("/baypdf/api/versions/{$version->id}/clone")->assertNotFound();
+    }
+
+    public function test_case_insensitive_database_collation_does_not_merge_distinct_scopes(): void
+    {
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            Schema::table('baypdf_templates', function (Blueprint $table): void {
+                $table->string('scope_key', 191)->nullable()->collation('NOCASE')->change();
+            });
+        }
+        $this->useScope('organization:A');
+        $foreign = app(TemplateManager::class)->create('Uppercase scope', 'report');
+
+        foreach (['organization:a', 'organization:A ', 'organization:Á'] as $key) {
+            $this->useScope($key);
+            $this->getJson('/baypdf/api/templates')->assertOk()->assertJsonPath('total', 0);
+            $this->getJson("/baypdf/api/templates/{$foreign->id}")->assertNotFound();
+            $this->postJson('/baypdf/api/versions/'.$foreign->versions->first()->id.'/preview')->assertNotFound();
+        }
+        $this->useScope('organization:A');
+        $this->getJson('/baypdf/api/templates')->assertOk()->assertJsonPath('total', 1);
     }
 
     public function test_safe_programmatic_api_rejects_a_version_from_another_scope(): void

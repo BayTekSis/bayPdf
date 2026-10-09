@@ -39,7 +39,7 @@ final class ScopeContext
     public function templates(Builder $query): Builder
     {
         if ($this->enabled()) {
-            $query->where('scope_key', $this->key());
+            $this->whereScope($query, (string) $this->key());
         }
 
         return $query;
@@ -53,9 +53,26 @@ final class ScopeContext
     {
         if ($this->enabled()) {
             $scope = $this->key();
-            $query->whereHas('template', fn (Builder $templates): Builder => $templates->where('scope_key', $scope));
+            $query->whereHas('template', fn (Builder $templates): Builder => $this->whereScope($templates, (string) $scope));
         }
 
         return $query;
+    }
+
+    /**
+     * @param  Builder<Template>  $query
+     * @return Builder<Template>
+     */
+    private function whereScope(Builder $query, string $key): Builder
+    {
+        $comparison = match ($query->getModel()->getConnection()->getDriverName()) {
+            'mysql', 'mariadb' => 'CAST(scope_key AS BINARY) = CAST(? AS BINARY)',
+            'sqlite' => 'scope_key COLLATE BINARY = ?',
+            'pgsql' => "convert_to(scope_key, 'UTF8') = convert_to(CAST(? AS text), 'UTF8')",
+            'sqlsrv' => 'CONVERT(varbinary(max), scope_key) = CONVERT(varbinary(max), CAST(? AS nvarchar(191)))',
+            default => throw new LogicException('The database driver does not support exact BayPdf scope comparison.'),
+        };
+
+        return $query->where('scope_key', $key)->whereRaw($comparison, [$key]);
     }
 }

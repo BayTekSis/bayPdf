@@ -6,6 +6,8 @@ Varsayılan mod tek ortak şablon alanıdır. İzolasyon gereken host'lar `scopi
 
 Scoped modda template ve version route binding, listeleme ve `TemplateManager` lifecycle/render çağrıları current scope ile sınırlandırılır. Başka scope'a ait tahmin edilmiş ID'ler bulunamaz. Version scope'u canonical template ilişkisinden gelir ve version başka template'e taşınamaz. Direct raw Eloquent/SQL sorguları tamamen engellenemez; host entegrasyonu okuma/yazma/render için `TemplateManager` ve designer API yolunu kullanmalıdır.
 
+Scope sorguları veritabanı collation'ından bağımsız byte eşitliği uygular; büyük/küçük harf, aksan veya sondaki boşluk farklı scope demektir. Anahtarın storage değeri korunur. SQLite ve MySQL kontrolleri doğrulandı; PostgreSQL/SQL Server karşılaştırma yolları bu turda runtime olarak sınanmadı.
+
 Migration sonrası eski `scope_key=null` template'ler scoped modda görünmez. Ownership kanıtlanmadan topluca bir current scope'a atanmaz; açık ID eşlemesi host migration'ında yapılır.
 
 Host render çağrısına verdiği verilerin erişimini kendi doğrular. PHP servisleri host kodunu güvenilir kabul eder. PDF otomatik depolanmaz, e-postalanmaz veya loglanmaz.

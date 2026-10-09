@@ -10,7 +10,7 @@ php artisan vendor:publish --tag=baypdf-assets
 php artisan migrate
 ```
 
-Bu komutlar ilk etiketli sürüm öncesinde GitHub geliştirme branch'ini kurar. `0.1.0` Packagist'e kaydedildikten sonra VCS tanımı olmadan `composer require bay/baypdf:^0.1` kullanın. Production'da etiketli sürümü tercih edin. `migrate` uygulamadaki bütün bekleyen migration'ları çalıştırır.
+Bu komutlar henüz etiketlenmemiş scope ve schema v2 eklemelerini içeren GitHub geliştirme branch'ini kurar. `0.1.0` etiketi bu eklemeleri içermez. Packagist kaydı tamamlandıktan sonra kayıtlı sürüm için VCS tanımı kaldırılabilir. Production'da doğrulanmış etiketli sürümü tercih edin. `migrate` uygulamadaki bütün bekleyen migration'ları çalıştırır.
 
 Yerel paket geliştirmesinde VCS yerine `composer config repositories.baypdf path C:/laragon/www/bayPdf` kullanılabilir; yolu kendi checkout konumuna uyarlayın. Composer junction/symlink yerine mirror kullanırsa paket değişikliklerinin uygulamaya ulaştığını doğrulayın.
 
@@ -80,7 +80,7 @@ $this->app->singleton(ScopeResolver::class, function ($app): ScopeResolver {
 });
 ```
 
-Sonra published config içinde `scoping.enabled` true yapılır. Resolver en fazla 191 karakterlik, boş olmayan ve control character içermeyen opaque bir string döndürmelidir. Örneğin `organization:abc` kullanılabilir; BayPdf anahtarın anlamını yorumlamaz. Null/geçersiz sonuç template işlemlerini durdurur.
+Sonra published config içinde `scoping.enabled` true yapılır. Resolver en fazla 191 byte uzunluğunda, boş olmayan ve control character içermeyen opaque bir string döndürmelidir. Örneğin `organization:abc` kullanılabilir; BayPdf anahtarın anlamını yorumlamaz. Null/geçersiz sonuç template işlemlerini durdurur.
 
 ### Mevcut unscoped template'ler
 
@@ -106,6 +106,8 @@ app(Assets::class)->adoptLegacy('baypdf/assets/verified-image.png');
 İşlem orijinali silmez. Doğrulanmış byte'ları current scope fingerprint dizinindeki private legacy mirror'a kopyalar; eski key aynı kalır. Aynı legacy asset gerçekten ortaksa her yetkili scope için ayrı adoption çağrısı gerekir. Ownership bilinmiyorsa kopyalamayın.
 
 ## Güncelleme
+
+`0.1.0` kurulumundan geliştirme branch'ine geçerken yeni nullable `scope_key` migration'ını çalıştırın ve assets'i yeniden yayımlayın. Shared modda legacy JSON aynı tek sayfalı sözleşmeyle kalır. Scope açılacaksa önce doğrulanmış template ID eşlemelerini ve asset adoption işlemlerini tamamlayın; yeni `scoping` ve `limits` config anahtarlarını kişiselleştirilmiş config'e ekleyin. Collection eklemek eski version snapshot'ını değiştirmez; yeni şema için yeni template oluşturun.
 
 Yayımlanmış paket için:
 

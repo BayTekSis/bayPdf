@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { addPageNumber, addTrailingElement, changeCollectionSource, collectionColumns, collectionVariables, createFlowDocument, dimensions, moveElement } from '../../resources/js/layout.js'
+import { addPageNumber, addTrailingElement, changeCollectionSource, collectionColumns, collectionVariables, createFlowDocument, dimensions, moveElement, rebalanceColumns, resizeFlowDocument } from '../../resources/js/layout.js'
 
 test('landscape and ISO page dimensions', () => {
   assert.deepEqual(dimensions({ size: 'A5', orientation: 'landscape' }), [210, 148])
@@ -20,6 +20,30 @@ const items = {
     { key: 'total', label: 'Total', type: 'money' },
   ],
 }
+
+test('rebalancing columns retains customized labels and alignment', () => {
+  const columns = collectionColumns(items, 180)
+  columns[0].align = 'C'
+  columns[0].label = 'Custom description'
+  columns.splice(1, 1)
+  const result = rebalanceColumns(columns, items.fields, 118)
+  assert.equal(result[0].align, 'C')
+  assert.equal(result[0].label, 'Custom description')
+  assert.deepEqual(result.map(column => column.width), [59, 59])
+})
+
+test('shrinking a flow page keeps trailing text and repeated footers within bounds', () => {
+  const flow = createFlowDocument({ page: { size: 'A4', orientation: 'portrait' }, elements: [] }, items, 'table')
+  const trailing = addTrailingElement(flow, 'text', 'Summary', null, 'summary')
+  const footer = addPageNumber(flow, 'Page {current}', 'footer')
+  flow.page.size = 'A5'
+  resizeFlowDocument(flow, items.fields)
+  assert.equal(trailing.x + trailing.width, 133)
+  assert.equal(footer.y + footer.height, 203)
+  assert.equal(footer.x + footer.width, 133)
+  assert.equal(flow.flow.bottom, 188)
+  assert.equal(flow.flow.table.columns.reduce((sum, column) => sum + column.width, 0), 118)
+})
 
 test('collection variables and deterministic column widths are derived from the snapshot', () => {
   assert.deepEqual(collectionVariables([{ key: 'name', type: 'text' }, items]), [items])

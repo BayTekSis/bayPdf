@@ -1,5 +1,25 @@
 # Doğrulama raporu
 
+## Finance readiness kapanışı — 2026-10-09
+
+Güncel kaynak üzerinde `composer qa`: **73 test / 259 assertion**, strict manifest, Pint (35 dosya), PHPStan sıfır hata ve dağıtım kuralları PASS. PHP 8.4.21 / Laravel 13.35.0 kullanıldı. `npm.cmd test`: **7 test**, production build, workbench hazırlığı ve Chromium: **6 senaryo PASS**. Build, tasarımcı düzeltmelerini `public/` varlıklarına taşıdı.
+
+Legacy matrix tüm scalar/QR/image değişkenlerini ve text/variable/image/QR/line/rectangle öğelerini A4/A5/Letter portrait/landscape üzerinde doğrular; preview, publish, render ve clone eski JSON sözleşmesini korur. Çok sayfalı browser senaryosu gerçek PDF page object sayısını ve hatalı column width için uyarı/yayın engelini de kontrol eder.
+
+Güncel kaynak/testler mevcut izole bağımlılık kurulumlarıyla PHP 8.4.21 üzerinde Laravel 12.69.3 stable, 12.69.0 lowest ve 13.30.0 lowest; PHP 8.3.30 üzerinde Laravel 12.69.0 ve 13.30.0 lowest ile çalıştırıldı. Her koşuda **72 test / 255 assertion PASS**. Matris bootstrap'ı yalnız güncel `src/`, `tests/`, `workbench/app/` autoload yollarını değiştirir; dependency setleri yeniden çözülmedi. PHP 8.4 lowest koşularında eski Symfony Translation deprecation bildirimi verdi; vendor değiştirilmedi veya bildirim gizlenmedi.
+
+Opt-in fixture 100 sentetik satırlı, dört sayfalı A4 PDF üretti. PyMuPDF 1.28.2 ile ilk/devam/son sayfa (1/2/4) bağımsız rasterize edildi ve görsel incelendi. Satırlar, yinelenen table/page header, footer, Page X / 4 ve final trailing summary hizalı; bu örnekte çakışma/kırpılma yok. Yerel kanıtlar `.artifacts/finance-verified-page-1.png`, `-2.png`, `-4.png`; tekrar üretim komutu DEVELOPMENT.md içinde.
+
+`.artifacts/baypdf-finance-dist.zip`: **42 giriş**, dışlama ve required runtime file kontrolleri PASS; arşiv dosyaları güncel kaynakla byte-for-byte aynı. Yeni ayrı dizinde `composer install --no-dev --no-scripts`, platform, autoload, assets/migration ve Testbench bulunmaması PASS. `boost sync --check`: 35 dosyada drift yok.
+
+Güvenlik/uyumluluk kaynak incelemesi auth/Gate, route binding, scoped lifecycle ve asset referansları, legacy adoption, bounded collection/layout, snapshot ve immutable version yollarını testlerle eşledi. İnceleme aynı oturum bağlamında yapıldı; bağımsız pentest değildir. Son hüküm ve BayDesk entegrasyon adımları [Finance readiness raporunda](codex/BAYPDF_FINANCE_READINESS_REPORT.md).
+
+Bağımsız Codex incelemesi collation kaynaklı scope eşleşmesi, hidden trailing pagination ve text→collection bağı için üç hata buldu. Üçü önce başarısız regresyonlarla doğrulandı, sonra giderildi. İkinci incelemede sütun hizalamasının sıfırlanması ve A4→A5 değişiminde trailing/footer taşması da başarısız frontend regresyonlarıyla doğrulanıp giderildi. Scope predicate raw anahtarı koruyarak byte eşitliği uygular. BayPdf artifacts içinde başlatılıp kapatılan ayrı MySQL 8.4.3 sunucusunda `utf8mb4_unicode_ci` ile **9 scope testi / 38 assertion PASS**; case/aksan/son boşluk farklılıkları izolasyonu aşamadı. Host/Jugend veritabanı kullanılmadı.
+
+Bir ara yerel matris denemesinde iki PHP süreci aynı izole Laravel 13 fake-storage dizinini eşzamanlı kullandı ve asset hataları oluştu. Bu koşu başarı kanıtı olarak sayılmadı; aynı kaynak/bağımlılıklarla koşular sıralı yeniden çalıştırıldı. Bağımlılık veya test assertions değiştirilmedi.
+
+Sınırlar: Son commit'in uzak CI'ı, yeni release/tag, Packagist ve GitHub security ayarları bu yerel sonuçlardan çıkarılamaz. MySQL'de yalnız scope suite çalıştırıldı; PostgreSQL/SQL Server runtime, yük/eşzamanlılık testi ve tüm PDF varyantları görsel olarak doğrulanmadı. Linux PHP 8.3.6 mevcut ana vendor'un PHP ≥8.4.1 gereksinimine uymadığı için Windows PHP kullanıldı; Linux build mevcut Windows Rollup bağımlılıklarıyla çalıştırılmadı. Global PHP/Composer ayarları değiştirilmedi.
+
 ## Kapsamlı kontrol — 2026-10-07
 
 Son kod üzerinde `composer qa`: **34 test / 80 assertion**, Pint, PHPStan ve dağıtım doğrulayıcısı PASS. `npm.cmd test`: **2 test**; production build ve Chromium: **4 senaryo PASS**. Ayrı lint/typecheck scripti yoktur.
@@ -63,3 +83,5 @@ Jugend repository'si ilk geliştirme sırasında salt okunur tutuldu; o kontrol 
 - Yayın değişiklikleri bağımsız, salt okunur incelemeden geçti. Codex CLI wrapper çalışmadı: `Codex CLI with exec review is required`; mevcut terminalde uygun CLI yok.
 
 Rector ve ayrı frontend lint/typecheck scripti projede yoktur. Belgeler düz Markdown olduğundan docs build komutu yoktur; bağlantılar dosya yollarına göre kontrol edilir. PHP/Laravel matrisi bu turda yerelde tekrarlanmadı. MySQL/PostgreSQL, yük testi ve PDF raster görsel doğrulaması yapılmadı. GitHub/Packagist yayın durumu için DURUM.md ve son handoff esas alınır.
+
+Son bağımsız inceleme geçersiz schema sürümünün flow içeriğini sessizce düşürdüğünü doğruladı. Başarısız regresyon ardından explicit sürümler yalnız integer 1/2 olarak kabul ediliyor. Üç bağımsız inceleme turu tamamlandı; son discriminator düzeltmesi yerel QA ile kontrol edildi, yeniden bağımsız inceleme yapılmadı. Yukarıdaki dependency-variant sonuçları son discriminator düzeltmesinden önceki 72-test kaynak hâline aittir.

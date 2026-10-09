@@ -2,7 +2,7 @@
 
 Edit document layouts without changing PHP code for every adjustment. BayPdf adds versioned PDF templates and a visual designer to Laravel applications.
 
-**Status:** Preparing the first release. Source and CI are available on [GitHub](https://github.com/BayTekSis/bayPdf). Until a tagged release is registered on Packagist, install the development branch through Composer's VCS repository support.
+**Status:** The repository contains the `0.1.0` release tag. The development branch adds scoped access and multi-page documents; these additions are not tagged yet. Packagist registration remains pending in the project records, so install through Composer's VCS repository support.
 
 ## Run locally
 
@@ -34,7 +34,7 @@ On Windows PowerShell, use `npm.cmd` and `npx.cmd` if script execution restricti
 
 ## Install in a Laravel application
 
-Before the first Packagist release, run these commands **in the consuming application**:
+Until Packagist registration is complete, run these commands **in the consuming application**:
 
 ```bash
 composer config repositories.baypdf vcs https://github.com/BayTekSis/bayPdf

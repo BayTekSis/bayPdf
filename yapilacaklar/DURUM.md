@@ -2,6 +2,10 @@
 
 ## 2026-10-09 Finance readiness çalışması
 
+Güncel kapanış: legacy compatibility matrix, PDF ilk/devam/son sayfa görsel kontrolü, browser validation/PDF içeriği ve final runtime dağıtım doğrulaması tamamlandı. Bağımsız incelemede bulunan collation scope izolasyonu, gizli trailing blok ve text→collection hataları başarısız regresyonlardan sonra düzeltildi. Main QA 73 test/259 assertion, frontend 7, browser 6 ve ayrı case-insensitive MySQL scope suite 9 test/38 assertion geçti. Paket yerel entegrasyon değerlendirmesine hazır; sonraki release için final commit'in uzak CI'ı ve kullanıcı sürüm/tag handoff'u gerekir. Ayrıntılar docs/VERIFICATION.md ve Finance readiness raporundadır.
+
+### Mantıksal birim geçmişi
+
 Repository truth audit tamamlandı. Mevcut kod shared template/asset alanı, scalar değişkenler ve fixed single-page absolute layout kullanıyor; schema snapshot, published immutability ve `lock_version` davranışları korunacak. `docs/codex/` altında continuity sistemi ve 65 objektif kabul kriterli master roadmap oluşturuldu. Başlangıç doğrulaması: 34 backend testi/80 assertion ve 2 frontend testi PASS; 4 mevcut Playwright senaryosu envantere alındı.
 
 Generic scope logical unit tamamlandı: public `ScopeResolver` contract'ı, default shared mod, enabled fail-closed davranış, indexed nullable `scope_key`, scoped TemplateManager lifecycle/render çağrıları ve template/version route binding eklendi. Legacy null satırlar scoped modda gizli kalır ve yalnız host'un doğrulanmış ID migration'ıyla sahiplenilir. Targeted doğrulama 24 test/77 assertion PASS.
@@ -57,4 +61,4 @@ Son kontrol: 34 backend testi / 80 assertion, 2 frontend testi, 4 Chromium senar
 
 GitHub CLI bu terminalde yok; Git credential lookup başarısız oldu. Codex CLI bağımsız inceleme wrapper'ı da uygun CLI bulamadı; yayın diff'i ayrı agent tarafından salt okunur incelendi.
 
-Sınırlar: tek sayfalı sabit yerleşim, ortak yönetim alanı; tenant izolasyonu, otomatik çok sayfa ve tablo akışı yok. Jugend'e yazılmadı.
+0.1.0 etiketinin tarihsel sınırları: tek sayfalı sabit yerleşim ve ortak yönetim alanı. Geliştirme branch'indeki Finance readiness genişletmesi opt-in scope, collection ve çok sayfalı akış ekler. Jugend'e yazılmadı.

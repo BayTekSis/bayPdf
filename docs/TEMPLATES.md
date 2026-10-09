@@ -25,7 +25,7 @@ $pdf = $manager->render($published, ['recipient.name' => 'Ayşe Yılmaz']);
 
 ## Yerleşim
 
-Koordinatlar ve boyutlar mm; font_size punto. Sayfa A4 (210×297), A5 (148×210) veya Letter (215.9×279.4). Yatay yön ölçüleri ters çevirir. Öğeler array sırasıyla çizilir; son öğe en önde. En fazla 100 öğe.
+Koordinatlar ve boyutlar mm; font_size punto. Sayfa A4 (210×297), A5 (148×210) veya Letter (215.9×279.4). Yatay yön ölçüleri ters çevirir. Öğeler array sırasıyla çizilir; son öğe en önde. Legacy belge en fazla 100 öğe kabul eder; schema v2 fixed öğe, tablo ve trailing öğelerin toplamını `limits.max_layout_elements` ile sınırlar (varsayılan 200).
 
 `elements`, sıfırdan başlayan ardışık indeksli bir liste olmalıdır. İsimli veya aralıklı anahtarlar doğrulama hatası verir; filtrelenmiş PHP dizilerini `array_values()` ile yeniden indeksleyin.
 
@@ -126,4 +126,8 @@ The first page starts at `first_top`; continuation pages start at `continuation_
 
 Trailing elements use the existing text, variable, image, QR, line and rectangle contract plus `page_number`. Their Y position is calculated from the actual table end. A block that does not fit moves as a whole to the next page; a block taller than the usable page fails. `gap_before` overrides the flow `gap`.
 
+Hidden trailing elements reserve no gap or height and do not create pages. A `text` element bound through `variable` accepts scalar text-compatible types; collection values must use the table source.
+
 Absolute page elements accept `region` (`page`, `header`, `footer`) and `repeat` (`first`, `all`, `continuation`, `last`). Header elements must end above both flow tops; footer elements must start at or below flow bottom. `page_number` uses `{current}` and `{total}` from the completed pagination plan, so the host does not register page variables and PDF bytes are not patched after generation.
+
+Explicit `schema_version` yalnız integer `1` veya `2` olabilir; string, float, null ve desteklenmeyen sürümler validation hatası verir. Sürüm alanı olmayan legacy belgeler desteklenmeye devam eder.

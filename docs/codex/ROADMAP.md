@@ -1,6 +1,6 @@
 # BayPdf Finance readiness roadmap
 
-Progress is calculated only from the objective checklist below. A box is checked after the behavior is implemented and its relevant verification passes.
+Progress is calculated only from the objective checklist below. A box is checked after the behavior is implemented and its relevant verification passes. This checklist tracks local implementation and evidence; remote CI, version selection and publication are separate release gates.
 
 ## A. Baseline and backward compatibility
 
@@ -8,8 +8,8 @@ Progress is calculated only from the objective checklist below. A box is checked
 - [x] Branch, HEAD, clean-tree state, and commit-signing configuration are recorded before edits.
 - [x] Current PHP/Laravel support and installed development runtime are recorded.
 - [x] Current backend, frontend, and browser test inventories are recorded.
-- [ ] Legacy layout fixtures cover every existing element, variable type, page format, and orientation.
-- [ ] Legacy fixed-page documents render without implicit flow or schema conversion.
+- [x] Legacy layout fixtures cover every existing element, variable type, page format, and orientation.
+- [x] Legacy fixed-page documents render without implicit flow or schema conversion.
 
 ## B. Generic scope isolation
 
@@ -63,7 +63,7 @@ Progress is calculated only from the objective checklist below. A box is checked
 - [x] Table headers can repeat on continuation pages.
 - [x] Maximum generated page and element limits prevent page explosion.
 - [x] Same version, data, and configuration produce deterministic document structure.
-- [ ] Representative first, continuation, and final PDF pages receive visual inspection evidence.
+- [x] Representative first, continuation, and final PDF pages receive visual inspection evidence.
 
 ## G. Headers, footers, and page context
 
@@ -90,15 +90,15 @@ Progress is calculated only from the objective checklist below. A box is checked
 
 ## J. Documentation, distribution, and release readiness
 
-- [ ] README, public API, security, template, variable, architecture, and upgrade documentation match code.
-- [ ] `yapilacaklar/` and continuity state are synchronized after every logical unit.
-- [ ] Compiled designer assets are current and included while development-only files remain excluded.
-- [ ] Fresh backend QA, frontend tests/build, workbench preparation, browser tests, and distribution checks pass.
-- [ ] Final security and backward-compatibility reviews are recorded.
-- [ ] The self-contained Finance readiness report includes BayDesk integration guidance and an evidence-based release verdict.
+- [x] README, public API, security, template, variable, architecture, and upgrade documentation match code.
+- [x] `yapilacaklar/` and continuity state are synchronized after every logical unit.
+- [x] Compiled designer assets are current and included while development-only files remain excluded.
+- [x] Fresh backend QA, frontend tests/build, workbench preparation, browser tests, and distribution checks pass.
+- [x] Final security and backward-compatibility reviews are recorded.
+- [x] The self-contained Finance readiness report includes BayDesk integration guidance and an evidence-based release verdict.
 
 ## Progress
 
-- Completed: 56
+- Completed: 65
 - Total: 65
-- Progress: 86.2%
+- Progress: 100%

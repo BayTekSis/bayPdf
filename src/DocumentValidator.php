@@ -12,6 +12,10 @@ final class DocumentValidator
 
     public function validate(array $document, array $variables): array
     {
+        if (array_key_exists('schema_version', $document) && ! in_array($document['schema_version'], [1, 2], true)) {
+            throw ValidationException::withMessages(['schema_version' => 'Schema version must be the integer 1 or 2.']);
+        }
+
         if (($document['schema_version'] ?? 1) === 2) {
             return $this->validateFlowDocument($document, $variables);
         }
@@ -205,6 +209,9 @@ final class DocumentValidator
                 $error = 'Unknown variable.';
             }
             if ($element['type'] === 'variable' && ($key === '' || ! in_array($schema[$key]['type'] ?? '', ['text', 'date', 'number', 'money', 'qr'], true))) {
+                $error = 'A text-compatible variable is required.';
+            }
+            if ($element['type'] === 'text' && $key !== '' && ! in_array($schema[$key]['type'] ?? '', ['text', 'date', 'number', 'money', 'qr'], true)) {
                 $error = 'A text-compatible variable is required.';
             }
             if ($element['type'] === 'qr' && $key !== '' && ! in_array($schema[$key]['type'] ?? '', ['text', 'date', 'number', 'money', 'qr'], true)) {

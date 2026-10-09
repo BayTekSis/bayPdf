@@ -125,6 +125,15 @@ test('collection table produces a multi-page preview with repeat and trailing se
   await page.getByRole('button', { name: '+ Page number' }).click()
   await page.getByRole('button', { name: /Summary/ }).last().click()
 
+  const firstColumnWidth = page.locator('.column-editor').first().getByLabel('Width', { exact: true })
+  const validWidth = await firstColumnWidth.inputValue()
+  await firstColumnWidth.fill('10')
+  await expect(page.getByRole('alert')).toHaveText('Column widths must equal the table width.')
+  await expect(page.getByRole('button', { name: 'Publish version' })).toBeDisabled()
+  await firstColumnWidth.fill(validWidth)
+  await expect(page.locator('.field-error')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Publish version' })).toBeEnabled()
+
   const saveRequest = page.waitForRequest(request => request.url().includes('/api/versions/') && request.method() === 'PUT')
   await page.getByRole('button', { name: 'Save draft', exact: true }).click()
   const payload = (await saveRequest).postDataJSON().document
@@ -141,5 +150,10 @@ test('collection table produces a multi-page preview with repeat and trailing se
   expect(response.status()).toBe(200)
   expect(response.headers()['content-type']).toContain('application/pdf')
   await expect(page.getByRole('dialog').getByRole('heading', { name: 'PDF preview' })).toBeVisible()
-  await expect(page.getByRole('dialog').getByRole('link', { name: 'Download PDF' })).toHaveAttribute('href', /^blob:/)
+  const download = page.getByRole('dialog').getByRole('link', { name: 'Download PDF' })
+  await expect(download).toHaveAttribute('href', /^blob:/)
+  const bytes = await download.evaluate(async link => Array.from(new Uint8Array(await (await fetch(link.href)).arrayBuffer())))
+  const pdf = Buffer.from(bytes).toString('latin1')
+  expect(pdf.startsWith('%PDF-')).toBe(true)
+  expect((pdf.match(/\/Type \/Page\b/g) ?? []).length).toBeGreaterThan(1)
 })

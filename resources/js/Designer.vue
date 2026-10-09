@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
-import { addPageNumber, addTrailingElement, changeCollectionSource, collectionColumns, collectionVariables, createFlowDocument, dimensions, moveElement } from './layout.js'
+import { addPageNumber, addTrailingElement, changeCollectionSource, collectionVariables, createFlowDocument, dimensions, moveElement, rebalanceColumns as rebalanceTableColumns, resizeFlowDocument } from './layout.js'
 
 const props = defineProps({ base: String, locale: String, messages: Object })
 const t = key => props.messages[key] ?? key
@@ -135,9 +135,7 @@ function selectCollection(event) {
   if (collection) { changeCollectionSource(document.value, collection); newColumnField.value = ''; remember() }
 }
 function rebalanceColumns() {
-  const fields = table.value.columns.map(column => collectionFields.value.find(field => field.key === column.field)).filter(Boolean)
-  const labels = Object.fromEntries(table.value.columns.map(column => [column.field, column.label]))
-  table.value.columns = collectionColumns({ fields }, Number(table.value.width)).map(column => ({ ...column, label: labels[column.field] ?? column.label }))
+  table.value.columns = rebalanceTableColumns(table.value.columns, collectionFields.value, Number(table.value.width))
 }
 function addColumn() {
   const field = collectionFields.value.find(item => item.key === newColumnField.value)
@@ -211,12 +209,7 @@ function tableStyle() {
 function tableExample(field, row) { return row?.[field] ?? `{${field}}` }
 function pageChanged() {
   if (!table.value) return
-  const [pageWidth, pageHeight] = dimensions(document.value.page)
-  table.value.x = 15; table.value.width = Number((pageWidth - 30).toFixed(1))
-  document.value.flow.bottom = Number((pageHeight - 22).toFixed(1))
-  document.value.flow.first_top = Math.min(document.value.flow.first_top, pageHeight - 40)
-  document.value.flow.continuation_top = Math.min(document.value.flow.continuation_top, pageHeight - 40)
-  rebalanceColumns()
+  resizeFlowDocument(document.value, collectionFields.value)
 }
 function setElementRegion(event) {
   selected.value.region = event.target.value

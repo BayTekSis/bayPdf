@@ -22,4 +22,4 @@ Layout JSON iki contract taşır: schema version alanı olmayan legacy fixed-pag
 
 Rendering ve Http namespace'leri iç uygulamadır. Vue kaynak bileşeni ayrı npm API değildir. JSON alanları [şablon rehberinde](https://github.com/BayTekSis/bayPdf/blob/master/docs/TEMPLATES.md) tanımlıdır. Model yazımı için TemplateManager kullanın; bulk SQL korumaları atlar.
 
-İlk yayın öncesi API kararlı sürüm olarak duyurulmuş değildir.
+`0.1.0` ilk etikettir. Scope ve schema v2 eklemeleri henüz etiketlenmemiş geliştirme branch'indedir. Güncelleme ve legacy adoption adımları kurulum rehberinde açıklanır.

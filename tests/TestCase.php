@@ -20,6 +20,14 @@ abstract class TestCase extends Orchestra
             'driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '',
             'foreign_key_constraints' => true,
         ]);
+        if (getenv('BAYPDF_SCOPE_MYSQL_PORT') !== false) {
+            $app['config']->set('database.connections.testing', [
+                'driver' => 'mysql', 'host' => '127.0.0.1',
+                'port' => (int) getenv('BAYPDF_SCOPE_MYSQL_PORT'),
+                'database' => 'baypdf_scope_verification', 'username' => 'root', 'password' => '',
+                'charset' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci', 'prefix' => '',
+            ]);
+        }
         $app['config']->set('baypdf.font_cache', __DIR__.'/../.artifacts/fonts');
     }
 }

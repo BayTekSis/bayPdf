@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-BayPdf is preparing its first release. Security fixes currently target the `master` branch. After the first release, use the latest available patch in the `0.1` series.
+Security fixes target the `master` branch and the latest available patch in the `0.1` series. Scoped access and multi-page rendering are currently available on the development branch and are not included in the `0.1.0` tag.
 
 ## Reporting a vulnerability
 
@@ -14,6 +14,6 @@ If the private reporting form is unavailable, contact the [maintainer](https://g
 
 ## Deployment boundaries
 
-The designer is disabled by default and requires host authentication and the `manage-baypdf` Gate. It has one shared template area, without tenant isolation. Store assets on a private disk and keep the development workbench off the public internet.
+The designer is disabled by default and requires host authentication and the `manage-baypdf` Gate. Shared access is the default. On the development branch, hosts can enable server-side scope isolation for templates, versions and assets. Store assets on a private disk and keep the development workbench off the public internet.
 
 See the [security guide](https://github.com/BayTekSis/bayPdf/blob/master/docs/SECURITY.md) for configuration and file handling boundaries.

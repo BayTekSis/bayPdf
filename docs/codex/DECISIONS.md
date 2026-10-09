@@ -13,18 +13,19 @@
 9. Finance, tax, e-invoice, delivery, accounting, and retention logic stays outside BayPdf.
 10. tFPDF remains the renderer unless a tested prototype proves a concrete blocker. An engine change requires a separate product-owner decision.
 
-## Pending implementation decisions
+## Verification boundary
 
-- Maximum defaults after renderer tests establish practical deterministic bounds.
+The implemented defaults are recorded below and in `config/baypdf.php`. Passing local checks establishes integration readiness, not a release: the final commit still needs remote CI, a separately selected version, and the user's tag/release handoff.
 
 ## Implemented scope decisions
 
 - Public contract: `BayPdf\Contracts\ScopeResolver::resolve(): ?string`.
 - Default binding returns null and `scoping.enabled=false` preserves the shared query behavior.
-- Enabled mode requires a non-empty opaque identifier of at most 191 characters without control characters.
+- Enabled mode requires a non-empty opaque identifier of at most 191 bytes without control characters.
 - `baypdf_templates.scope_key` is nullable and indexed. Existing rows remain null.
 - TemplateVersion carries no duplicate scope column; queries derive ownership through `template_id`.
 - Scoped route binding and TemplateManager return not-found behavior for foreign template/version IDs.
+- Scope predicates preserve the stored opaque key and enforce byte equality independently of database collation. SQLite and isolated MySQL 8.4 verification include case, accent and trailing-space differences. Other driver predicates remain runtime-unverified in this session.
 - Version reassignment is prohibited for every version, preventing ownership changes through the relation.
 - Legacy ownership adoption is an explicit host migration over verified template IDs; automatic assignment is forbidden.
 
@@ -56,5 +57,6 @@
 - Rows never split. Wrapped columns share the maximum measured row height; an oversized row fails with its path and no value.
 - Table header repetition is explicit. Page elements support first/all/continuation/last repeat rules.
 - Trailing blocks follow the true table end and move whole to a new page when needed.
+- Hidden trailing blocks take no space in the pagination plan. Bound text elements require scalar text-compatible variables; collections cannot reach text drawing.
 - Defaults cap output at 100 pages and 200 layout elements. Existing asset, QR, text and collection limits continue to apply.
 - tFPDF creation timestamp metadata prevents a byte-for-byte determinism guarantee across different seconds; pagination and document structure are deterministic.

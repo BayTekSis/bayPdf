@@ -66,6 +66,37 @@ export function changeCollectionSource(document, collection) {
   document.flow.table.columns = collectionColumns(collection, document.flow.table.width)
 }
 
+export function rebalanceColumns(columns, fields, width) {
+  const selectedFields = columns.map(column => fields.find(field => field.key === column.field)).filter(Boolean)
+  const existing = Object.fromEntries(columns.map(column => [column.field, column]))
+  return collectionColumns({ fields: selectedFields }, width).map(column => ({ ...column, label: existing[column.field]?.label ?? column.label, align: existing[column.field]?.align ?? column.align }))
+}
+
+export function resizeFlowDocument(document, fields) {
+  const [pageWidth, pageHeight] = dimensions(document.page)
+  const table = document.flow.table
+  table.x = 15; table.width = Number((pageWidth - 30).toFixed(1))
+  document.flow.bottom = Number((pageHeight - 22).toFixed(1))
+  document.flow.first_top = Math.min(document.flow.first_top, pageHeight - 40)
+  document.flow.continuation_top = Math.min(document.flow.continuation_top, pageHeight - 40)
+  table.columns = rebalanceColumns(table.columns, fields, Number(table.width))
+  for (const element of document.flow.trailing) {
+    element.x = Math.min(Number(element.x), table.x)
+    element.width = Math.min(Number(element.width), pageWidth - 15 - element.x)
+    element.height = Math.min(Number(element.height), document.flow.bottom - Math.max(document.flow.first_top, document.flow.continuation_top))
+  }
+  for (const element of document.elements) {
+    element.width = Math.min(Number(element.width), pageWidth)
+    element.height = Math.min(Number(element.height), pageHeight)
+    if (element.region === 'footer') element.height = Math.min(element.height, pageHeight - document.flow.bottom)
+    if (element.region === 'header') element.height = Math.min(element.height, document.flow.first_top, document.flow.continuation_top)
+    element.x = Math.max(0, Math.min(Number(element.x), pageWidth - element.width - 15))
+    element.y = element.region === 'footer'
+      ? Math.max(document.flow.bottom, pageHeight - element.height - 7)
+      : Math.max(0, Math.min(Number(element.y), (element.region === 'header' ? Math.min(document.flow.first_top, document.flow.continuation_top) : pageHeight) - element.height))
+  }
+}
+
 export function addTrailingElement(document, type, label, variable = null, id = crypto.randomUUID()) {
   const element = {
     id,

@@ -38,6 +38,10 @@ npm run test:browser
 
 QA: manifest, Pint, Larastan/PHPStan level 5, PHPUnit ve dağıtım kontrolü. Backend SQLite in-memory, browser testleri yalnızca workbench kullanır. CI PHP 8.3/8.4, Laravel 12/13 ve prefer-lowest/prefer-stable matrisini tanımlar.
 
+Görsel PDF kanıtı üretmek için `BAYPDF_VISUAL_EVIDENCE=1` ortam değişkeniyle `php vendor/bin/phpunit --filter test_table_header_page_header_footer_and_page_numbers_repeat` çalıştırın. Windows PowerShell'de önce `$env:BAYPDF_VISUAL_EVIDENCE='1'` ayarlayın. Fixture 100 sentetik satırlı PDF'yi `.artifacts/multi-page-commercial-document.pdf` içine yazar; normal test koşusunda bu PDF üretilmez. İlk, devam ve son sayfayı bağımsız PDF renderer ile inceleyin. Bu incelemenin kapsamı ve sonucu `docs/VERIFICATION.md` içine kaydedilir.
+
+Case-insensitive MySQL doğrulaması için yalnız ayrılmış, loopback test sunucusunda `baypdf_scope_verification` veritabanı ve `utf8mb4_unicode_ci` collation kullanın. `BAYPDF_SCOPE_MYSQL_PORT` bu sunucunun portuna ayarlandığında `php vendor/bin/phpunit --filter ScopeIsolationTest` aynı scope testlerini MySQL'de çalıştırır. Testler migration ve veri yazımı yapar; üretim/host veritabanına yönlendirmeyin. Değişken ayarlanmadığında varsayılan SQLite in-memory kalır.
+
 Paket kökünde php artisan yerine php vendor/bin/testbench kullanılır. Host uygulamaya kurulumda normal artisan geçerlidir.
 
 Frontend kaynakları resources/js, dağıtılan build public altındadır. Build kaynakla birlikte commit edilir. npm run dev build-watch çalıştırır. Workbench'e aktarmak için:

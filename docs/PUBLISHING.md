@@ -29,18 +29,18 @@ Kontrollerden sonra yalnızca ilgili dosyaları commit edin ve `git push origin 
 
 Repository Settings → Security → Private vulnerability reporting etkinleştirilmelidir. [SECURITY.md](../SECURITY.md) özel bildirim kanalını ve destek kapsamını açıklar. GitHub ve Packagist kimlik doğrulamasını yerel araçların güvenli oturumlarıyla yapın; tokenları source code veya release notlarına koymayın.
 
-## İlk sürüm
+## Mevcut etiket ve sonraki yayın
 
-İlk sürüm hedefi `0.1.0`, release başlığı `v0.1.0`'dır. [Public API](../PUBLIC_API.md) ve tek sayfa/ortak yönetim alanı sınırları geçerlidir. `0.x` sürümlerinde uyumluluğu sürüm notlarından kontrol edin.
+`0.1.0` etiketi repository'de vardır ve legacy tek sayfa/shared davranışı içerir. Scope ve schema v2 geliştirme branch'indedir; bu eklemeler için henüz yeni sürüm seçilmedi. [Public API](../PUBLIC_API.md) ve [kurulum/güncelleme adımları](INSTALLATION.md) güncel geliştirme sözleşmesini açıklar. `0.x` sürümlerinde uyumluluğu sürüm notlarından kontrol edin.
 
-Package Boost kuralı gereği agent tag/release oluşturmaz. CI yeşil olduktan sonra `internal/release-notes-0.1.0.md` hazırlanır; ilk satır gerçek, doğrulanmış commit SHA'sını içerir. `internal/` Git ve dağıtım dışında tutulur.
+Package Boost kuralı gereği agent tag/release oluşturmaz. CI yeşil olduktan sonra seçilen sürüm için `internal/release-notes-<version>.md` hazırlanır; ilk satır gerçek, doğrulanmış commit SHA'sını içerir. `internal/` Git ve dağıtım dışında tutulur. Eski `release-notes-0.1.0.md` önceki yayının kaydıdır; yeni çalışma için yeniden kullanılmaz.
 
 Yayınlamadan hemen önce:
 
 1. Notların SHA'sını `git rev-parse HEAD` ve `git ls-remote origin refs/heads/master` ile karşılaştırın; üçü aynı olmalı.
 2. Actions'ta o SHA için tüm test, kalite, tarayıcı ve dağıtım işleri tamamlanmış ve başarılı olmalı.
-3. `0.1.0` tag'inin daha önce oluşturulmadığını kontrol edin; var olan tag'i taşımayın.
-4. GitHub Releases → Draft a new release ile yeni `0.1.0` tag'ini **master** üzerinde oluşturun. Başlık `v0.1.0`, gövde doğrulanmış notlar olmalı.
+3. Seçilen yeni tag'in daha önce oluşturulmadığını kontrol edin; mevcut `0.1.0` tag'ini taşımayın.
+4. GitHub Releases → Draft a new release ile seçilen yeni tag'i **master** üzerinde oluşturun. Başlık `v<version>`, gövde doğrulanmış notlar olmalı.
 5. Yayın sonrası tag testlerini ve `Update changelog` işini izleyin. `CHANGELOG.md` release gövdesinden otomatik güncellenir.
 
 GitHub CLI ile yayın komutu yalnızca SHA ve CI kontrolleri geçtikten sonra hazırlanmış handoff'tan çalıştırılır; hedef branch açıkça belirtilir.

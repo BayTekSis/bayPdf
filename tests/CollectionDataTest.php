@@ -180,6 +180,20 @@ final class CollectionDataTest extends TestCase
         $resolver->resolve([$this->collection()], ['items' => [[...$row, 'description' => str_repeat('x', 1100)]]]);
     }
 
+    public function test_text_elements_cannot_bind_collection_values(): void
+    {
+        $document = [
+            'page' => ['size' => 'A4', 'orientation' => 'portrait'],
+            'elements' => [[
+                'id' => 'bound-text', 'type' => 'text', 'variable' => 'items',
+                'x' => 10, 'y' => 10, 'width' => 100, 'height' => 20,
+            ]],
+        ];
+
+        $this->expectException(ValidationException::class);
+        app(DocumentValidator::class)->validate($document, [$this->collection()]);
+    }
+
     public function test_document_type_collection_and_field_count_limits_are_enforced(): void
     {
         config()->set('baypdf.limits.max_collections', 1);

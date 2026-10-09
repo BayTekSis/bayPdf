@@ -1,19 +1,18 @@
 # Current state
 
 - Current branch: `master`
-- Current phase: Backward compatibility, visual PDF, documentation, and release verification
-- Last completed unit: Progressive schema-v2 designer, scoped asset catalog, workbench example, and browser scenarios
-- Current working state: Designer source and compiled assets support collections, repeat rules, page numbers, and trailing content; logical unit is ready to commit
-- Acceptance criteria completed: 56 of 65; implementation and browser/security behavior are complete
-- Acceptance criteria remaining: See unchecked items in `ROADMAP.md`
-- Known blockers: None.
-- Latest validation: Pint PASS; targeted backend 41 tests/132 assertions PASS; frontend 5 tests PASS; production build PASS; Playwright 6 scenarios PASS.
-- Expected next task: Complete legacy compatibility fixtures, visual PDF inspection, distribution/security review, and final report.
-- Expected next commit message: `Dinamik tablo tasarımcısı eklendi`
-- Uncommitted user changes: None at task start.
+- Current phase: Final compatibility, security and distribution closeout; release remains a separate handoff.
+- Last implementation commit before closeout: `a0cf920` — progressive designer, scoped asset catalog, workbench example and browser scenarios.
+- Closeout work: Legacy matrix, opt-in visual PDF fixture, stronger browser assertions, exact-byte scope filtering, hidden-trailing pagination and scalar text-binding regressions. Use `git status` for the actual commit state.
+- Acceptance status: `ROADMAP.md` is authoritative; completion refers to local package work, not publication.
+- Release blockers: Remote CI on the final commit, next version selection and user tag/release handoff. Packagist/private reporting remain external steps from project records.
+- Latest main validation: `composer qa` — 73 tests/259 assertions, Pint, PHPStan and distribution rules PASS; frontend 7 tests, build, workbench preparation and Playwright 6 scenarios PASS; shipped designer assets rebuilt; Boost 35-file no-drift check PASS.
+- Additional evidence: Isolated MySQL 8.4.3 case-insensitive scope suite — 9 tests/38 assertions PASS; representative first/continuation/final PDF pages visually inspected; archive/runtime checks and dependency variants are recorded in `VERIFICATION.md` and the Finance readiness report.
+- Expected next task: Validate the final commit in remote CI, then prepare the selected release through `docs/PUBLISHING.md`. Do not move the existing `0.1.0` tag.
+- Session entry working tree: Modified `tests/MultiPageRenderingTest.php` and untracked `tests/LegacyCompatibilityTest.php`; both were preserved and completed.
 - Recommended next model/reasoning: GPT-5.6 Sol, high reasoning, because public API, persistence, rendering, and security boundaries are changing.
 
-## Verified baseline
+## Historical baseline at the initial audit
 
 - HEAD at audit: `65a671e45e53e4dceba47a3d4218e666b8f446c3`
 - Database: `baypdf_templates`, `baypdf_versions`

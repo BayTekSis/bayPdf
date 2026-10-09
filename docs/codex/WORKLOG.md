@@ -41,3 +41,11 @@
 - Main files/domains: Vue designer, layout helpers, translations/CSS, compiled package assets, frontend tests, Playwright scenarios, workbench registration
 - Validation: Pint PASS; targeted backend 41 tests/132 assertions PASS; frontend 5 tests PASS; Vite production build PASS; Playwright 6 scenarios PASS
 - Next unit: Legacy compatibility matrix, representative PDF visual inspection, full QA/distribution/security review, and final report
+
+## 2026-10-09 — Compatibility and final verification
+
+- Completed unit: All legacy element/variable/page combinations, opt-in PDF evidence, browser width-validation and real Blob page checks, refreshed package/upgrade/continuity documents and self-contained BayDesk integration report.
+- Review fixes: Independent Codex findings were reproduced before changes; scope comparisons now enforce exact bytes, hidden trailing blocks do not paginate, and text cannot bind collections. Existing scope keys and published JSON were preserved. Two further designer regressions preserve column alignment and fit trailing/footer content after page-size changes.
+- Validation: Main `composer qa` — 73 tests/259 assertions, Pint, PHPStan and distribution rules PASS; frontend 7, Vite build and browser 6 PASS; shipped assets rebuilt; Boost 35-file no-drift PASS. Dependency variants, PDF visuals and archive/runtime checks are detailed in `docs/VERIFICATION.md`.
+- Database evidence: Separate disposable MySQL 8.4.3, case-insensitive collation — 9 scope tests/38 assertions PASS. The server was shut down; no host database was used.
+- Next unit: Remote CI on the final commit and a separately selected release handoff; existing 0.1.0 tag is unchanged.

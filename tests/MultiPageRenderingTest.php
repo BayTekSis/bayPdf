@@ -3,6 +3,7 @@
 namespace BayPdf\Tests;
 
 use BayPdf\DocumentTypes;
+use BayPdf\DocumentValidator;
 use BayPdf\PdfRenderer;
 use BayPdf\TemplateManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,6 +32,21 @@ final class MultiPageRenderingTest extends TestCase
         $this->assertGreaterThan(1, $this->pageCount($manyA));
         $this->assertSame($this->pageCount($manyA), $this->pageCount($manyB));
         $this->assertSame($this->textOccurrences($manyA, 'Description'), $this->textOccurrences($manyB, 'Description'));
+    }
+
+    public function test_invalid_schema_discriminators_cannot_silently_discard_flow_content(): void
+    {
+        foreach (['2', 2.0, 3, null] as $version) {
+            $document = $this->document();
+            $document['schema_version'] = $version;
+            $document['elements'] = [];
+            try {
+                app(DocumentValidator::class)->validate($document, []);
+                $this->fail('Invalid schema version accepted.');
+            } catch (ValidationException $exception) {
+                $this->assertArrayHasKey('schema_version', $exception->errors());
+            }
+        }
     }
 
     public function test_exact_fit_stays_on_one_page_and_one_more_row_creates_page_two(): void
@@ -71,6 +87,13 @@ final class MultiPageRenderingTest extends TestCase
         $this->assertSame($pages, $this->textOccurrences($pdf, 'Confidential footer'));
         foreach (range(1, $pages) as $page) {
             $this->assertSame(1, $this->textOccurrences($pdf, "Page {$page} / {$pages}"));
+        }
+        if (getenv('BAYPDF_VISUAL_EVIDENCE') === '1') {
+            if (! is_dir(__DIR__.'/../.artifacts')) {
+                mkdir(__DIR__.'/../.artifacts', 0777, true);
+            }
+            $visualRows = array_map(fn (int $index): array => $this->row("Visual evidence row {$index}"), range(1, 100));
+            file_put_contents(__DIR__.'/../.artifacts/multi-page-commercial-document.pdf', $this->render($visualRows));
         }
     }
 
@@ -136,6 +159,22 @@ final class MultiPageRenderingTest extends TestCase
         config()->set('baypdf.limits.max_generated_pages', 1);
         $this->expectException(ValidationException::class);
         $this->render(array_fill(0, 20, $this->row('Page limit')), $document);
+    }
+
+    public function test_hidden_trailing_blocks_do_not_create_pages_or_consume_the_page_limit(): void
+    {
+        $document = $this->document();
+        $document['flow']['first_top'] = 30;
+        $document['flow']['continuation_top'] = 30;
+        $document['flow']['bottom'] = 80;
+        $document['flow']['trailing'][0]['height'] = 35;
+        $document['flow']['trailing'][0]['hidden'] = true;
+        config()->set('baypdf.limits.max_generated_pages', 1);
+
+        $pdf = $this->render([$this->row('Visible row')], $document);
+
+        $this->assertSame(1, $this->pageCount($pdf));
+        $this->assertSame(0, $this->textOccurrences($pdf, 'Trailing summary'));
     }
 
     public function test_invalid_column_widths_and_unknown_collection_fields_are_rejected(): void

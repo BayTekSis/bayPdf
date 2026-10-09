@@ -25,7 +25,7 @@ $data = ['customer' => ['name' => 'Ayşe Yılmaz'], 'quote.total' => 1250.5];
 | key | Belge türü içinde benzersiz sabit anahtar |
 | label | Görünen ad; host locale'e göre çevirebilir |
 | group | Tasarımcıda gruplama |
-| type | text, date, number, money, image, qr |
+| type | text, date, number, money, image, qr, collection |
 | required | Değer yoksa doğrulama hatası |
 | example | Önizleme değeri; gerçek müşteri verisi olmamalı |
 | default | Anahtar hiç verilmediyse kullanılan değer |
@@ -33,7 +33,7 @@ $data = ['customer' => ['name' => 'Ayşe Yılmaz'], 'quote.total' => 1250.5];
 | currency | Üç büyük harfli para kodu; varsayılan EUR |
 | decimals | number/money için 0–6; varsayılan 2 |
 
-En fazla 100 değişken. Veriler scalar ve en fazla 5000 karakter olmalıdır. Sıfır geçerlidir. Açık null/boş metin default yerine boş kabul edilir; required ise hata verir.
+En fazla 100 değişken. Scalar değişken verileri en fazla 5000 karakter olmalıdır; collection limitleri aşağıda ayrıca açıklanır. Sıfır geçerlidir. Açık null/boş metin default yerine boş kabul edilir; required ise hata verir.
 
 `register()` çağrısındaki değişken şeması sıfırdan başlayan ardışık indeksli bir liste olmalıdır. İsimli veya aralıklı anahtarlar kabul edilmez; gerekirse `array_values()` kullanın. Bu kural, anahtarlı veri dizisine (`$data`) uygulanmaz.
 

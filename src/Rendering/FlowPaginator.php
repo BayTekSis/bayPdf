@@ -53,6 +53,9 @@ final class FlowPaginator
         }
 
         foreach ($flow['trailing'] as $index => $element) {
+            if ($element['hidden'] ?? false) {
+                continue;
+            }
             $gap = (float) ($element['gap_before'] ?? $flow['gap']);
             $height = (float) $element['height'];
             $candidate = $y + $gap;
