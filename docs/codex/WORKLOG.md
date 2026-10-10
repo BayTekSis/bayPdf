@@ -54,5 +54,5 @@
 
 - Completed unit: Scope-aware public template/version reads, clone lock refresh, and dynamic designer route base.
 - Main files/domains: TemplateManager, designer shell, scoped read and clone lifecycle tests, API documentation.
-- Validation: Isolated Sail/Testbench snapshot 78 tests/276 assertions PASS; Pint 36 files and PHPStan PASS. Distribution validator reports a `.gitattributes` policy mismatch; BayDesk PostgreSQL retest and remote CI remain.
-- Next unit: Validate the committed package against BayDesk PostgreSQL, reconcile distribution policy, and complete remote CI/release gates.
+- Validation: Isolated Sail/Testbench snapshot `composer qa` PASS — 78 tests/276 assertions, Pint 36 files, PHPStan zero errors and distribution policy valid after restoring the checkout's `.lpv`/`.gitattributes` into the QA copy. BayDesk immutable-commit PostgreSQL consumer 12 tests/147 assertions PASS. Remote CI remains.
+- Next unit: Make the local commit remotely reachable with authorization, then complete remote CI/release gates.
