@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/baypdf/designer.css') }}">
 </head>
 <body>
-    <div id="baypdf" data-base="{{ url(config('baypdf.path')) }}" data-locale="{{ app()->getLocale() }}" data-messages="{{ json_encode(__('baypdf::designer'), JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR) }}"></div>
+    <div id="baypdf" data-base="{{ url()->current() }}" data-locale="{{ app()->getLocale() }}" data-messages="{{ json_encode(__('baypdf::designer'), JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR) }}"></div>
     <noscript>{{ __('baypdf::designer.javascript') }}</noscript>
     <script type="module" src="{{ asset('vendor/baypdf/designer.js') }}"></script>
 </body>

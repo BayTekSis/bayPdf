@@ -4,7 +4,7 @@ Sürümleme sözleşmesi:
 - BayPdf\BayPdfServiceProvider
 - Contracts\ScopeResolver::resolve
 - DocumentTypes::register, get, all, examples
-- TemplateManager::create, save, publish, cloneDraft, preview, render
+- TemplateManager::paginate, getTemplate, paginateVersions, getVersion, create, save, publish, cloneDraft, preview, render
 - PdfRenderer::render
 - Assets::store, bytes, all, adoptLegacy
 - DocumentValidator::validate, dimensions, blank

@@ -89,6 +89,9 @@ final class TemplateManagerTest extends TestCase
         $this->assertNull($clone->published_at);
         $this->assertSame($version->document, $clone->document);
         $this->assertSame($version->variables, $clone->variables);
+        $this->assertSame(1, $clone->lock_version);
+        $saved = $manager->save($clone, $this->document(), $clone->lock_version);
+        $this->assertNotNull($manager->publish($saved, $saved->lock_version)->published_at);
     }
 
     public function test_draft_is_not_used_for_production_generation(): void

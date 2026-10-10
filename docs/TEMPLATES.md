@@ -48,6 +48,10 @@ Metin satırlara sarılır. Sığmazsa 422 verir; kutuyu büyütün veya fontu k
 
 | Metot | Davranış |
 |---|---|
+| paginate(type?,perPage,page) | Current scope içindeki şablonları belge türüne göre sayfalar; perPage 1–100 |
+| getTemplate(id) | Current scope içindeki tek şablonu okur; yabancı ID için 404 |
+| paginateVersions(templateId,publishedOnly,perPage,page) | Şablon sürümlerinin metadata listesini sayfalar; yabancı ID için 404 |
+| getVersion(id) | Current scope içindeki tek sürümü okur; yabancı ID için 404 |
 | create(name,type) | Şablon ve ilk taslak, transaction |
 | save(version,document,expectedLock) | Taslak kaydı, lock_version artışı |
 | preview(version) | Snapshot örnekleriyle PDF |
@@ -57,7 +61,7 @@ Metin satırlara sarılır. Sığmazsa 422 verir; kutuyu büyütün veya fontu k
 
 Eski lock_version 409 üretir. Yeniden yükleyin; başkasının kaydını otomatik ezmeyin. Doğrudan SQL/bulk Eloquent model korumalarını atlar; yazımlar için TemplateManager kullanın.
 
-Scoping etkinse TemplateManager current opaque scope'u server-side resolver'dan alır. Create edilen template bu scope'u taşır; save, publish, clone, preview ve render yalnız aynı scope'un version'larını kabul eder. TemplateVersion ayrı bir scope alanı taşımaz ve başka Template'e reassociate edilemez. Direct model sorguları package servisinin scope kontrolünü atlayabileceğinden recommended public path değildir.
+Scoping etkinse TemplateManager current opaque scope'u server-side resolver'dan alır. Listeleme, tekil okuma, create, save, publish, clone, preview ve render yalnız aynı scope'un kayıtlarını kabul eder. `paginateVersions` yalnız sürüm metadata alanlarını döndürür; tam belge şeması için yetkili `getVersion` kullanılır. `cloneDraft` veritabanı varsayılanı olan güncel `lock_version` değerini döndürür; bu değerle hemen save yapılabilir. TemplateVersion ayrı bir scope alanı taşımaz ve başka Template'e reassociate edilemez. Direct model sorguları package servisinin scope kontrolünü atlayabileceğinden recommended public path değildir.
 
 Veritabanı olmadan: `app(BayPdf\PdfRenderer::class)->render($document, $data, $variables)`. Bu düşük seviye API yayın durumu denetlemez. variables, DocumentTypes üzerinden doğrulanmış şemadır.
 

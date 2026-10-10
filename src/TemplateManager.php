@@ -6,6 +6,7 @@ use BayPdf\Models\Template;
 use BayPdf\Models\TemplateVersion;
 use BayPdf\Support\ScopeContext;
 use Carbon\CarbonImmutable;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -19,6 +20,54 @@ final class TemplateManager
         private PdfRenderer $renderer,
         private ScopeContext $scope,
     ) {}
+
+    /** @return LengthAwarePaginator<int, Template> */
+    public function paginate(?string $documentType = null, int $perPage = 30, int $page = 1): LengthAwarePaginator
+    {
+        Validator::make(
+            ['per_page' => $perPage, 'page' => $page],
+            ['per_page' => ['required', 'integer', 'between:1,100'], 'page' => ['required', 'integer', 'min:1']],
+        )->validate();
+        if ($documentType !== null) {
+            $this->types->get($documentType);
+        }
+
+        $query = $this->scope->templates(Template::query());
+        if ($documentType !== null) {
+            $query->where('document_type', $documentType);
+        }
+
+        return $query->withCount('versions')->latest('id')->paginate($perPage, ['*'], 'page', $page);
+    }
+
+    public function getTemplate(int $id): Template
+    {
+        return $this->scope->templates(Template::query())->findOrFail($id);
+    }
+
+    /** @return LengthAwarePaginator<int, TemplateVersion> */
+    public function paginateVersions(int $templateId, bool $publishedOnly = false, int $perPage = 30, int $page = 1): LengthAwarePaginator
+    {
+        $this->getTemplate($templateId);
+        Validator::make(
+            ['per_page' => $perPage, 'page' => $page],
+            ['per_page' => ['required', 'integer', 'between:1,100'], 'page' => ['required', 'integer', 'min:1']],
+        )->validate();
+
+        $query = $this->scope->versions(TemplateVersion::query())
+            ->where('template_id', $templateId)
+            ->select(['id', 'template_id', 'number', 'lock_version', 'published_at', 'created_at', 'updated_at']);
+        if ($publishedOnly) {
+            $query->whereNotNull('published_at');
+        }
+
+        return $query->orderByDesc('number')->paginate($perPage, ['*'], 'page', $page);
+    }
+
+    public function getVersion(int $id): TemplateVersion
+    {
+        return $this->findVersion($id);
+    }
 
     public function create(string $name, string $documentType): Template
     {
@@ -71,11 +120,13 @@ final class TemplateManager
             $source = $this->findVersion($source->id, true);
             $template = $this->scope->templates(Template::query())->lockForUpdate()->findOrFail($source->template_id);
 
-            return $template->versions()->create([
+            $draft = $template->versions()->create([
                 'number' => $template->versions()->max('number') + 1,
                 'document' => $source->document,
                 'variables' => $source->variables,
             ]);
+
+            return $draft->refresh();
         });
     }
 

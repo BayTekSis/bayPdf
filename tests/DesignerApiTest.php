@@ -76,7 +76,10 @@ final class DesignerApiTest extends TestCase
         $this->postJson("/baypdf/api/versions/{$id}/preview", ['document' => $document])->assertOk()->assertHeader('Content-Type', 'application/pdf');
         $this->postJson("/baypdf/api/versions/{$id}/publish", ['lock_version' => 2])->assertOk();
         $this->putJson("/baypdf/api/versions/{$id}", ['lock_version' => 3, 'document' => $document])->assertConflict();
-        $this->postJson("/baypdf/api/versions/{$id}/clone")->assertCreated()->assertJsonPath('number', 2)->assertJsonPath('published_at', null);
+        $clone = $this->postJson("/baypdf/api/versions/{$id}/clone")
+            ->assertCreated()->assertJsonPath('number', 2)->assertJsonPath('published_at', null)->assertJsonPath('lock_version', 1);
+        $this->putJson('/baypdf/api/versions/'.$clone->json('id'), ['lock_version' => 1, 'document' => $document])
+            ->assertOk()->assertJsonPath('lock_version', 2);
         $this->getJson('/baypdf/api/templates')->assertOk()->assertJsonPath('total', 1);
     }
 

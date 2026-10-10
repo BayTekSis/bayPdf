@@ -49,3 +49,10 @@
 - Validation: Main `composer qa` — 73 tests/259 assertions, Pint, PHPStan and distribution rules PASS; frontend 7, Vite build and browser 6 PASS; shipped assets rebuilt; Boost 35-file no-drift PASS. Dependency variants, PDF visuals and archive/runtime checks are detailed in `docs/VERIFICATION.md`.
 - Database evidence: Separate disposable MySQL 8.4.3, case-insensitive collation — 9 scope tests/38 assertions PASS. The server was shut down; no host database was used.
 - Next unit: Remote CI on the final commit and a separately selected release handoff; existing 0.1.0 tag is unchanged.
+
+## 2026-10-10 — BayDesk consumer contract
+
+- Completed unit: Scope-aware public template/version reads, clone lock refresh, and dynamic designer route base.
+- Main files/domains: TemplateManager, designer shell, scoped read and clone lifecycle tests, API documentation.
+- Validation: Isolated Sail/Testbench snapshot 78 tests/276 assertions PASS; Pint 36 files and PHPStan PASS. Distribution validator reports a `.gitattributes` policy mismatch; BayDesk PostgreSQL retest and remote CI remain.
+- Next unit: Validate the committed package against BayDesk PostgreSQL, reconcile distribution policy, and complete remote CI/release gates.

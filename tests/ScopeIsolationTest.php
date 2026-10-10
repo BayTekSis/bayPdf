@@ -13,6 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\ValidationException;
 use LogicException;
 
 final class ScopeIsolationTest extends TestCase
@@ -74,6 +75,57 @@ final class ScopeIsolationTest extends TestCase
             ->assertOk()
             ->assertJsonPath('total', 1)
             ->assertJsonPath('data.0.name', 'Scope B report');
+    }
+
+    public function test_public_read_api_paginates_and_rejects_foreign_ids(): void
+    {
+        $manager = app(TemplateManager::class);
+        $this->useScope('organization:a');
+        $first = $manager->create('First report', 'report');
+        $published = $manager->publish($manager->save($first->versions->first(), $this->document(), 1), 2);
+        $manager->cloneDraft($published);
+        $this->useScope('organization:b');
+        $foreign = $manager->create('Foreign report', 'report');
+
+        $this->useScope('organization:a');
+        $this->assertSame(1, $manager->paginate('report', 1)->total());
+        $this->assertSame($first->id, $manager->getTemplate($first->id)->id);
+        $this->assertSame(1, $manager->paginateVersions($first->id, true)->total());
+        $versions = $manager->paginateVersions($first->id);
+        $this->assertSame(2, $versions->total());
+        $this->assertFalse($versions->items()[0]->offsetExists('document'));
+        $this->assertSame($published->id, $manager->getVersion($published->id)->id);
+        $this->expectException(ModelNotFoundException::class);
+        $manager->getTemplate($foreign->id);
+    }
+
+    public function test_public_read_api_rejects_foreign_versions(): void
+    {
+        $manager = app(TemplateManager::class);
+        $this->useScope('organization:b');
+        $foreign = $manager->create('Foreign report', 'report');
+
+        $this->useScope('organization:a');
+        $this->expectException(ModelNotFoundException::class);
+        $manager->getVersion($foreign->versions->first()->id);
+    }
+
+    public function test_public_read_api_rejects_foreign_version_list(): void
+    {
+        $manager = app(TemplateManager::class);
+        $this->useScope('organization:b');
+        $foreign = $manager->create('Foreign report', 'report');
+        $this->useScope('organization:a');
+
+        $this->expectException(ModelNotFoundException::class);
+        $manager->paginateVersions($foreign->id);
+    }
+
+    public function test_public_read_api_bounds_page_size(): void
+    {
+        $this->useScope('organization:a');
+        $this->expectException(ValidationException::class);
+        app(TemplateManager::class)->paginate('report', 101);
     }
 
     public function test_cross_scope_template_and_version_routes_are_unavailable(): void

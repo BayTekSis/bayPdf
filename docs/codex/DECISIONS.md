@@ -15,6 +15,8 @@
 
 ## Verification boundary
 
+The host reads company-scoped templates and versions only through `TemplateManager` pagination/get methods. Version lists expose metadata; full document data requires an explicit scoped read. Designer API base is derived from the resolved request URL so a host may mount the designer below a company route. A cloned draft returns the database-populated lock value before the client edits it.
+
 The implemented defaults are recorded below and in `config/baypdf.php`. Passing local checks establishes integration readiness, not a release: the final commit still needs remote CI, a separately selected version, and the user's tag/release handoff.
 
 ## Implemented scope decisions
